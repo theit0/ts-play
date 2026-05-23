@@ -103,64 +103,58 @@ Los tipos desaparecen en la compilación. Son solo para ayudarte durante el desa
     {
       id: "ch01-03",
       title: "Parámetros tipados",
-      type: "explanation",
-      content: `# Parámetros tipados
+      type: "exercise",
+      instructions: `## Parámetros tipados
 
-La forma más común de usar TypeScript es añadir tipos a los parámetros de las funciones.
+Se te proporciona una función \`multiply\`. De forma predeterminada, el editor te está advirtiendo que los parámetros tienen implícitamente el tipo \`any\`. Lo explicaremos en el siguiente capítulo.
 
-## Sintaxis básica
-
-\`\`\`typescript
-function nombreFuncion(parametro: tipo) {
-    // cuerpo
-}
-\`\`\`
-
-El tipo va después del parámetro, separado por dos puntos.
-
-## Tipos básicos disponibles
-
-Los tipos más comunes que usarás son:
-
-| Tipo | Descripción | Ejemplo |
-|------|-------------|---------|
-| \`string\` | Cadenas de texto | \`"hola"\`, \`"TypeScript"\` |
-| \`number\` | Números (enteros y decimales) | \`42\`, \`3.14\` |
-| \`boolean\` | Verdadero o falso | \`true\`, \`false\` |
-
-## Ejemplo práctico
-
-\`\`\`typescript
-function calcularPrecio(cantidad: number, precioUnitario: number) {
-    return cantidad * precioUnitario;
+Por ahora, nos gustaría que proporciones el tipo de los parámetros \`x\` e \`y\`. Debe ser \`number\` para ambos. Asegúrate de que la \`n\` esté en minúscula.`,
+      starterCode: `function multiply(x, y) {
+    return x * y;
 }
 
-calcularPrecio(5, 10.99);  // ✓ correcto
-calcularPrecio("5", 10.99); // ✗ Error: '5' no es un número
-\`\`\`
-
-## Múltiples parámetros
-
-Cada parámetro tiene su propia anotación de tipo:
-
-\`\`\`typescript
-function presentar(nombre: string, edad: number, activo: boolean) {
-    return \`\${nombre}, \${edad} años, activo: \${activo}\`;
+// Sample usage (do not modify)
+console.log(multiply(2, 4)); // 8
+console.log(multiply(5, 3)); // 15`,
+      solution: `function multiply(x: number, y: number) {
+    return x * y;
 }
 
-presentar("Ana", 25, true); // ✓
-\`\`\`
-
-> **Nota importante:** TypeScript diferencia entre \`string\` (minúscula) y \`String\` (mayúscula). Siempre usa **minúsculas** para los tipos primitivos.
-`,
+// Sample usage (do not modify)
+console.log(multiply(2, 4)); // 8
+console.log(multiply(5, 3)); // 15`,
+      hint: "Añade `: number` después de cada parámetro: `multiply(x: number, y: number)`.",
+      tests: [
+        {
+          name: "multiply's parameters are typed",
+          run: (code) =>
+            /multiply\s*\(\s*\w+\s*:\s*number\s*,\s*\w+\s*:\s*number/.test(code),
+        },
+        {
+          name: "multiply still works as expected",
+          run: (code) => {
+            const { output, error } = runCode(
+              code,
+              `console.log(multiply(2, 4)); console.log(multiply(5, 3));`
+            );
+            return (
+              !error &&
+              output.some((o) => o.includes("8")) &&
+              output.some((o) => o.includes("15"))
+            );
+          },
+        },
+        {
+          name: "Extra checks",
+          run: (code) => !/:\s*Number/.test(code),
+        },
+      ],
     },
     {
       id: "ch01-04",
       title: "¿Cómo funciona TypeScript?",
       type: "explanation",
       content: `# ¿Cómo funciona TypeScript?
-
-*Última actualización: febrero 2025*
 
 TypeScript es un superconjunto de JavaScript que añade tipos al lenguaje.
 

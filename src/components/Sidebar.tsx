@@ -61,9 +61,6 @@ export function Sidebar() {
           </div>
         </div>
       ))}
-      <div className="px-4 py-6 text-xs text-[#4d4d4d] border-t border-[#3e3e42] mt-4">
-        Otros cursos por Jad »
-      </div>
     </div>
   );
 }

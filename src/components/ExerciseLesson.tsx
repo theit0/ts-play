@@ -1,11 +1,13 @@
 import { useState, useCallback } from "react";
 import type { ComponentProps } from "react";
+import confetti from "canvas-confetti";
 import Editor from "@monaco-editor/react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { vscDarkPlus } from "react-syntax-highlighter/dist/esm/styles/prism";
 import type { Lesson } from "../data/types";
+import { getAdjacentLessons } from "../data/curriculum";
 import { runCode } from "../utils/runner";
 import { useAppStore } from "../store";
 
@@ -20,13 +22,33 @@ interface Props {
   lesson: Lesson;
 }
 
+function playSuccess() {
+  const ctx = new AudioContext();
+  const gain = ctx.createGain();
+  gain.connect(ctx.destination);
+  gain.gain.setValueAtTime(0.25, ctx.currentTime);
+  gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.6);
+
+  [523.25, 659.25, 783.99].forEach((freq, i) => {
+    const osc = ctx.createOscillator();
+    osc.connect(gain);
+    osc.type = "sine";
+    osc.frequency.setValueAtTime(freq, ctx.currentTime + i * 0.12);
+    osc.start(ctx.currentTime + i * 0.12);
+    osc.stop(ctx.currentTime + i * 0.12 + 0.2);
+  });
+}
+
 export function ExerciseLesson({ lesson }: Props) {
   const {
     markComplete,
     completedLessons,
     saveCodeForLesson,
     getCodeForLesson,
+    setCurrentLesson,
   } = useAppStore();
+
+  const { next } = getAdjacentLessons(lesson.id);
 
   const savedCode = getCodeForLesson(lesson.id);
   const [code, setCode] = useState(savedCode ?? lesson.starterCode ?? "");
@@ -57,6 +79,8 @@ export function ExerciseLesson({ lesson }: Props) {
       const allPassed = results.every((r) => r.passed);
       if (allPassed) {
         markComplete(lesson.id);
+        playSuccess();
+        confetti({ particleCount: 120, spread: 80, origin: { y: 0.6 } });
       }
     } else {
       setActiveBottomTab("console");
@@ -227,7 +251,7 @@ export function ExerciseLesson({ lesson }: Props) {
 
             {allPassed && (
               <div className="mt-4 p-3 bg-[#1a2e1a] rounded border border-[#2d5a2d] text-sm text-[#4ec9b0]">
-                🎉 ¡Todos los tests pasan! Ejercicio completado.
+                ¡Todos los tests pasan! Ejercicio completado.
               </div>
             )}
           </div>
@@ -296,6 +320,17 @@ export function ExerciseLesson({ lesson }: Props) {
               Run
               <span className="text-white/60 text-[10px]">Ctrl+Enter</span>
             </button>
+            {allPassed && next && (
+              <button
+                onClick={() => setCurrentLesson(next.id)}
+                className="flex items-center gap-1.5 px-3 py-1 text-xs rounded bg-[#007acc] text-white font-semibold hover:bg-[#006ab3] transition-colors"
+              >
+                Siguiente
+                <svg className="w-3 h-3" fill="none" viewBox="0 0 12 12" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M4 2l4 4-4 4"/>
+                </svg>
+              </button>
+            )}
           </div>
         </div>
 
