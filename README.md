@@ -1,0 +1,138 @@
+# TS Play — Aprende TypeScript en español
+
+Una plataforma web interactiva para aprender TypeScript en español, con un editor de código en tiempo real, ejercicios prácticos y seguimiento de progreso.
+
+![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=flat&logo=typescript&logoColor=white)
+![React](https://img.shields.io/badge/React-61DAFB?style=flat&logo=react&logoColor=black)
+![Vite](https://img.shields.io/badge/Vite-646CFF?style=flat&logo=vite&logoColor=white)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-06B6D4?style=flat&logo=tailwindcss&logoColor=white)
+
+---
+
+## ¿De qué trata?
+
+TS Play es una aplicación de aprendizaje estructurado de TypeScript diseñada para hispanohablantes. El contenido está organizado en capítulos que van desde los fundamentos hasta conceptos avanzados, con un enfoque práctico: cada tema se refuerza con ejercicios que el usuario resuelve directamente en el navegador.
+
+La plataforma combina explicaciones claras en español con un entorno de código interactivo donde se puede escribir TypeScript real, ejecutarlo y ver los resultados al instante.
+
+---
+
+## Características
+
+- **Editor Monaco integrado** — el mismo motor que usa VS Code, con resaltado de sintaxis TypeScript y detección de errores en tiempo real
+- **Ejecución en el navegador** — el código TypeScript se transpila y ejecuta sin necesidad de un servidor backend
+- **Sistema de tests automáticos** — cada ejercicio incluye tests que verifican si la solución es correcta
+- **Progreso persistente** — el progreso y el código de cada ejercicio se guardan en `localStorage`
+- **10 capítulos de contenido** — desde introducción hasta funciones avanzadas, con más de 50 lecciones
+- **Dos tipos de lecciones**: explicaciones teóricas con markdown enriquecido y ejercicios interactivos con playground
+- **Diseño dark theme** — interfaz moderna orientada a desarrolladores
+
+---
+
+## Capítulos disponibles
+
+| # | Capítulo | Contenido |
+|---|----------|-----------|
+| 1 | Intro to TypeScript | Qué es TS, parámetros tipados, cómo funciona |
+| 2 | The any type | El tipo `any`, tsconfig.json |
+| 3 | TypeScript ESLint | Reglas ESLint, ban-ts-comment, tipos prohibidos |
+| 4 | Primitive types | string, number, boolean, inferencia de tipos |
+| 5 | Union types | Tipos de unión, type narrowing con `typeof` |
+| 6 | The type alias | Aliases de tipos, reutilización |
+| 7 | Arrays | Tipado de arrays, métodos |
+| 8 | Tuples | Tuplas, tipos por posición |
+| 9 | Literal types | Tipos literales, `const` vs `let` |
+| 10 | Functions | Tipos de retorno, void, parámetros opcionales, arrow functions |
+
+---
+
+## Stack tecnológico
+
+| Tecnología | Rol |
+|-----------|-----|
+| **React 18** | UI y gestión de componentes |
+| **TypeScript** | Tipado estático en toda la app |
+| **Vite** | Build tool y dev server |
+| **Monaco Editor** | Editor de código embebido |
+| **Babel Standalone** | Transpilación de TypeScript en el browser |
+| **Tailwind CSS** | Estilos utilitarios, dark theme |
+| **Zustand** | Estado global (lección activa, progreso) |
+| **React Markdown** | Renderizado de contenido de lecciones |
+| **ESLint + typescript-eslint** | Linting del código fuente |
+
+---
+
+## Correr localmente
+
+```bash
+# Clonar el repositorio
+git clone https://github.com/theopelegrina/ts-play.git
+cd ts-play
+
+# Instalar dependencias
+npm install
+
+# Iniciar el servidor de desarrollo
+npm run dev
+```
+
+La aplicación estará disponible en `http://localhost:5173`.
+
+```bash
+# Build para producción
+npm run build
+
+# Preview del build
+npm run preview
+```
+
+---
+
+## Estructura del proyecto
+
+```
+src/
+├── components/         # Componentes React
+│   ├── Sidebar.tsx     # Navegación lateral con capítulos y lecciones
+│   ├── Header.tsx      # Barra superior con navegación entre lecciones
+│   ├── ExplanationLesson.tsx  # Vista de lección teórica
+│   └── ExerciseLesson.tsx     # Vista de ejercicio con editor + tests
+├── data/
+│   ├── types.ts        # Interfaces TypeScript del modelo de datos
+│   ├── curriculum.ts   # Índice del currículo completo
+│   └── chapters/       # Contenido por capítulo (ch01.ts – ch10.ts)
+├── utils/
+│   └── runner.ts       # Motor de transpilación y ejecución de código
+└── store.ts            # Estado global con Zustand
+```
+
+---
+
+## Arquitectura del playground
+
+El playground funciona completamente en el cliente:
+
+1. El usuario escribe TypeScript en el editor Monaco
+2. Al hacer clic en **Run**, el código se transpila usando **Babel Standalone** (cargado desde CDN)
+3. El código JavaScript resultante se ejecuta en un contexto aislado con `new Function()`, capturando el output de `console.log`
+4. Los tests predefinidos de cada ejercicio analizan el código fuente y/o el output para determinar si la solución es correcta
+5. El progreso se persiste en `localStorage`
+
+---
+
+## Capturas
+
+> *Screenshots del proyecto en funcionamiento*
+
+| Lección explicativa | Ejercicio interactivo |
+|--------------------|-----------------------|
+| Vista de teoría con markdown enriquecido | Editor Monaco + panel de tests |
+
+---
+
+## Autor
+
+**Theo Pelegrina** — Frontend Engineer
+
+[![GitHub](https://img.shields.io/badge/GitHub-181717?style=flat&logo=github&logoColor=white)](https://github.com/theopelegrina)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-0A66C2?style=flat&logo=linkedin&logoColor=white)](https://linkedin.com/in/theopelegrina)
