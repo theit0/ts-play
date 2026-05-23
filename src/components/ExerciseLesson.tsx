@@ -94,9 +94,9 @@ export function ExerciseLesson({ lesson }: Props) {
       {/* Main area: editor + instructions */}
       <div className="flex flex-1 min-h-0">
         {/* Editor */}
-        <div className="flex-1 flex flex-col min-w-0 border-r border-[#2a2a45]">
-          <div className="flex items-center px-3 py-1.5 bg-[#141428] border-b border-[#2a2a45] text-xs text-[#6b7280] gap-2">
-            <span className="text-[#e8e8f0]">index.ts</span>
+        <div className="flex-1 flex flex-col min-w-0 border-r border-[#3e3e42]">
+          <div className="flex items-center px-3 py-1.5 bg-[#252526] border-b border-[#3e3e42] text-xs text-[#6b7280] gap-2">
+            <span className="text-[#d4d4d4]">index.ts</span>
             {isDone && (
               <span className="ml-auto text-[#f59e0b] flex items-center gap-1">
                 <svg className="w-3 h-3" fill="none" viewBox="0 0 12 12" stroke="currentColor" strokeWidth={2}>
@@ -132,8 +132,8 @@ export function ExerciseLesson({ lesson }: Props) {
 
         {/* Instructions panel */}
         <div className="w-80 xl:w-96 flex-shrink-0 flex flex-col overflow-hidden">
-          <div className="flex border-b border-[#2a2a45]">
-            <button className="px-4 py-2 text-sm text-[#e8e8f0] border-b-2 border-[#00d4aa] bg-transparent">
+          <div className="flex border-b border-[#3e3e42]">
+            <button className="px-4 py-2 text-sm text-[#d4d4d4] border-b-2 border-[#007acc] bg-transparent">
               Instrucciones
             </button>
           </div>
@@ -142,12 +142,12 @@ export function ExerciseLesson({ lesson }: Props) {
               remarkPlugins={[remarkGfm]}
               components={{
                 h2: ({ children }) => (
-                  <h2 className="text-base font-semibold text-[#e8e8f0] mb-3">
+                  <h2 className="text-base font-semibold text-[#d4d4d4] mb-3">
                     {children}
                   </h2>
                 ),
                 p: ({ children }) => (
-                  <p className="text-sm text-[#c5c5d8] leading-relaxed mb-3">
+                  <p className="text-sm text-[#cccccc] leading-relaxed mb-3">
                     {children}
                   </p>
                 ),
@@ -156,14 +156,14 @@ export function ExerciseLesson({ lesson }: Props) {
                   const lang = match?.[1] ?? "typescript";
                   if (!inline && match) {
                     return (
-                      <div className="my-2 rounded overflow-hidden border border-[#2a2a45]">
+                      <div className="my-2 rounded overflow-hidden border border-[#3e3e42]">
                         <SyntaxHighlighter
                           language={lang === "ts" ? "typescript" : lang}
                           style={vscDarkPlus}
                           customStyle={{
                             margin: 0,
                             padding: "10px 12px",
-                            background: "#0e0e1a",
+                            background: "#1e1e1e",
                             fontSize: "12px",
                             lineHeight: "1.6",
                           }}
@@ -176,7 +176,7 @@ export function ExerciseLesson({ lesson }: Props) {
                   }
                   return (
                     <code
-                      className="bg-[#1e1e38] text-[#00d4aa] text-xs px-1 py-0.5 rounded font-mono"
+                      className="bg-[#2a2a2a] text-[#007acc] text-xs px-1 py-0.5 rounded font-mono"
                       {...props}
                     >
                       {children}
@@ -184,34 +184,34 @@ export function ExerciseLesson({ lesson }: Props) {
                   );
                 },
                 ul: ({ children }) => (
-                  <ul className="text-sm text-[#c5c5d8] mb-3 space-y-1 ml-3 list-disc">
+                  <ul className="text-sm text-[#cccccc] mb-3 space-y-1 ml-3 list-disc">
                     {children}
                   </ul>
                 ),
                 li: ({ children }) => <li className="leading-relaxed">{children}</li>,
                 strong: ({ children }) => (
-                  <strong className="text-[#e8e8f0] font-semibold">{children}</strong>
+                  <strong className="text-[#d4d4d4] font-semibold">{children}</strong>
                 ),
                 blockquote: ({ children }) => (
-                  <blockquote className="border-l-2 border-[#00d4aa] pl-3 my-3 text-[#9ca3af] text-sm italic">
+                  <blockquote className="border-l-2 border-[#007acc] pl-3 my-3 text-[#9ca3af] text-sm italic">
                     {children}
                   </blockquote>
                 ),
                 table: ({ children }) => (
-                  <div className="overflow-x-auto my-3 rounded border border-[#2a2a45]">
+                  <div className="overflow-x-auto my-3 rounded border border-[#3e3e42]">
                     <table className="w-full text-xs border-collapse">{children}</table>
                   </div>
                 ),
-                thead: ({ children }) => <thead className="bg-[#141428]">{children}</thead>,
-                tbody: ({ children }) => <tbody className="divide-y divide-[#2a2a45]">{children}</tbody>,
+                thead: ({ children }) => <thead className="bg-[#252526]">{children}</thead>,
+                tbody: ({ children }) => <tbody className="divide-y divide-[#3e3e42]">{children}</tbody>,
                 tr: ({ children }) => <tr>{children}</tr>,
                 th: ({ children }) => (
-                  <th className="px-3 py-2 text-left text-xs font-semibold text-[#9ca3af] uppercase tracking-wider border-b border-[#2a2a45]">
+                  <th className="px-3 py-2 text-left text-xs font-semibold text-[#9ca3af] uppercase tracking-wider border-b border-[#3e3e42]">
                     {children}
                   </th>
                 ),
                 td: ({ children }) => (
-                  <td className="px-3 py-2 text-[#c5c5d8]">{children}</td>
+                  <td className="px-3 py-2 text-[#cccccc]">{children}</td>
                 ),
               }}
             >
@@ -219,14 +219,14 @@ export function ExerciseLesson({ lesson }: Props) {
             </ReactMarkdown>
 
             {showHint && lesson.hint && (
-              <div className="mt-3 p-3 bg-[#1e1e38] rounded border border-[#2a2a45] text-sm text-[#c5c5d8]">
+              <div className="mt-3 p-3 bg-[#2a2a2a] rounded border border-[#3e3e42] text-sm text-[#cccccc]">
                 <span className="text-[#f59e0b] font-medium">Pista: </span>
                 {lesson.hint}
               </div>
             )}
 
             {allPassed && (
-              <div className="mt-4 p-3 bg-[#0d2a1a] rounded border border-[#065f46] text-sm text-[#6ee7b7]">
+              <div className="mt-4 p-3 bg-[#1a2e1a] rounded border border-[#2d5a2d] text-sm text-[#4ec9b0]">
                 🎉 ¡Todos los tests pasan! Ejercicio completado.
               </div>
             )}
@@ -235,19 +235,19 @@ export function ExerciseLesson({ lesson }: Props) {
       </div>
 
       {/* Bottom panel: tests + console */}
-      <div className="h-52 flex-shrink-0 border-t border-[#2a2a45] flex flex-col">
-        <div className="flex items-center border-b border-[#2a2a45]">
+      <div className="h-52 flex-shrink-0 border-t border-[#3e3e42] flex flex-col">
+        <div className="flex items-center border-b border-[#3e3e42]">
           <button
             onClick={() => setActiveBottomTab("tests")}
             className={`px-4 py-2 text-sm transition-colors ${
               activeBottomTab === "tests"
-                ? "text-[#e8e8f0] border-b-2 border-[#00d4aa]"
+                ? "text-[#d4d4d4] border-b-2 border-[#007acc]"
                 : "text-[#6b7280] hover:text-[#9ca3af]"
             }`}
           >
             Tests{" "}
             {testResults && (
-              <span className={`ml-1 text-xs font-medium ${allPassed ? "text-[#22c55e]" : "text-[#9ca3af]"}`}>
+              <span className={`ml-1 text-xs font-medium ${allPassed ? "text-[#4ec9b0]" : "text-[#9ca3af]"}`}>
                 ({passedCount}/{totalCount})
               </span>
             )}
@@ -256,7 +256,7 @@ export function ExerciseLesson({ lesson }: Props) {
             onClick={() => setActiveBottomTab("console")}
             className={`px-4 py-2 text-sm transition-colors ${
               activeBottomTab === "console"
-                ? "text-[#e8e8f0] border-b-2 border-[#00d4aa]"
+                ? "text-[#d4d4d4] border-b-2 border-[#007acc]"
                 : "text-[#6b7280] hover:text-[#9ca3af]"
             }`}
           >
@@ -281,20 +281,20 @@ export function ExerciseLesson({ lesson }: Props) {
             {lesson.solution && (
               <button
                 onClick={handleShowSolution}
-                className="px-3 py-1 text-xs rounded bg-[#1e1e38] text-[#9ca3af] hover:text-[#e8e8f0] transition-colors"
+                className="px-3 py-1 text-xs rounded bg-[#2a2a2a] text-[#9ca3af] hover:text-[#d4d4d4] transition-colors"
               >
                 Solución
               </button>
             )}
             <button
               onClick={handleRun}
-              className="flex items-center gap-1.5 px-3 py-1 text-xs rounded bg-[#00d4aa] text-[#0e0e1a] font-semibold hover:bg-[#00c49a] transition-colors"
+              className="flex items-center gap-1.5 px-3 py-1 text-xs rounded bg-[#007acc] text-white font-semibold hover:bg-[#006ab3] transition-colors"
             >
               <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 12 12">
                 <path d="M2 2l8 4-8 4V2z"/>
               </svg>
               Run
-              <span className="text-[#0e0e1a]/60 text-[10px]">Ctrl+Enter</span>
+              <span className="text-white/60 text-[10px]">Ctrl+Enter</span>
             </button>
           </div>
         </div>
@@ -309,10 +309,10 @@ export function ExerciseLesson({ lesson }: Props) {
               ) : (
                 testResults.map((t, i) => (
                   <div key={i} className="flex items-center gap-2 text-sm py-0.5">
-                    <span className={t.passed ? "text-[#22c55e]" : "text-[#ef4444]"}>
+                    <span className={t.passed ? "text-[#4ec9b0]" : "text-[#ef4444]"}>
                       {t.passed ? "✓" : "✗"}
                     </span>
-                    <span className={t.passed ? "text-[#c5c5d8]" : "text-[#ef4444]"}>
+                    <span className={t.passed ? "text-[#cccccc]" : "text-[#ef4444]"}>
                       {t.name}
                     </span>
                   </div>

@@ -36,13 +36,13 @@ export function Sidebar() {
                   onClick={() => setCurrentLesson(lesson.id)}
                   className={`w-full flex items-center gap-2.5 px-4 py-1.5 text-sm text-left transition-colors ${
                     isActive
-                      ? "bg-[#242440] text-[#e8e8f0]"
-                      : "text-[#9ca3af] hover:bg-[#1e1e38] hover:text-[#e8e8f0]"
+                      ? "bg-[#37373d] text-[#d4d4d4]"
+                      : "text-[#9ca3af] hover:bg-[#2a2a2a] hover:text-[#d4d4d4]"
                   }`}
                 >
                   <span
                     className={
-                      isDone ? "text-[#f59e0b]" : isActive ? "text-[#00d4aa]" : "text-[#4b5563]"
+                      isDone ? "text-[#f59e0b]" : isActive ? "text-[#007acc]" : "text-[#4d4d4d]"
                     }
                   >
                     <LessonIcon type={lesson.type} />
@@ -61,7 +61,7 @@ export function Sidebar() {
           </div>
         </div>
       ))}
-      <div className="px-4 py-6 text-xs text-[#4b5563] border-t border-[#2a2a45] mt-4">
+      <div className="px-4 py-6 text-xs text-[#4d4d4d] border-t border-[#3e3e42] mt-4">
         Otros cursos por Jad »
       </div>
     </div>

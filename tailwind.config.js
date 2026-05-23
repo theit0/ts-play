@@ -4,12 +4,12 @@ export default {
   theme: {
     extend: {
       colors: {
-        sidebar: "#141428",
-        panel: "#1a1a30",
-        hover: "#242440",
-        accent: "#00d4aa",
+        sidebar: "#252526",
+        panel: "#2d2d2d",
+        hover: "#37373d",
+        accent: "#007acc",
         amber: "#f59e0b",
-        border: "#2a2a45",
+        border: "#3e3e42",
       },
       fontFamily: {
         mono: ["JetBrains Mono", "Fira Code", "Consolas", "monospace"],

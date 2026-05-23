@@ -31,22 +31,22 @@ export function ExplanationLesson({ lesson }: Props) {
             remarkPlugins={[remarkGfm]}
             components={{
               h1: ({ children }) => (
-                <h1 className="text-2xl font-bold text-[#e8e8f0] mb-6 pb-3 border-b border-[#2a2a45]">
+                <h1 className="text-2xl font-bold text-[#d4d4d4] mb-6 pb-3 border-b border-[#3e3e42]">
                   {children}
                 </h1>
               ),
               h2: ({ children }) => (
-                <h2 className="text-lg font-semibold text-[#e8e8f0] mt-8 mb-3">
+                <h2 className="text-lg font-semibold text-[#d4d4d4] mt-8 mb-3">
                   {children}
                 </h2>
               ),
               h3: ({ children }) => (
-                <h3 className="text-base font-semibold text-[#e8e8f0] mt-6 mb-2">
+                <h3 className="text-base font-semibold text-[#d4d4d4] mt-6 mb-2">
                   {children}
                 </h3>
               ),
               p: ({ children }) => (
-                <p className="text-[#c5c5d8] leading-relaxed mb-4">{children}</p>
+                <p className="text-[#cccccc] leading-relaxed mb-4">{children}</p>
               ),
               code: ({ className, children, inline, ...props }: CodeProps) => {
                 const match = /language-(\w+)/.exec(className ?? "");
@@ -54,8 +54,8 @@ export function ExplanationLesson({ lesson }: Props) {
 
                 if (!inline && match) {
                   return (
-                    <div className="my-4 rounded-lg overflow-hidden border border-[#2a2a45]">
-                      <div className="bg-[#141428] px-3 py-1.5 text-xs text-[#6b7280] border-b border-[#2a2a45]">
+                    <div className="my-4 rounded-lg overflow-hidden border border-[#3e3e42]">
+                      <div className="bg-[#252526] px-3 py-1.5 text-xs text-[#6b7280] border-b border-[#3e3e42]">
                         {lang}
                       </div>
                       <SyntaxHighlighter
@@ -64,7 +64,7 @@ export function ExplanationLesson({ lesson }: Props) {
                         customStyle={{
                           margin: 0,
                           padding: "12px 16px",
-                          background: "#0e0e1a",
+                          background: "#1e1e1e",
                           fontSize: "13px",
                           lineHeight: "1.6",
                           borderRadius: 0,
@@ -79,7 +79,7 @@ export function ExplanationLesson({ lesson }: Props) {
 
                 return (
                   <code
-                    className="bg-[#1e1e38] text-[#00d4aa] text-sm px-1.5 py-0.5 rounded font-mono"
+                    className="bg-[#2a2a2a] text-[#007acc] text-sm px-1.5 py-0.5 rounded font-mono"
                     {...props}
                   >
                     {children}
@@ -87,50 +87,50 @@ export function ExplanationLesson({ lesson }: Props) {
                 );
               },
               ul: ({ children }) => (
-                <ul className="text-[#c5c5d8] mb-4 space-y-1 ml-4 list-disc">{children}</ul>
+                <ul className="text-[#cccccc] mb-4 space-y-1 ml-4 list-disc">{children}</ul>
               ),
               ol: ({ children }) => (
-                <ol className="text-[#c5c5d8] mb-4 space-y-1 ml-4 list-decimal">{children}</ol>
+                <ol className="text-[#cccccc] mb-4 space-y-1 ml-4 list-decimal">{children}</ol>
               ),
               li: ({ children }) => (
                 <li className="leading-relaxed">{children}</li>
               ),
               strong: ({ children }) => (
-                <strong className="text-[#e8e8f0] font-semibold">{children}</strong>
+                <strong className="text-[#d4d4d4] font-semibold">{children}</strong>
               ),
               em: ({ children }) => (
-                <em className="text-[#c5c5d8] italic">{children}</em>
+                <em className="text-[#cccccc] italic">{children}</em>
               ),
               blockquote: ({ children }) => (
-                <blockquote className="border-l-4 border-[#00d4aa] pl-4 my-4 text-[#9ca3af] italic">
+                <blockquote className="border-l-4 border-[#007acc] pl-4 my-4 text-[#9ca3af] italic">
                   {children}
                 </blockquote>
               ),
               table: ({ children }) => (
-                <div className="overflow-x-auto my-5 rounded-lg border border-[#2a2a45]">
+                <div className="overflow-x-auto my-5 rounded-lg border border-[#3e3e42]">
                   <table className="w-full text-sm border-collapse">{children}</table>
                 </div>
               ),
               thead: ({ children }) => (
-                <thead className="bg-[#141428]">{children}</thead>
+                <thead className="bg-[#252526]">{children}</thead>
               ),
               tbody: ({ children }) => (
-                <tbody className="divide-y divide-[#2a2a45]">{children}</tbody>
+                <tbody className="divide-y divide-[#3e3e42]">{children}</tbody>
               ),
               tr: ({ children }) => (
-                <tr className="hover:bg-[#1a1a30] transition-colors">{children}</tr>
+                <tr className="hover:bg-[#2d2d2d] transition-colors">{children}</tr>
               ),
               th: ({ children }) => (
-                <th className="px-4 py-2.5 text-left text-xs font-semibold text-[#9ca3af] uppercase tracking-wider border-b border-[#2a2a45]">
+                <th className="px-4 py-2.5 text-left text-xs font-semibold text-[#9ca3af] uppercase tracking-wider border-b border-[#3e3e42]">
                   {children}
                 </th>
               ),
               td: ({ children }) => (
-                <td className="px-4 py-2.5 text-[#c5c5d8]">
+                <td className="px-4 py-2.5 text-[#cccccc]">
                   {children}
                 </td>
               ),
-              hr: () => <hr className="border-[#2a2a45] my-6" />,
+              hr: () => <hr className="border-[#3e3e42] my-6" />,
             }}
           >
             {lesson.content || ""}
@@ -143,7 +143,7 @@ export function ExplanationLesson({ lesson }: Props) {
           </span>
           <button
             onClick={handleContinue}
-            className="flex items-center gap-2 px-5 py-2.5 rounded bg-[#00d4aa] text-[#0e0e1a] font-semibold text-sm hover:bg-[#00c49a] transition-colors"
+            className="flex items-center gap-2 px-5 py-2.5 rounded bg-[#007acc] text-white font-semibold text-sm hover:bg-[#006ab3] transition-colors"
           >
             {next ? "Continuar" : "Finalizar capítulo"}
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>

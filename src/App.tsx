@@ -18,12 +18,12 @@ export default function App() {
   if (!lesson) return null;
 
   return (
-    <div className="h-screen flex flex-col bg-[#0e0e1a] text-[#e8e8f0] overflow-hidden">
+    <div className="h-screen flex flex-col bg-[#1e1e1e] text-[#d4d4d4] overflow-hidden">
       <Header />
       <div className="flex flex-1 min-h-0">
         {/* Sidebar */}
         {sidebarOpen && (
-          <aside className="w-64 flex-shrink-0 bg-[#141428] border-r border-[#2a2a45] flex flex-col">
+          <aside className="w-64 flex-shrink-0 bg-[#252526] border-r border-[#3e3e42] flex flex-col">
             <Sidebar />
           </aside>
         )}
