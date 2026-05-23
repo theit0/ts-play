@@ -6,6 +6,7 @@ Una plataforma web interactiva para aprender TypeScript en español, con un edit
 ![React](https://img.shields.io/badge/React-61DAFB?style=flat&logo=react&logoColor=black)
 ![Vite](https://img.shields.io/badge/Vite-646CFF?style=flat&logo=vite&logoColor=white)
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-06B6D4?style=flat&logo=tailwindcss&logoColor=white)
+![CI](https://github.com/theopelegrina/ts-play/actions/workflows/ci.yml/badge.svg)
 
 ---
 
@@ -43,6 +44,49 @@ La plataforma combina explicaciones claras en español con un entorno de código
 | 8 | Tuples | Tuplas, tipos por posición |
 | 9 | Literal types | Tipos literales, `const` vs `let` |
 | 10 | Functions | Tipos de retorno, void, parámetros opcionales, arrow functions |
+| 11 | Modules | import/export, import type |
+| 12 | Objects | Tipos de objetos, duck typing, sistema estructural |
+| 13 | Interfaces | Introducción a interfaces, declaration merging, extends |
+| 14 | Type vs. Interface | Diferencias, cuándo usar cada uno |
+| 15 | Real-life complex objects | Objetos complejos, optional chaining, propiedades anidadas |
+| 16 | Callbacks | Tipado de callbacks, params y return types |
+| 17 | Classes I | Clases, constructores, propiedades opcionales |
+| 18 | Classes II | Visibility modifiers, parameter properties, readonly |
+| 19 | Class implements | implements interface, descripción de instancias |
+| 20 | Class extends | Herencia, substitutability |
+| 21 | Polymorphism | Polimorfismo, refactoring con clases |
+| 22 | Unknown and type narrowing | El tipo `unknown`, narrowing avanzado |
+| 23 | Function overloads | Sobrecargas de función, firmas de sobrecarga |
+| 24 | Misc concepts | Conceptos varios, tipos avanzados |
+| 25 | Intro to generics | Problema y solución de generics, sintaxis |
+| 26 | Generics (continued) | Técnica para resolver generics |
+| 27 | Array generics | Generics con arrays |
+| 28 | Object generics | Generics con objetos, paginado |
+| 29 | Class generics | Clases genéricas, caché service |
+| 30 | Generic default type | Tipos genéricos con valor por defecto |
+| 31 | Multiple generic types | Múltiples parámetros de tipo |
+| 32 | Generic constraints | Restricciones con `extends` |
+| 33 | The keyof operator | `keyof`, acceso seguro a propiedades |
+| 34 | Utility Types I | `Required`, `Partial`, `Pick`, `Omit` |
+| 35 | Utility Types II | `typeof`, `ReturnType`, `Parameters`, `NonNullable` |
+| 36 | Record | `Record<Keys, Type>`, casos de uso |
+| 37 | Index signatures | Firmas de índice, tipos dinámicos |
+| 38 | Intersection types | Tipos de intersección con `&` |
+| 39 | Promises | Tipado de Promises, async/await |
+| 40 | Fetch | Fetch API tipada |
+| 41 | Practical fetch | Fetch práctico, uniones discriminadas |
+| 42 | FetchWrapper | Clase genérica FetchWrapper |
+| 43 | Intro to DOM | DOM con TypeScript, querySelector |
+| 44 | HTMLElement | Interfaces HTMLElement, HTMLInputElement |
+| 45 | querySelector generic | querySelector genérico tipado |
+| 46 | Asserting elements | Non-null assertions, type assertions |
+| 47 | querySelector deep dive | Sobrecargas de querySelector |
+| 48 | querySelector summary | Proyecto registro, proyecto clima |
+| 49 | querySelectorAll | `NodeListOf`, querySelectorAll genérico |
+| 50 | DOM Misc | Eventos DOM, getElementById |
+| 51 | DOM Projects | Proyectos DOM completos |
+| 52 | Ambient modules | Módulos ambiente, extender interfaces globales |
+| 53 | Migrating to TypeScript | Migración de JS a TS, proyecto final |
 
 ---
 
@@ -135,4 +179,3 @@ El playground funciona completamente en el cliente:
 **Theo Pelegrina** — Frontend Engineer
 
 [![GitHub](https://img.shields.io/badge/GitHub-181717?style=flat&logo=github&logoColor=white)](https://github.com/theopelegrina)
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-0A66C2?style=flat&logo=linkedin&logoColor=white)](https://linkedin.com/in/theopelegrina)

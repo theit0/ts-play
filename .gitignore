@@ -36,4 +36,4 @@ Thumbs.db
 *.tsbuildinfo
 
 # Internal / not for public
-PENDING.md
+docs/
