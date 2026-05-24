@@ -1,8 +1,8 @@
 import { create } from "zustand";
 
-const PROGRESS_KEY = "ts-play-progress";
-const CODE_KEY = "ts-play-code";
-const LAST_LESSON_KEY = "ts-play-last-lesson";
+const PROGRESS_KEY = "ts-play-progress-v1";
+const CODE_KEY = "ts-play-code-v1";
+const LAST_LESSON_KEY = "ts-play-last-lesson-v1";
 
 function loadProgress(): Set<string> {
   try {

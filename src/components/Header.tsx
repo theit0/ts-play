@@ -1,6 +1,6 @@
 import { Menu, ChevronRight, Map } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
-import { getAdjacentLessons, findLesson, chapters } from "../data/curriculum";
+import { getAdjacentLessons, findLesson, allLessons } from "../data/curriculum";
 import { useAppStore } from "../store";
 
 export function Header() {
@@ -13,7 +13,6 @@ export function Header() {
   const isHome = !currentLessonId;
 
   // On the home page, Continuar navigates to the first incomplete or last visited lesson
-  const allLessons = chapters.flatMap((c) => c.lessons);
   const firstIncomplete = allLessons.find((l) => !completedLessons.has(l.id));
   const continueTarget = lastLessonId ?? firstIncomplete?.id ?? allLessons[0]?.id;
 

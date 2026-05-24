@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { PrismLight as SyntaxHighlighter } from "react-syntax-highlighter";
@@ -121,8 +122,9 @@ function buildComponents(compact: boolean) {
 }
 
 export function MarkdownContent({ content, compact = false }: { content: string; compact?: boolean }) {
+  const components = useMemo(() => buildComponents(compact), [compact]);
   return (
-    <ReactMarkdown remarkPlugins={[remarkGfm]} components={buildComponents(compact)}>
+    <ReactMarkdown remarkPlugins={[remarkGfm]} components={components}>
       {content}
     </ReactMarkdown>
   );

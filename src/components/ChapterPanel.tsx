@@ -3,7 +3,7 @@ import { CHAPTER_COLORS } from "../utils/layout";
 
 export function ChapterPanel({ completedLessons }: { completedLessons: Set<string> }) {
   return (
-    <aside className="w-72 flex-shrink-0 border-l border-[var(--vs-border)] p-6 overflow-y-auto flex flex-col gap-4 bg-[var(--vs-surface)]">
+    <aside className="hidden xl:flex w-72 flex-shrink-0 border-l border-[var(--vs-border)] p-6 overflow-y-auto flex-col gap-4 bg-[var(--vs-surface)]">
       <div className="text-[10px] font-bold uppercase tracking-widest text-[var(--vs-fg)]/40">
         Capítulos
       </div>
