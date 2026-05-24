@@ -32,22 +32,22 @@ export function ExplanationLesson({ lesson }: Props) {
             remarkPlugins={[remarkGfm]}
             components={{
               h1: ({ children }) => (
-                <h1 className="text-2xl font-bold text-[#d4d4d4] mb-6 pb-3 border-b border-[#3e3e42]">
+                <h1 className="text-2xl font-bold text-[var(--vs-fg)] mb-6 pb-3 border-b border-[var(--vs-border)]">
                   {children}
                 </h1>
               ),
               h2: ({ children }) => (
-                <h2 className="text-lg font-semibold text-[#d4d4d4] mt-8 mb-3">
+                <h2 className="text-lg font-semibold text-[var(--vs-fg)] mt-8 mb-3">
                   {children}
                 </h2>
               ),
               h3: ({ children }) => (
-                <h3 className="text-base font-semibold text-[#d4d4d4] mt-6 mb-2">
+                <h3 className="text-base font-semibold text-[var(--vs-fg)] mt-6 mb-2">
                   {children}
                 </h3>
               ),
               p: ({ children }) => (
-                <p className="text-[#cccccc] leading-relaxed mb-4">{children}</p>
+                <p className="text-[var(--vs-body)] leading-relaxed mb-4">{children}</p>
               ),
               code: ({ className, children, inline, ...props }: CodeProps) => {
                 const match = /language-(\w+)/.exec(className ?? "");
@@ -55,8 +55,8 @@ export function ExplanationLesson({ lesson }: Props) {
 
                 if (!inline && match) {
                   return (
-                    <div className="my-4 rounded-lg overflow-hidden border border-[#3e3e42]">
-                      <div className="bg-[#252526] px-3 py-1.5 text-xs text-[#6b7280] border-b border-[#3e3e42]">
+                    <div className="my-4 rounded-lg overflow-hidden border border-[var(--vs-border)]">
+                      <div className="bg-[var(--vs-surface)] px-3 py-1.5 text-xs text-[var(--vs-muted)] border-b border-[var(--vs-border)]">
                         {lang}
                       </div>
                       <SyntaxHighlighter
@@ -80,7 +80,7 @@ export function ExplanationLesson({ lesson }: Props) {
 
                 return (
                   <code
-                    className="bg-[#2a2a2a] text-[#007acc] text-sm px-1.5 py-0.5 rounded font-mono"
+                    className="bg-[var(--vs-elevated)] text-[var(--vs-accent)] text-sm px-1.5 py-0.5 rounded font-mono"
                     {...props}
                   >
                     {children}
@@ -88,50 +88,46 @@ export function ExplanationLesson({ lesson }: Props) {
                 );
               },
               ul: ({ children }) => (
-                <ul className="text-[#cccccc] mb-4 space-y-1 ml-4 list-disc">{children}</ul>
+                <ul className="text-[var(--vs-body)] mb-4 space-y-1 ml-4 list-disc">{children}</ul>
               ),
               ol: ({ children }) => (
-                <ol className="text-[#cccccc] mb-4 space-y-1 ml-4 list-decimal">{children}</ol>
+                <ol className="text-[var(--vs-body)] mb-4 space-y-1 ml-4 list-decimal">{children}</ol>
               ),
-              li: ({ children }) => (
-                <li className="leading-relaxed">{children}</li>
-              ),
+              li: ({ children }) => <li className="leading-relaxed">{children}</li>,
               strong: ({ children }) => (
-                <strong className="text-[#d4d4d4] font-semibold">{children}</strong>
+                <strong className="text-[var(--vs-fg)] font-semibold">{children}</strong>
               ),
               em: ({ children }) => (
-                <em className="text-[#cccccc] italic">{children}</em>
+                <em className="text-[var(--vs-body)] italic">{children}</em>
               ),
               blockquote: ({ children }) => (
-                <blockquote className="border-l-4 border-[#007acc] pl-4 my-4 text-[#9ca3af] italic">
+                <blockquote className="border-l-4 border-[var(--vs-accent)] pl-4 my-4 text-[var(--vs-subtle)] italic">
                   {children}
                 </blockquote>
               ),
               table: ({ children }) => (
-                <div className="overflow-x-auto my-5 rounded-lg border border-[#3e3e42]">
+                <div className="overflow-x-auto my-5 rounded-lg border border-[var(--vs-border)]">
                   <table className="w-full text-sm border-collapse">{children}</table>
                 </div>
               ),
               thead: ({ children }) => (
-                <thead className="bg-[#252526]">{children}</thead>
+                <thead className="bg-[var(--vs-surface)]">{children}</thead>
               ),
               tbody: ({ children }) => (
-                <tbody className="divide-y divide-[#3e3e42]">{children}</tbody>
+                <tbody className="divide-y divide-[var(--vs-border)]">{children}</tbody>
               ),
               tr: ({ children }) => (
-                <tr className="hover:bg-[#2d2d2d] transition-colors">{children}</tr>
+                <tr className="hover:bg-[var(--vs-elevated)] transition-colors">{children}</tr>
               ),
               th: ({ children }) => (
-                <th className="px-4 py-2.5 text-left text-xs font-semibold text-[#9ca3af] uppercase tracking-wider border-b border-[#3e3e42]">
+                <th className="px-4 py-2.5 text-left text-xs font-semibold text-[var(--vs-subtle)] uppercase tracking-wider border-b border-[var(--vs-border)]">
                   {children}
                 </th>
               ),
               td: ({ children }) => (
-                <td className="px-4 py-2.5 text-[#cccccc]">
-                  {children}
-                </td>
+                <td className="px-4 py-2.5 text-[var(--vs-body)]">{children}</td>
               ),
-              hr: () => <hr className="border-[#3e3e42] my-6" />,
+              hr: () => <hr className="border-[var(--vs-border)] my-6" />,
             }}
           >
             {lesson.content || ""}
@@ -139,12 +135,12 @@ export function ExplanationLesson({ lesson }: Props) {
         </article>
 
         <div className="mt-10 flex items-center justify-between">
-          <span className="text-sm text-[#4ec9b0] flex items-center gap-1">
+          <span className="text-sm text-[var(--vs-success)] flex items-center gap-1">
             {isDone && <><Check className="w-4 h-4" /> Completada</>}
           </span>
           <button
             onClick={handleContinue}
-            className="flex items-center gap-2 px-5 py-2.5 rounded bg-[#007acc] text-white font-semibold text-sm hover:bg-[#006ab3] transition-colors"
+            className="flex items-center gap-2 px-5 py-2.5 rounded bg-[var(--vs-accent)] text-white font-semibold text-sm hover:bg-[var(--vs-accent-dark)] transition-colors"
           >
             {next ? "Continuar" : "Finalizar capítulo"}
             <ChevronRight className="w-4 h-4" />

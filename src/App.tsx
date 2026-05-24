@@ -10,25 +10,21 @@ export default function App() {
   const { currentLessonId, sidebarOpen } = useAppStore();
   const lesson = findLesson(currentLessonId);
 
-  // Keyboard shortcut: Ctrl+Enter = run (handled inside ExerciseLesson via editor)
   useEffect(() => {
-    document.title = lesson ? `${lesson.title} — Aprende TypeScript` : "Aprende TypeScript";
+    document.title = lesson ? `${lesson.title} — PlayTS` : "PlayTS";
   }, [lesson]);
 
   if (!lesson) return null;
 
   return (
-    <div className="h-screen flex flex-col bg-[#1e1e1e] text-[#d4d4d4] overflow-hidden">
+    <div className="h-screen flex flex-col bg-[var(--vs-bg)] text-[var(--vs-fg)] overflow-hidden">
       <Header />
       <div className="flex flex-1 min-h-0">
-        {/* Sidebar */}
         {sidebarOpen && (
-          <aside className="w-64 flex-shrink-0 bg-[#252526] border-r border-[#3e3e42] flex flex-col">
+          <aside className="w-64 flex-shrink-0 bg-[var(--vs-surface)] border-r border-[var(--vs-border)] flex flex-col">
             <Sidebar />
           </aside>
         )}
-
-        {/* Main content */}
         <main className="flex-1 flex flex-col min-w-0 min-h-0">
           {lesson.type === "explanation" ? (
             <ExplanationLesson key={lesson.id} lesson={lesson} />

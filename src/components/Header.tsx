@@ -1,18 +1,23 @@
 import { Menu, ChevronLeft, ChevronRight } from "lucide-react";
-import { getAdjacentLessons, findLesson } from "../data/curriculum";
+import { getAdjacentLessons, findLesson, chapters } from "../data/curriculum";
 import { useAppStore } from "../store";
 
+const totalLessons = chapters.flatMap((c) => c.lessons).length;
+
 export function Header() {
-  const { currentLessonId, setCurrentLesson, toggleSidebar, sidebarOpen } =
+  const { currentLessonId, setCurrentLesson, toggleSidebar, sidebarOpen, completedLessons } =
     useAppStore();
   const lesson = findLesson(currentLessonId);
   const { prev, next } = getAdjacentLessons(currentLessonId);
 
+  const completedCount = completedLessons.size;
+  const progressPct = Math.round((completedCount / totalLessons) * 100);
+
   return (
-    <header className="h-12 flex items-center px-4 gap-3 border-b border-[#3e3e42] flex-shrink-0">
+    <header className="h-12 flex items-center px-4 gap-3 border-b border-[var(--vs-border)] flex-shrink-0">
       <button
         onClick={toggleSidebar}
-        className="p-1.5 rounded text-[#6b7280] hover:text-[#d4d4d4] hover:bg-[#37373d] transition-colors"
+        className="p-1.5 rounded text-[var(--vs-muted)] hover:text-[var(--vs-fg)] hover:bg-[var(--vs-hover)] transition-colors"
         title={sidebarOpen ? "Cerrar sidebar" : "Abrir sidebar"}
       >
         <Menu className="w-4 h-4" />
@@ -20,22 +25,31 @@ export function Header() {
 
       <div className="flex items-center gap-2">
         <img src="/playts-logo.png" alt="PlayTS" className="h-7 w-7" />
-        <span className="text-[#9ca3af] text-sm font-medium">
-          PlayTS
-        </span>
+        <span className="text-[var(--vs-subtle)] text-sm font-medium">PlayTS</span>
       </div>
 
-      <div className="ml-auto flex items-center gap-2">
+      <div className="ml-auto flex items-center gap-3">
         {lesson && (
-          <span className="text-sm text-[#d4d4d4] hidden sm:block">
-            {lesson.title}
-          </span>
+          <span className="text-sm text-[var(--vs-fg)] hidden sm:block">{lesson.title}</span>
         )}
+
+        <div className="hidden sm:flex items-center gap-2">
+          <div className="w-24 h-1.5 bg-[var(--vs-elevated)] rounded-full overflow-hidden">
+            <div
+              className="h-full bg-[var(--vs-accent)] rounded-full transition-all duration-300"
+              style={{ width: `${progressPct}%` }}
+            />
+          </div>
+          <span className="text-xs text-[var(--vs-muted)] tabular-nums">
+            {completedCount}/{totalLessons}
+          </span>
+        </div>
+
         <div className="flex gap-1">
           <button
             onClick={() => prev && setCurrentLesson(prev.id)}
             disabled={!prev}
-            className="flex items-center gap-1 px-3 py-1.5 text-sm rounded text-[#9ca3af] hover:text-[#d4d4d4] hover:bg-[#37373d] disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+            className="flex items-center gap-1 px-3 py-1.5 text-sm rounded text-[var(--vs-subtle)] hover:text-[var(--vs-fg)] hover:bg-[var(--vs-hover)] disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
           >
             <ChevronLeft className="w-4 h-4" />
             <span className="hidden sm:inline">Atrás</span>
@@ -43,7 +57,7 @@ export function Header() {
           <button
             onClick={() => next && setCurrentLesson(next.id)}
             disabled={!next}
-            className="flex items-center gap-1 px-3 py-1.5 text-sm rounded bg-[#007acc] text-white font-medium hover:bg-[#006ab3] disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+            className="flex items-center gap-1 px-3 py-1.5 text-sm rounded bg-[var(--vs-accent)] text-white font-medium hover:bg-[var(--vs-accent-dark)] disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
           >
             <span className="hidden sm:inline">Siguiente</span>
             <ChevronRight className="w-4 h-4" />

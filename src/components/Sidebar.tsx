@@ -14,7 +14,7 @@ export function Sidebar() {
     <div className="h-full overflow-y-auto py-3">
       {chapters.map((chapter) => (
         <div key={chapter.id} className="mb-1">
-          <div className="px-4 py-2 text-xs font-semibold text-[#9ca3af] uppercase tracking-wider">
+          <div className="px-4 py-2 text-xs font-semibold text-[var(--vs-subtle)] uppercase tracking-wider">
             {chapter.id.replace("ch", "")}. {chapter.title}
           </div>
           <div>
@@ -27,20 +27,24 @@ export function Sidebar() {
                   onClick={() => setCurrentLesson(lesson.id)}
                   className={`w-full flex items-center gap-2.5 px-4 py-1.5 text-sm text-left transition-colors ${
                     isActive
-                      ? "bg-[#37373d] text-[#d4d4d4]"
-                      : "text-[#9ca3af] hover:bg-[#2a2a2a] hover:text-[#d4d4d4]"
+                      ? "bg-[var(--vs-hover)] text-[var(--vs-fg)]"
+                      : "text-[var(--vs-subtle)] hover:bg-[var(--vs-elevated)] hover:text-[var(--vs-fg)]"
                   }`}
                 >
                   <span
                     className={
-                      isDone ? "text-[#4ec9b0]" : isActive ? "text-[#007acc]" : "text-[#4d4d4d]"
+                      isDone
+                        ? "text-[var(--vs-success)]"
+                        : isActive
+                        ? "text-[var(--vs-accent)]"
+                        : "text-[var(--vs-dim)]"
                     }
                   >
                     <LessonIcon type={lesson.type} />
                   </span>
                   <span className="truncate">{lesson.title}</span>
                   {isDone && (
-                    <span className="ml-auto flex-shrink-0 text-[#4ec9b0]">
+                    <span className="ml-auto flex-shrink-0 text-[var(--vs-success)]">
                       <Check className="w-3.5 h-3.5" />
                     </span>
                   )}

@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useRef } from "react";
 import { Check, X, Play, ChevronRight } from "lucide-react";
 import type { ComponentProps } from "react";
 import confetti from "canvas-confetti";
@@ -51,6 +51,7 @@ export function ExerciseLesson({ lesson }: Props) {
   } = useAppStore();
 
   const { next } = getAdjacentLessons(lesson.id);
+  const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const savedCode = getCodeForLesson(lesson.id);
   const [code, setCode] = useState(savedCode ?? lesson.starterCode ?? "");
@@ -93,15 +94,16 @@ export function ExerciseLesson({ lesson }: Props) {
     (value: string | undefined) => {
       const v = value ?? "";
       setCode(v);
-      saveCodeForLesson(lesson.id, v);
+      if (saveTimer.current) clearTimeout(saveTimer.current);
+      saveTimer.current = setTimeout(() => {
+        saveCodeForLesson(lesson.id, v);
+      }, 500);
     },
     [lesson.id, saveCodeForLesson]
   );
 
   const handleShowSolution = () => {
-    if (lesson.solution) {
-      setCode(lesson.solution);
-    }
+    if (lesson.solution) setCode(lesson.solution);
   };
 
   const handleReset = () => {
@@ -118,14 +120,13 @@ export function ExerciseLesson({ lesson }: Props) {
 
   return (
     <div className="flex-1 flex flex-col min-h-0">
-      {/* Main area: editor + instructions */}
       <div className="flex flex-1 min-h-0">
         {/* Editor */}
-        <div className="flex-1 flex flex-col min-w-0 border-r border-[#3e3e42]">
-          <div className="flex items-center px-3 py-1.5 bg-[#252526] border-b border-[#3e3e42] text-xs text-[#6b7280] gap-2">
-            <span className="text-[#d4d4d4]">index.ts</span>
+        <div className="flex-1 flex flex-col min-w-0 border-r border-[var(--vs-border)]">
+          <div className="flex items-center px-3 py-1.5 bg-[var(--vs-surface)] border-b border-[var(--vs-border)] text-xs text-[var(--vs-muted)] gap-2">
+            <span className="text-[var(--vs-fg)]">index.ts</span>
             {isDone && (
-              <span className="ml-auto text-[#4ec9b0] flex items-center gap-1">
+              <span className="ml-auto text-[var(--vs-success)] flex items-center gap-1">
                 <Check className="w-3 h-3" />
                 Completado
               </span>
@@ -157,8 +158,8 @@ export function ExerciseLesson({ lesson }: Props) {
 
         {/* Instructions panel */}
         <div className="w-80 xl:w-96 flex-shrink-0 flex flex-col overflow-hidden">
-          <div className="flex border-b border-[#3e3e42]">
-            <button className="px-4 py-2 text-sm text-[#d4d4d4] border-b-2 border-[#007acc] bg-transparent">
+          <div className="flex border-b border-[var(--vs-border)]">
+            <button className="px-4 py-2 text-sm text-[var(--vs-fg)] border-b-2 border-[var(--vs-accent)] bg-transparent">
               Instrucciones
             </button>
           </div>
@@ -167,21 +168,17 @@ export function ExerciseLesson({ lesson }: Props) {
               remarkPlugins={[remarkGfm]}
               components={{
                 h2: ({ children }) => (
-                  <h2 className="text-base font-semibold text-[#d4d4d4] mb-3">
-                    {children}
-                  </h2>
+                  <h2 className="text-base font-semibold text-[var(--vs-fg)] mb-3">{children}</h2>
                 ),
                 p: ({ children }) => (
-                  <p className="text-sm text-[#cccccc] leading-relaxed mb-3">
-                    {children}
-                  </p>
+                  <p className="text-sm text-[var(--vs-body)] leading-relaxed mb-3">{children}</p>
                 ),
                 code: ({ className, children, inline, ...props }: CodeProps) => {
                   const match = /language-(\w+)/.exec(className ?? "");
                   const lang = match?.[1] ?? "typescript";
                   if (!inline && match) {
                     return (
-                      <div className="my-2 rounded overflow-hidden border border-[#3e3e42]">
+                      <div className="my-2 rounded overflow-hidden border border-[var(--vs-border)]">
                         <SyntaxHighlighter
                           language={lang === "ts" ? "typescript" : lang}
                           style={vscDarkPlus}
@@ -201,7 +198,7 @@ export function ExerciseLesson({ lesson }: Props) {
                   }
                   return (
                     <code
-                      className="bg-[#2a2a2a] text-[#007acc] text-xs px-1 py-0.5 rounded font-mono"
+                      className="bg-[var(--vs-elevated)] text-[var(--vs-accent)] text-xs px-1 py-0.5 rounded font-mono"
                       {...props}
                     >
                       {children}
@@ -209,34 +206,32 @@ export function ExerciseLesson({ lesson }: Props) {
                   );
                 },
                 ul: ({ children }) => (
-                  <ul className="text-sm text-[#cccccc] mb-3 space-y-1 ml-3 list-disc">
-                    {children}
-                  </ul>
+                  <ul className="text-sm text-[var(--vs-body)] mb-3 space-y-1 ml-3 list-disc">{children}</ul>
                 ),
                 li: ({ children }) => <li className="leading-relaxed">{children}</li>,
                 strong: ({ children }) => (
-                  <strong className="text-[#d4d4d4] font-semibold">{children}</strong>
+                  <strong className="text-[var(--vs-fg)] font-semibold">{children}</strong>
                 ),
                 blockquote: ({ children }) => (
-                  <blockquote className="border-l-2 border-[#007acc] pl-3 my-3 text-[#9ca3af] text-sm italic">
+                  <blockquote className="border-l-2 border-[var(--vs-accent)] pl-3 my-3 text-[var(--vs-subtle)] text-sm italic">
                     {children}
                   </blockquote>
                 ),
                 table: ({ children }) => (
-                  <div className="overflow-x-auto my-3 rounded border border-[#3e3e42]">
+                  <div className="overflow-x-auto my-3 rounded border border-[var(--vs-border)]">
                     <table className="w-full text-xs border-collapse">{children}</table>
                   </div>
                 ),
-                thead: ({ children }) => <thead className="bg-[#252526]">{children}</thead>,
-                tbody: ({ children }) => <tbody className="divide-y divide-[#3e3e42]">{children}</tbody>,
+                thead: ({ children }) => <thead className="bg-[var(--vs-surface)]">{children}</thead>,
+                tbody: ({ children }) => <tbody className="divide-y divide-[var(--vs-border)]">{children}</tbody>,
                 tr: ({ children }) => <tr>{children}</tr>,
                 th: ({ children }) => (
-                  <th className="px-3 py-2 text-left text-xs font-semibold text-[#9ca3af] uppercase tracking-wider border-b border-[#3e3e42]">
+                  <th className="px-3 py-2 text-left text-xs font-semibold text-[var(--vs-subtle)] uppercase tracking-wider border-b border-[var(--vs-border)]">
                     {children}
                   </th>
                 ),
                 td: ({ children }) => (
-                  <td className="px-3 py-2 text-[#cccccc]">{children}</td>
+                  <td className="px-3 py-2 text-[var(--vs-body)]">{children}</td>
                 ),
               }}
             >
@@ -244,13 +239,13 @@ export function ExerciseLesson({ lesson }: Props) {
             </ReactMarkdown>
 
             {showHint && lesson.hint && (
-              <div className="mt-3 p-3 bg-[#2a2a2a] rounded border border-[#3e3e42] text-sm text-[#cccccc]">
+              <div className="mt-3 p-3 bg-[var(--vs-elevated)] rounded border border-[var(--vs-border)] text-sm text-[var(--vs-body)]">
                 {lesson.hint}
               </div>
             )}
 
             {allPassed && (
-              <div className="mt-4 p-3 bg-[#1a2e1a] rounded border border-[#2d5a2d] text-sm text-[#4ec9b0]">
+              <div className="mt-4 p-3 bg-[var(--vs-success-bg)] rounded border border-[var(--vs-success-ring)] text-sm text-[var(--vs-success)]">
                 ¡Todos los tests pasan! Ejercicio completado.
               </div>
             )}
@@ -259,19 +254,23 @@ export function ExerciseLesson({ lesson }: Props) {
       </div>
 
       {/* Bottom panel: tests + console */}
-      <div className="h-52 flex-shrink-0 border-t border-[#3e3e42] flex flex-col">
-        <div className="flex items-center border-b border-[#3e3e42]">
+      <div className="h-52 flex-shrink-0 border-t border-[var(--vs-border)] flex flex-col">
+        <div className="flex items-center border-b border-[var(--vs-border)]">
           <button
             onClick={() => setActiveBottomTab("tests")}
             className={`px-4 py-2 text-sm transition-colors ${
               activeBottomTab === "tests"
-                ? "text-[#d4d4d4] border-b-2 border-[#007acc]"
-                : "text-[#6b7280] hover:text-[#9ca3af]"
+                ? "text-[var(--vs-fg)] border-b-2 border-[var(--vs-accent)]"
+                : "text-[var(--vs-muted)] hover:text-[var(--vs-subtle)]"
             }`}
           >
             Tests{" "}
             {testResults && (
-              <span className={`ml-1 text-xs font-medium ${allPassed ? "text-[#4ec9b0]" : "text-[#9ca3af]"}`}>
+              <span
+                className={`ml-1 text-xs font-medium ${
+                  allPassed ? "text-[var(--vs-success)]" : "text-[var(--vs-subtle)]"
+                }`}
+              >
                 ({passedCount}/{totalCount})
               </span>
             )}
@@ -280,8 +279,8 @@ export function ExerciseLesson({ lesson }: Props) {
             onClick={() => setActiveBottomTab("console")}
             className={`px-4 py-2 text-sm transition-colors ${
               activeBottomTab === "console"
-                ? "text-[#d4d4d4] border-b-2 border-[#007acc]"
-                : "text-[#6b7280] hover:text-[#9ca3af]"
+                ? "text-[var(--vs-fg)] border-b-2 border-[var(--vs-accent)]"
+                : "text-[var(--vs-muted)] hover:text-[var(--vs-subtle)]"
             }`}
           >
             Consola
@@ -291,28 +290,28 @@ export function ExerciseLesson({ lesson }: Props) {
             {lesson.hint && !showHint && (
               <button
                 onClick={() => setShowHint(true)}
-                className="px-3 py-1 text-xs rounded bg-[#2a2a2a] text-[#9ca3af] hover:text-[#d4d4d4] transition-colors"
+                className="px-3 py-1 text-xs rounded bg-[var(--vs-elevated)] text-[var(--vs-subtle)] hover:text-[var(--vs-fg)] transition-colors"
               >
                 Obtener pista
               </button>
             )}
             <button
               onClick={handleReset}
-              className="px-3 py-1 text-xs rounded bg-[#2a2a2a] text-[#9ca3af] hover:text-[#d4d4d4] transition-colors"
+              className="px-3 py-1 text-xs rounded bg-[var(--vs-elevated)] text-[var(--vs-subtle)] hover:text-[var(--vs-fg)] transition-colors"
             >
               Reiniciar
             </button>
             {lesson.solution && (
               <button
                 onClick={handleShowSolution}
-                className="px-3 py-1 text-xs rounded bg-[#2a2a2a] text-[#9ca3af] hover:text-[#d4d4d4] transition-colors"
+                className="px-3 py-1 text-xs rounded bg-[var(--vs-elevated)] text-[var(--vs-subtle)] hover:text-[var(--vs-fg)] transition-colors"
               >
                 Solución
               </button>
             )}
             <button
               onClick={handleRun}
-              className="flex items-center gap-1.5 px-3 py-1 text-xs rounded bg-[#007acc] text-white font-semibold hover:bg-[#006ab3] transition-colors"
+              className="flex items-center gap-1.5 px-3 py-1 text-xs rounded bg-[var(--vs-accent)] text-white font-semibold hover:bg-[var(--vs-accent-dark)] transition-colors"
             >
               <Play className="w-3 h-3" fill="currentColor" />
               Run
@@ -321,7 +320,7 @@ export function ExerciseLesson({ lesson }: Props) {
             {(allPassed || isDone) && next && (
               <button
                 onClick={() => setCurrentLesson(next.id)}
-                className="flex items-center gap-1.5 px-3 py-1 text-xs rounded bg-[#007acc] text-white font-semibold hover:bg-[#006ab3] transition-colors"
+                className="flex items-center gap-1.5 px-3 py-1 text-xs rounded bg-[var(--vs-accent)] text-white font-semibold hover:bg-[var(--vs-accent-dark)] transition-colors"
               >
                 Siguiente
                 <ChevronRight className="w-3 h-3" />
@@ -334,16 +333,16 @@ export function ExerciseLesson({ lesson }: Props) {
           {activeBottomTab === "tests" && (
             <div className="space-y-1">
               {testResults === null ? (
-                <p className="text-xs text-[#6b7280] italic py-2">
+                <p className="text-xs text-[var(--vs-muted)] italic py-2">
                   Haz clic en Run para ejecutar los tests.
                 </p>
               ) : (
                 testResults.map((t, i) => (
                   <div key={i} className="flex items-center gap-2 text-sm py-0.5">
-                    <span className={t.passed ? "text-[#4ec9b0]" : "text-[#ef4444]"}>
+                    <span className={t.passed ? "text-[var(--vs-success)]" : "text-[var(--vs-error)]"}>
                       {t.passed ? <Check className="w-3.5 h-3.5" /> : <X className="w-3.5 h-3.5" />}
                     </span>
-                    <span className={t.passed ? "text-[#cccccc]" : "text-[#ef4444]"}>
+                    <span className={t.passed ? "text-[var(--vs-body)]" : "text-[var(--vs-error)]"}>
                       {t.name}
                     </span>
                   </div>
@@ -355,15 +354,13 @@ export function ExerciseLesson({ lesson }: Props) {
           {activeBottomTab === "console" && (
             <div className="font-mono text-xs space-y-0.5">
               {runtimeError && (
-                <div className="text-[#ef4444]">{runtimeError}</div>
+                <div className="text-[var(--vs-error)]">{runtimeError}</div>
               )}
               {output.length === 0 && !runtimeError && (
-                <p className="text-[#6b7280] italic">Sin salida todavía.</p>
+                <p className="text-[var(--vs-muted)] italic">Sin salida todavía.</p>
               )}
               {output.map((line, i) => (
-                <div key={i} className="text-[#f59e0b]">
-                  {line}
-                </div>
+                <div key={i} className="text-[var(--vs-warn)]">{line}</div>
               ))}
             </div>
           )}

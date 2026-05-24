@@ -16,9 +16,29 @@ body,
   padding: 0;
 }
 
+:root {
+  --vs-bg:           #1e1e1e;
+  --vs-surface:      #252526;
+  --vs-elevated:     #2a2a2a;
+  --vs-hover:        #37373d;
+  --vs-border:       #3e3e42;
+  --vs-dim:          #4d4d4d;
+  --vs-muted:        #6b7280;
+  --vs-subtle:       #9ca3af;
+  --vs-body:         #cccccc;
+  --vs-fg:           #d4d4d4;
+  --vs-accent:       #007acc;
+  --vs-accent-dark:  #006ab3;
+  --vs-success:      #4ec9b0;
+  --vs-success-bg:   #1a2e1a;
+  --vs-success-ring: #2d5a2d;
+  --vs-error:        #ef4444;
+  --vs-warn:         #f59e0b;
+}
+
 body {
-  background-color: #1e1e1e;
-  color: #d4d4d4;
+  background-color: var(--vs-bg);
+  color: var(--vs-fg);
   font-family: system-ui, -apple-system, sans-serif;
 }
 
@@ -29,21 +49,21 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: #1e1e1e;
+  background: var(--vs-bg);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #3e3e42;
+  background: var(--vs-border);
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #4d4d4d;
+  background: var(--vs-dim);
 }
 
 /* Monaco editor background fix */
 .monaco-editor,
 .monaco-editor-background,
 .monaco-editor .margin {
-  background-color: #1e1e1e !important;
+  background-color: var(--vs-bg) !important;
 }
