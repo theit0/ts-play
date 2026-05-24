@@ -2,7 +2,8 @@ import { useState, useCallback, useRef, useMemo, useEffect } from "react";
 import { Check, X, Play, ChevronRight } from "lucide-react";
 import type { ComponentProps } from "react";
 import confetti from "canvas-confetti";
-import Editor, { type OnMount } from "@monaco-editor/react";
+import Editor, { type OnMount, type Monaco } from "@monaco-editor/react";
+import type { editor as MonacoEditor } from "monaco-editor";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { PrismLight as SyntaxHighlighter } from "react-syntax-highlighter";
@@ -64,6 +65,7 @@ export function ExerciseLesson({ lesson }: Props) {
   const { next } = getAdjacentLessons(lesson.id);
   const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const editorRef = useRef<Parameters<OnMount>[0] | null>(null);
+  const monacoRef = useRef<Monaco | null>(null);
 
   const { size: bottomHeight, onMouseDown: onBottomDragStart } = useDragResize(208, "vertical", 80, 500);
   const { size: rightWidth, onMouseDown: onRightDragStart } = useDragResize(320, "horizontal", 200, 600);
@@ -73,6 +75,7 @@ export function ExerciseLesson({ lesson }: Props) {
   const [output, setOutput] = useState<string[]>([]);
   const [runtimeError, setRuntimeError] = useState<string | null>(null);
   const [testResults, setTestResults] = useState<TestResult[] | null>(null);
+  const [tsErrors, setTsErrors] = useState<{ message: string; line: number }[]>([]);
   const [showHint, setShowHint] = useState(false);
   const [activeBottomTab, setActiveBottomTab] = useState<"tests" | "console" | "js">("tests");
   const [mobilePanelTab, setMobilePanelTab] = useState<"editor" | "instructions">("editor");
@@ -86,7 +89,22 @@ export function ExerciseLesson({ lesson }: Props) {
 
   const isDone = completedLessons.has(lesson.id);
 
-  const handleRun = useCallback(() => {
+  const handleRun = useCallback(async () => {
+    let tsErrs: { message: string; line: number }[] = [];
+    const monaco = monacoRef.current;
+    const editor = editorRef.current;
+    if (monaco && editor) {
+      const model = editor.getModel();
+      if (model) {
+        await new Promise<void>((r) => setTimeout(r, 300));
+        const markers: MonacoEditor.IMarker[] = monaco.editor.getModelMarkers({ resource: model.uri });
+        tsErrs = markers
+          .filter((m: MonacoEditor.IMarker) => m.severity === monaco.MarkerSeverity.Error)
+          .map((m: MonacoEditor.IMarker) => ({ message: m.message, line: m.startLineNumber }));
+      }
+    }
+    setTsErrors(tsErrs);
+
     const { output: out, error } = runCode(code);
     setOutput(out);
     setRuntimeError(error ?? null);
@@ -102,12 +120,14 @@ export function ExerciseLesson({ lesson }: Props) {
       setTestResults(results);
       setActiveBottomTab("tests");
 
-      const allPassed = results.every((r) => r.passed);
-      if (allPassed) {
+      const allTestsPassed = results.every((r) => r.passed) && tsErrs.length === 0;
+      if (allTestsPassed) {
         markComplete(lesson.id);
         playSuccess();
         confetti({ particleCount: 120, spread: 80, origin: { y: 0.6 } });
       }
+    } else if (tsErrs.length > 0) {
+      setActiveBottomTab("tests");
     } else {
       setActiveBottomTab("console");
     }
@@ -132,6 +152,7 @@ export function ExerciseLesson({ lesson }: Props) {
   const handleReset = () => {
     setCode(lesson.starterCode ?? "");
     setTestResults(null);
+    setTsErrors([]);
     setOutput([]);
     setRuntimeError(null);
     unmarkComplete(lesson.id);
@@ -151,7 +172,7 @@ export function ExerciseLesson({ lesson }: Props) {
 
   const passedCount = testResults?.filter((r) => r.passed).length ?? 0;
   const totalCount = testResults?.length ?? 0;
-  const allPassed = totalCount > 0 && passedCount === totalCount;
+  const allPassed = totalCount > 0 && passedCount === totalCount && tsErrors.length === 0;
 
   return (
     <div className="flex-1 flex flex-col min-h-0">
@@ -202,7 +223,10 @@ export function ExerciseLesson({ lesson }: Props) {
               value={code}
               onChange={handleCodeChange}
               theme="vs-dark"
-              onMount={(editor) => { editorRef.current = editor; }}
+              onMount={(editor, monaco) => {
+                editorRef.current = editor;
+                monacoRef.current = monaco;
+              }}
               options={{
                 fontSize: 16,
                 minimap: { enabled: false },
@@ -355,6 +379,11 @@ export function ExerciseLesson({ lesson }: Props) {
                 ({passedCount}/{totalCount})
               </span>
             )}
+            {tsErrors.length > 0 && (
+              <span className="ml-1 text-xs font-medium text-[var(--vs-error)]">
+                TS:{tsErrors.length}
+              </span>
+            )}
           </button>
           <button
             onClick={() => setActiveBottomTab("console")}
@@ -424,21 +453,34 @@ export function ExerciseLesson({ lesson }: Props) {
         <div className="flex-1 overflow-y-auto px-4 py-2">
           {activeBottomTab === "tests" && (
             <div className="space-y-1">
-              {testResults === null ? (
+              {testResults === null && tsErrors.length === 0 ? (
                 <p className="text-xs text-[var(--vs-muted)] py-2">
                   Haz clic en Run para ejecutar los tests.
                 </p>
               ) : (
-                testResults.map((t, i) => (
-                  <div key={i} className="flex items-center gap-2 text-sm py-0.5">
-                    <span className={t.passed ? "text-[var(--vs-success)]" : "text-[var(--vs-error)]"}>
-                      {t.passed ? <Check className="w-3.5 h-3.5" /> : <X className="w-3.5 h-3.5" />}
-                    </span>
-                    <span className={t.passed ? "text-[var(--vs-body)]" : "text-[var(--vs-error)]"}>
-                      {t.name}
-                    </span>
-                  </div>
-                ))
+                <>
+                  {tsErrors.map((e, i) => (
+                    <div key={`ts-${i}`} className="flex items-start gap-2 py-0.5">
+                      <span className="text-[var(--vs-error)] flex-shrink-0 mt-0.5">
+                        <X className="w-3.5 h-3.5" />
+                      </span>
+                      <span className="text-[var(--vs-error)] font-mono text-xs leading-relaxed">
+                        {e.line > 0 ? `L${e.line}: ` : ""}
+                        {e.message}
+                      </span>
+                    </div>
+                  ))}
+                  {testResults?.map((t, i) => (
+                    <div key={i} className="flex items-center gap-2 text-sm py-0.5">
+                      <span className={t.passed ? "text-[var(--vs-success)]" : "text-[var(--vs-error)]"}>
+                        {t.passed ? <Check className="w-3.5 h-3.5" /> : <X className="w-3.5 h-3.5" />}
+                      </span>
+                      <span className={t.passed ? "text-[var(--vs-body)]" : "text-[var(--vs-error)]"}>
+                        {t.name}
+                      </span>
+                    </div>
+                  ))}
+                </>
               )}
             </div>
           )}
