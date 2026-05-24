@@ -1,8 +1,6 @@
-import { useEffect, lazy, Suspense } from "react";
+import { lazy, Suspense, useEffect } from "react";
 import { Sidebar } from "./components/Sidebar";
 import { Header } from "./components/Header";
-import { findLesson } from "./data/curriculum";
-import { useAppStore } from "./store";
 
 const ExplanationLesson = lazy(() =>
   import("./components/ExplanationLesson").then((m) => ({ default: m.ExplanationLesson }))
@@ -10,6 +8,8 @@ const ExplanationLesson = lazy(() =>
 const ExerciseLesson = lazy(() =>
   import("./components/ExerciseLesson").then((m) => ({ default: m.ExerciseLesson }))
 );
+import { findLesson } from "./data/curriculum";
+import { useAppStore } from "./store";
 
 export default function App() {
   const { currentLessonId, sidebarOpen, toggleSidebar } = useAppStore();
