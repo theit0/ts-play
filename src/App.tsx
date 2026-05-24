@@ -1,10 +1,15 @@
-import { useEffect } from "react";
+import { useEffect, lazy, Suspense } from "react";
 import { Sidebar } from "./components/Sidebar";
 import { Header } from "./components/Header";
-import { ExplanationLesson } from "./components/ExplanationLesson";
-import { ExerciseLesson } from "./components/ExerciseLesson";
 import { findLesson } from "./data/curriculum";
 import { useAppStore } from "./store";
+
+const ExplanationLesson = lazy(() =>
+  import("./components/ExplanationLesson").then((m) => ({ default: m.ExplanationLesson }))
+);
+const ExerciseLesson = lazy(() =>
+  import("./components/ExerciseLesson").then((m) => ({ default: m.ExerciseLesson }))
+);
 
 export default function App() {
   const { currentLessonId, sidebarOpen, toggleSidebar } = useAppStore();
@@ -37,11 +42,13 @@ export default function App() {
           </aside>
         )}
         <main className="flex-1 flex flex-col min-w-0 min-h-0">
-          {lesson.type === "explanation" ? (
-            <ExplanationLesson key={lesson.id} lesson={lesson} />
-          ) : (
-            <ExerciseLesson key={lesson.id} lesson={lesson} />
-          )}
+          <Suspense fallback={<div className="flex-1 bg-[var(--vs-bg)]" />}>
+            {lesson.type === "explanation" ? (
+              <ExplanationLesson key={lesson.id} lesson={lesson} />
+            ) : (
+              <ExerciseLesson key={lesson.id} lesson={lesson} />
+            )}
+          </Suspense>
         </main>
       </div>
     </div>
