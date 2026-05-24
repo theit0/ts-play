@@ -1,19 +1,10 @@
+import { Code2, BookOpen, Check } from "lucide-react";
 import { chapters } from "../data/curriculum";
 import { useAppStore } from "../store";
 
 function LessonIcon({ type }: { type: "explanation" | "exercise" }) {
-  if (type === "exercise") {
-    return (
-      <svg className="w-3.5 h-3.5 flex-shrink-0" viewBox="0 0 16 16" fill="none">
-        <path d="M5 4l-3 4 3 4M11 4l3 4-3 4M9 3l-2 10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-      </svg>
-    );
-  }
-  return (
-    <svg className="w-3.5 h-3.5 flex-shrink-0" viewBox="0 0 16 16" fill="none">
-      <path d="M2 4h12M2 8h8M2 12h10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
-    </svg>
-  );
+  if (type === "exercise") return <Code2 className="w-3.5 h-3.5 flex-shrink-0" />;
+  return <BookOpen className="w-3.5 h-3.5 flex-shrink-0" />;
 }
 
 export function Sidebar() {
@@ -42,17 +33,15 @@ export function Sidebar() {
                 >
                   <span
                     className={
-                      isDone ? "text-[#f59e0b]" : isActive ? "text-[#007acc]" : "text-[#4d4d4d]"
+                      isDone ? "text-[#4ec9b0]" : isActive ? "text-[#007acc]" : "text-[#4d4d4d]"
                     }
                   >
                     <LessonIcon type={lesson.type} />
                   </span>
                   <span className="truncate">{lesson.title}</span>
                   {isDone && (
-                    <span className="ml-auto flex-shrink-0 text-[#f59e0b]">
-                      <svg className="w-3.5 h-3.5" viewBox="0 0 16 16" fill="currentColor">
-                        <path d="M13.5 4.5l-7 7L3 8" stroke="currentColor" strokeWidth="1.5" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
-                      </svg>
+                    <span className="ml-auto flex-shrink-0 text-[#4ec9b0]">
+                      <Check className="w-3.5 h-3.5" />
                     </span>
                   )}
                 </button>

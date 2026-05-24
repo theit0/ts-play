@@ -1,4 +1,5 @@
 import { useState, useCallback } from "react";
+import { Check, X, Play, ChevronRight } from "lucide-react";
 import type { ComponentProps } from "react";
 import confetti from "canvas-confetti";
 import Editor from "@monaco-editor/react";
@@ -42,6 +43,7 @@ function playSuccess() {
 export function ExerciseLesson({ lesson }: Props) {
   const {
     markComplete,
+    unmarkComplete,
     completedLessons,
     saveCodeForLesson,
     getCodeForLesson,
@@ -107,6 +109,7 @@ export function ExerciseLesson({ lesson }: Props) {
     setTestResults(null);
     setOutput([]);
     setRuntimeError(null);
+    unmarkComplete(lesson.id);
   };
 
   const passedCount = testResults?.filter((r) => r.passed).length ?? 0;
@@ -122,10 +125,8 @@ export function ExerciseLesson({ lesson }: Props) {
           <div className="flex items-center px-3 py-1.5 bg-[#252526] border-b border-[#3e3e42] text-xs text-[#6b7280] gap-2">
             <span className="text-[#d4d4d4]">index.ts</span>
             {isDone && (
-              <span className="ml-auto text-[#f59e0b] flex items-center gap-1">
-                <svg className="w-3 h-3" fill="none" viewBox="0 0 12 12" stroke="currentColor" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M10 3L5 8.5 2 5.5"/>
-                </svg>
+              <span className="ml-auto text-[#4ec9b0] flex items-center gap-1">
+                <Check className="w-3 h-3" />
                 Completado
               </span>
             )}
@@ -138,7 +139,7 @@ export function ExerciseLesson({ lesson }: Props) {
               onChange={handleCodeChange}
               theme="vs-dark"
               options={{
-                fontSize: 14,
+                fontSize: 16,
                 minimap: { enabled: false },
                 scrollBeyondLastLine: false,
                 lineNumbers: "on",
@@ -244,7 +245,6 @@ export function ExerciseLesson({ lesson }: Props) {
 
             {showHint && lesson.hint && (
               <div className="mt-3 p-3 bg-[#2a2a2a] rounded border border-[#3e3e42] text-sm text-[#cccccc]">
-                <span className="text-[#f59e0b] font-medium">Pista: </span>
                 {lesson.hint}
               </div>
             )}
@@ -291,14 +291,14 @@ export function ExerciseLesson({ lesson }: Props) {
             {lesson.hint && !showHint && (
               <button
                 onClick={() => setShowHint(true)}
-                className="text-xs text-[#6b7280] hover:text-[#9ca3af] transition-colors"
+                className="px-3 py-1 text-xs rounded bg-[#2a2a2a] text-[#9ca3af] hover:text-[#d4d4d4] transition-colors"
               >
                 Obtener pista
               </button>
             )}
             <button
               onClick={handleReset}
-              className="text-xs text-[#6b7280] hover:text-[#9ca3af] transition-colors"
+              className="px-3 py-1 text-xs rounded bg-[#2a2a2a] text-[#9ca3af] hover:text-[#d4d4d4] transition-colors"
             >
               Reiniciar
             </button>
@@ -314,21 +314,17 @@ export function ExerciseLesson({ lesson }: Props) {
               onClick={handleRun}
               className="flex items-center gap-1.5 px-3 py-1 text-xs rounded bg-[#007acc] text-white font-semibold hover:bg-[#006ab3] transition-colors"
             >
-              <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 12 12">
-                <path d="M2 2l8 4-8 4V2z"/>
-              </svg>
+              <Play className="w-3 h-3" fill="currentColor" />
               Run
               <span className="text-white/60 text-[10px]">Ctrl+Enter</span>
             </button>
-            {allPassed && next && (
+            {(allPassed || isDone) && next && (
               <button
                 onClick={() => setCurrentLesson(next.id)}
                 className="flex items-center gap-1.5 px-3 py-1 text-xs rounded bg-[#007acc] text-white font-semibold hover:bg-[#006ab3] transition-colors"
               >
                 Siguiente
-                <svg className="w-3 h-3" fill="none" viewBox="0 0 12 12" stroke="currentColor" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M4 2l4 4-4 4"/>
-                </svg>
+                <ChevronRight className="w-3 h-3" />
               </button>
             )}
           </div>
@@ -345,7 +341,7 @@ export function ExerciseLesson({ lesson }: Props) {
                 testResults.map((t, i) => (
                   <div key={i} className="flex items-center gap-2 text-sm py-0.5">
                     <span className={t.passed ? "text-[#4ec9b0]" : "text-[#ef4444]"}>
-                      {t.passed ? "✓" : "✗"}
+                      {t.passed ? <Check className="w-3.5 h-3.5" /> : <X className="w-3.5 h-3.5" />}
                     </span>
                     <span className={t.passed ? "text-[#cccccc]" : "text-[#ef4444]"}>
                       {t.name}

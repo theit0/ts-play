@@ -1,3 +1,4 @@
+import { Menu, ChevronLeft, ChevronRight } from "lucide-react";
 import { getAdjacentLessons, findLesson } from "../data/curriculum";
 import { useAppStore } from "../store";
 
@@ -14,19 +15,14 @@ export function Header() {
         className="p-1.5 rounded text-[#6b7280] hover:text-[#d4d4d4] hover:bg-[#37373d] transition-colors"
         title={sidebarOpen ? "Cerrar sidebar" : "Abrir sidebar"}
       >
-        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-          <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
-        </svg>
+        <Menu className="w-4 h-4" />
       </button>
 
       <div className="flex items-center gap-2">
-        <div className="bg-[#3178c6] text-white text-xs font-bold px-1.5 py-0.5 rounded">
-          TS
-        </div>
+        <img src="/playts-logo.png" alt="PlayTS" className="h-7 w-7" />
         <span className="text-[#9ca3af] text-sm font-medium">
-          Aprende TypeScript
+          PlayTS
         </span>
-        <span className="text-[#4d4d4d] text-sm">En español</span>
       </div>
 
       <div className="ml-auto flex items-center gap-2">
@@ -41,9 +37,7 @@ export function Header() {
             disabled={!prev}
             className="flex items-center gap-1 px-3 py-1.5 text-sm rounded text-[#9ca3af] hover:text-[#d4d4d4] hover:bg-[#37373d] disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
           >
-            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
-            </svg>
+            <ChevronLeft className="w-4 h-4" />
             <span className="hidden sm:inline">Atrás</span>
           </button>
           <button
@@ -52,9 +46,7 @@ export function Header() {
             className="flex items-center gap-1 px-3 py-1.5 text-sm rounded bg-[#007acc] text-white font-medium hover:bg-[#006ab3] disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
           >
             <span className="hidden sm:inline">Siguiente</span>
-            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-            </svg>
+            <ChevronRight className="w-4 h-4" />
           </button>
         </div>
       </div>

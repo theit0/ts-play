@@ -1,3 +1,4 @@
+import { Check, ChevronRight } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
@@ -138,17 +139,15 @@ export function ExplanationLesson({ lesson }: Props) {
         </article>
 
         <div className="mt-10 flex items-center justify-between">
-          <span className="text-sm text-[#6b7280]">
-            {isDone ? "✓ Completada" : ""}
+          <span className="text-sm text-[#4ec9b0] flex items-center gap-1">
+            {isDone && <><Check className="w-4 h-4" /> Completada</>}
           </span>
           <button
             onClick={handleContinue}
             className="flex items-center gap-2 px-5 py-2.5 rounded bg-[#007acc] text-white font-semibold text-sm hover:bg-[#006ab3] transition-colors"
           >
             {next ? "Continuar" : "Finalizar capítulo"}
-            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-            </svg>
+            <ChevronRight className="w-4 h-4" />
           </button>
         </div>
       </div>

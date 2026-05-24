@@ -40,6 +40,7 @@ interface AppState {
 
   setCurrentLesson: (id: string) => void;
   markComplete: (id: string) => void;
+  unmarkComplete: (id: string) => void;
   saveCodeForLesson: (lessonId: string, code: string) => void;
   getCodeForLesson: (lessonId: string) => string | undefined;
   toggleSidebar: () => void;
@@ -56,6 +57,13 @@ export const useAppStore = create<AppState>((set, get) => ({
   markComplete: (id) => {
     const next = new Set(get().completedLessons);
     next.add(id);
+    saveProgress(next);
+    set({ completedLessons: next });
+  },
+
+  unmarkComplete: (id) => {
+    const next = new Set(get().completedLessons);
+    next.delete(id);
     saveProgress(next);
     set({ completedLessons: next });
   },
