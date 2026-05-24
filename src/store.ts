@@ -15,7 +15,11 @@ function loadProgress(): Set<string> {
 }
 
 function saveProgress(completed: Set<string>): void {
-  localStorage.setItem(PROGRESS_KEY, JSON.stringify([...completed]));
+  try {
+    localStorage.setItem(PROGRESS_KEY, JSON.stringify([...completed]));
+  } catch (e) {
+    console.error("Failed to save progress:", e);
+  }
 }
 
 function loadCode(): Record<string, string> {
@@ -29,7 +33,11 @@ function loadCode(): Record<string, string> {
 }
 
 function saveCode(codes: Record<string, string>): void {
-  localStorage.setItem(CODE_KEY, JSON.stringify(codes));
+  try {
+    localStorage.setItem(CODE_KEY, JSON.stringify(codes));
+  } catch (e) {
+    console.error("Failed to save code:", e);
+  }
 }
 
 interface AppState {
@@ -50,7 +58,7 @@ export const useAppStore = create<AppState>((set, get) => ({
   completedLessons: loadProgress(),
   savedCode: loadCode(),
   sidebarOpen: typeof window !== "undefined" ? window.innerWidth >= 768 : true,
-  lastLessonId: localStorage.getItem(LAST_LESSON_KEY),
+  lastLessonId: (() => { try { return localStorage.getItem(LAST_LESSON_KEY); } catch { return null; } })(),
 
   markComplete: (id) => {
     const next = new Set(get().completedLessons);
@@ -77,7 +85,11 @@ export const useAppStore = create<AppState>((set, get) => ({
   toggleSidebar: () => set((s) => ({ sidebarOpen: !s.sidebarOpen })),
 
   setLastLessonId: (id) => {
-    localStorage.setItem(LAST_LESSON_KEY, id);
+    try {
+      localStorage.setItem(LAST_LESSON_KEY, id);
+    } catch (e) {
+      console.error("Failed to save last lesson:", e);
+    }
     set({ lastLessonId: id });
   },
 }));

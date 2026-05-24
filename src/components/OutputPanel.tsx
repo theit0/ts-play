@@ -7,6 +7,7 @@ import type { Lesson } from "../data/types";
 export interface TestResult {
   name: string;
   passed: boolean;
+  error?: string;
 }
 
 export type BottomTab = "tests" | "console" | "js";
@@ -134,11 +135,16 @@ export function OutputPanel({
                   </div>
                 ))}
                 {testResults?.map((t, i) => (
-                  <div key={i} className="flex items-center gap-2 text-sm py-0.5">
-                    <span className={t.passed ? "text-[var(--vs-success)]" : "text-[var(--vs-error)]"}>
-                      {t.passed ? <Check className="w-3.5 h-3.5" /> : <X className="w-3.5 h-3.5" />}
-                    </span>
-                    <span className={t.passed ? "text-[var(--vs-body)]" : "text-[var(--vs-error)]"}>{t.name}</span>
+                  <div key={i} className="flex flex-col py-0.5">
+                    <div className="flex items-center gap-2 text-sm">
+                      <span className={t.passed ? "text-[var(--vs-success)]" : "text-[var(--vs-error)]"}>
+                        {t.passed ? <Check className="w-3.5 h-3.5" /> : <X className="w-3.5 h-3.5" />}
+                      </span>
+                      <span className={t.passed ? "text-[var(--vs-body)]" : "text-[var(--vs-error)]"}>{t.name}</span>
+                    </div>
+                    {!t.passed && t.error && (
+                      <div className="ml-6 font-mono text-xs text-[var(--vs-error)] opacity-70">{t.error}</div>
+                    )}
                   </div>
                 ))}
               </>

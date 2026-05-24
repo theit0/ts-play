@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { chapters } from "../data/curriculum";
 import { useAppStore } from "../store";
@@ -20,12 +20,12 @@ export function HomePage() {
   const [scrolled, setScrolled] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
 
-  const { nodes, headers, totalHeight } = computeLayout();
-  const allLessons      = chapters.flatMap((c) => c.lessons);
+  const { nodes, headers, totalHeight } = useMemo(() => computeLayout(), []);
+  const allLessons      = useMemo(() => chapters.flatMap((c) => c.lessons), []);
   const firstIncomplete = allLessons.findIndex((l) => !completedLessons.has(l.id));
   const activeLessonId  = firstIncomplete >= 0 ? allLessons[firstIncomplete].id : null;
 
-  const svgPath = buildSvgPath(nodes);
+  const svgPath = useMemo(() => buildSvgPath(nodes), [nodes]);
 
   function getState(lessonId: string): NodeState {
     if (completedLessons.has(lessonId)) return "done";
@@ -45,8 +45,9 @@ export function HomePage() {
     const activeNode = nodes.find((n) => n.lessonId === activeLessonId);
     if (!activeNode || !scrollRef.current) return;
     const top = Math.max(0, OUTER_Y + activeNode.y - NODE_R - 120);
-    setTimeout(() => scrollRef.current?.scrollTo({ top, behavior: "smooth" }), TIMING.SCROLL_TO_LESSON_DELAY);
-  }, []); 
+    const timer = setTimeout(() => scrollRef.current?.scrollTo({ top, behavior: "smooth" }), TIMING.SCROLL_TO_LESSON_DELAY);
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
     <div className="h-screen flex flex-col bg-[var(--vs-bg)] text-[var(--vs-fg)] overflow-hidden">

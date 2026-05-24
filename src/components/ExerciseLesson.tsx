@@ -50,6 +50,8 @@ export function ExerciseLesson({ lesson }: Props) {
     if (!babelReady) preloadBabel().then(() => setBabelReady(true));
   }, []); // intentionally empty - run once on mount
 
+  useEffect(() => () => { if (saveTimer.current) clearTimeout(saveTimer.current); }, []);
+
   const isDone = completedLessons.has(lesson.id);
 
   const handleRun = useCallback(async () => {
@@ -92,7 +94,7 @@ export function ExerciseLesson({ lesson }: Props) {
     if (lesson.tests && lesson.tests.length > 0) {
       const results = lesson.tests.map((t) => {
         try   { return { name: t.name, passed: t.run(code) }; }
-        catch { return { name: t.name, passed: false }; }
+        catch (e) { return { name: t.name, passed: false, error: e instanceof Error ? e.message : String(e) }; }
       });
       setTestResults(results);
       setActiveBottomTab("tests");
