@@ -20,15 +20,15 @@ La plataforma combina explicaciones claras en español con un entorno de código
 
 ## Características
 
-- **Editor Monaco integrado** — el mismo motor que usa VS Code, con resaltado de sintaxis TypeScript y detección de errores en tiempo real
-- **Ejecución en el navegador** — el código TypeScript se transpila y ejecuta sin necesidad de un servidor backend
-- **Visualización del JS compilado** — panel en tiempo real que muestra el JavaScript resultante de transpilar el código TypeScript del usuario
-- **Sistema de tests automáticos** — cada ejercicio incluye tests que verifican si la solución es correcta
-- **Progreso persistente** — el progreso y el código de cada ejercicio se guardan en `localStorage`
-- **10 capítulos de contenido** — desde introducción hasta funciones avanzadas, con más de 50 lecciones
+- **Editor Monaco integrado** - el mismo motor que usa VS Code, con resaltado de sintaxis TypeScript y detección de errores en tiempo real
+- **Ejecución en el navegador** - el código TypeScript se transpila y ejecuta sin necesidad de un servidor backend
+- **Visualización del JS compilado** - panel en tiempo real que muestra el JavaScript resultante de transpilar el código TypeScript del usuario
+- **Sistema de tests automáticos** - cada ejercicio incluye tests que verifican si la solución es correcta
+- **Progreso persistente** - el progreso y el código de cada ejercicio se guardan en `localStorage`
+- **10 capítulos de contenido** - desde introducción hasta funciones avanzadas, con más de 50 lecciones
 - **Dos tipos de lecciones**: explicaciones teóricas con markdown enriquecido y ejercicios interactivos con playground
-- **Diseño responsive** — interfaz adaptada para móviles con sidebar drawer y tab switcher en el editor
-- **Diseño dark theme** — interfaz moderna orientada a desarrolladores
+- **Diseño responsive** - interfaz adaptada para móviles con sidebar drawer y tab switcher en el editor
+- **Diseño dark theme** - interfaz moderna orientada a desarrolladores
 
 ---
 
@@ -135,26 +135,6 @@ npm run preview
 
 ---
 
-## Estructura del proyecto
-
-```
-src/
-├── components/         # Componentes React
-│   ├── Sidebar.tsx     # Navegación lateral con capítulos y lecciones
-│   ├── Header.tsx      # Barra superior con navegación entre lecciones
-│   ├── ExplanationLesson.tsx  # Vista de lección teórica
-│   └── ExerciseLesson.tsx     # Vista de ejercicio con editor + tests
-├── data/
-│   ├── types.ts        # Interfaces TypeScript del modelo de datos
-│   ├── curriculum.ts   # Índice del currículo completo
-│   └── chapters/       # Contenido por capítulo (ch01.ts – ch10.ts)
-├── utils/
-│   └── runner.ts       # Motor de transpilación y ejecución de código
-└── store.ts            # Estado global con Zustand
-```
-
----
-
 ## Arquitectura del playground
 
 El playground funciona completamente en el cliente:
@@ -169,6 +149,6 @@ El playground funciona completamente en el cliente:
 
 ## Autor
 
-**Theo Pelegrina** — Frontend Engineer | Systems Engineer
+**Theo Pelegrina** - Frontend Engineer | Systems Engineer
 
 [![GitHub](https://img.shields.io/badge/GitHub-181717?style=flat&logo=github&logoColor=white)](https://github.com/theopelegrina)

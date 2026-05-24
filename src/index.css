@@ -59,6 +59,36 @@ body {
   background: var(--vs-dim);
 }
 
+/* Lesson node 3D button effect */
+.lesson-node {
+  transition: transform 0.08s ease, box-shadow 0.08s ease;
+  border: none;
+  outline: none;
+}
+.lesson-node.state-done {
+  background: #22c55e;
+  box-shadow: 0 5px 0 #15803d;
+  color: white;
+}
+.lesson-node.state-done:hover  { transform: translateY(2px); box-shadow: 0 3px 0 #15803d; }
+.lesson-node.state-done:active { transform: translateY(5px); box-shadow: none; }
+
+.lesson-node.state-active {
+  background: #3b82f6;
+  box-shadow: 0 5px 0 #1d4ed8;
+  color: white;
+}
+.lesson-node.state-active:hover  { transform: translateY(2px); box-shadow: 0 3px 0 #1d4ed8; }
+.lesson-node.state-active:active { transform: translateY(5px); box-shadow: none; }
+
+.lesson-node.state-todo {
+  background: #2d3748;
+  box-shadow: 0 5px 0 #1a202c;
+  color: rgba(212,212,212,0.35);
+}
+.lesson-node.state-todo:hover  { transform: translateY(2px); box-shadow: 0 3px 0 #1a202c; }
+.lesson-node.state-todo:active { transform: translateY(5px); box-shadow: none; }
+
 /* Monaco editor background fix */
 .monaco-editor,
 .monaco-editor-background,
