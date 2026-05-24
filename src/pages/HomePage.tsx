@@ -84,6 +84,7 @@ export function HomePage() {
             onClick={() => scrollRef.current?.scrollTo({ top: 0, behavior: "smooth" })}
             className="absolute bottom-6 right-6 z-10 w-12 h-12 rounded-2xl flex items-center justify-center text-white transition-all hover:scale-110 active:scale-95"
             style={{ backgroundColor: "var(--vs-accent)", boxShadow: "0 4px 0 var(--vs-accent-dark)" }}
+            aria-label="Ir arriba"
             title="Ir arriba"
           >
             <ArrowUp size={20} strokeWidth={2.5} />

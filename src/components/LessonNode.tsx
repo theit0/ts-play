@@ -25,6 +25,7 @@ export function LessonNode({ x, y, lesson, state, chapterIdx, onNavigate }: {
         onClick={onNavigate}
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
+        aria-label={lesson.title}
         className={`relative w-full h-full rounded-full flex items-center justify-center cursor-pointer lesson-node state-${state}`}
       >
         {state === "done"            ? <Check    size={22} strokeWidth={3} />

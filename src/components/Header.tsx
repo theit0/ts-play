@@ -28,6 +28,7 @@ export function Header() {
       <button
         onClick={toggleSidebar}
         className="p-1.5 rounded text-[var(--vs-muted)] hover:text-[var(--vs-fg)] hover:bg-[var(--vs-hover)] transition-colors"
+        aria-label={sidebarOpen ? "Cerrar sidebar" : "Abrir sidebar"}
         title={sidebarOpen ? "Cerrar sidebar" : "Abrir sidebar"}
       >
         <Menu className="w-4 h-4" />
@@ -36,9 +37,10 @@ export function Header() {
       <button
         onClick={() => navigate("/")}
         className="flex items-center gap-2 hover:opacity-80 transition-opacity"
+        aria-label="Volver al mapa"
         title="Volver al mapa"
       >
-        <img src="/playts-logo.png" alt="PlayTS" className="h-7 w-7" />
+        <img src="/playts-logo.png" alt="" className="h-7 w-7" />
         <span className="text-[var(--vs-subtle)] text-sm font-medium hidden sm:inline">PlayTS</span>
       </button>
 
@@ -46,6 +48,7 @@ export function Header() {
         <button
           onClick={() => navigate("/")}
           className="flex items-center gap-1.5 px-2.5 py-1.5 text-xs rounded text-[var(--vs-muted)] hover:text-[var(--vs-fg)] hover:bg-[var(--vs-hover)] transition-colors"
+          aria-label="Volver al mapa"
           title="Volver al mapa"
         >
           <Map className="w-3.5 h-3.5" />

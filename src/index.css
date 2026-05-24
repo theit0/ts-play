@@ -37,7 +37,7 @@ body,
 body {
   background-color: var(--vs-bg);
   color: var(--vs-fg);
-  font-family: system-ui, -apple-system, sans-serif;
+  font-family: "Inter Variable", system-ui, -apple-system, sans-serif;
 }
 
 /* Scrollbar styling */
