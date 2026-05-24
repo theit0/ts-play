@@ -10,6 +10,7 @@ import { ChapterDivider } from "../components/ChapterDivider";
 import { LessonNode } from "../components/LessonNode";
 import { ChapterPanel } from "../components/ChapterPanel";
 import { computeLayout, buildSvgPath, PATH_W, NODE_R, OUTER_Y } from "../utils/layout";
+import { TIMING } from "../config";
 import type { NodeState } from "../utils/layout";
 
 export function HomePage() {
@@ -44,7 +45,7 @@ export function HomePage() {
     const activeNode = nodes.find((n) => n.lessonId === activeLessonId);
     if (!activeNode || !scrollRef.current) return;
     const top = Math.max(0, OUTER_Y + activeNode.y - NODE_R - 120);
-    setTimeout(() => scrollRef.current?.scrollTo({ top, behavior: "smooth" }), 150);
+    setTimeout(() => scrollRef.current?.scrollTo({ top, behavior: "smooth" }), TIMING.SCROLL_TO_LESSON_DELAY);
   }, []); 
 
   return (

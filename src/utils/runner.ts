@@ -56,22 +56,27 @@ export function runCode(userCode: string, appendCode = ""): RunResult {
     return { output, error: String(e) };
   }
 
+    function serialize(a: unknown): string {
+    if (typeof a === "string") return a;
+    if (a === null) return "null";
+    if (a === undefined) return "undefined";
+    const seen = new Set<unknown>();
+    try {
+      return JSON.stringify(a, (_, value: unknown) => {
+        if (typeof value === "object" && value !== null) {
+          if (seen.has(value)) return "[Circular]";
+          seen.add(value);
+        }
+        return value;
+      });
+    } catch {
+      return String(a);
+    }
+  }
+
   const capturedConsole = {
     log: (...args: unknown[]) => {
-      output.push(
-        args
-          .map((a) => {
-            if (typeof a === "string") return a;
-            if (a === null) return "null";
-            if (a === undefined) return "undefined";
-            try {
-              return JSON.stringify(a);
-            } catch {
-              return String(a);
-            }
-          })
-          .join(" ")
-      );
+      output.push(args.map(serialize).join(" "));
     },
     error: (...args: unknown[]) =>
       output.push("[error] " + args.map(String).join(" ")),

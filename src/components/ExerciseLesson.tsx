@@ -9,6 +9,7 @@ import { useDragResize } from "../hooks/useDragResize";
 import { useAppStore } from "../store";
 import { useNavigate } from "react-router-dom";
 import { playSuccess } from "../utils/audio";
+import { TIMING } from "../config";
 import { EditorPanel } from "./EditorPanel";
 import { InstructionsPanel } from "./InstructionsPanel";
 import { OutputPanel, type BottomTab, type TestResult } from "./OutputPanel";
@@ -60,11 +61,26 @@ export function ExerciseLesson({ lesson }: Props) {
     if (monaco && editor) {
       const model = editor.getModel();
       if (model) {
-        await new Promise<void>((r) => setTimeout(r, 300));
-        const markers: MonacoEditor.IMarker[] = monaco.editor.getModelMarkers({ resource: model.uri });
-        tsErrs = markers
-          .filter((m: MonacoEditor.IMarker) => m.severity === monaco.MarkerSeverity.Error)
-          .map((m: MonacoEditor.IMarker) => ({ message: m.message, line: m.startLineNumber }));
+        try {
+          const getWorker = await monaco.languages.typescript.getTypeScriptWorker();
+          const tsWorker = await getWorker(model.uri);
+          const uri = model.uri.toString();
+          const [semantic, syntactic] = await Promise.all([
+            tsWorker.getSemanticDiagnostics(uri),
+            tsWorker.getSyntacticDiagnostics(uri),
+          ]);
+          tsErrs = [...semantic, ...syntactic].map((d) => ({
+            message: typeof d.messageText === "string"
+              ? d.messageText
+              : (d.messageText as { messageText: string }).messageText,
+            line: model.getPositionAt(d.start ?? 0).lineNumber,
+          }));
+        } catch {
+          const markers: MonacoEditor.IMarker[] = monaco.editor.getModelMarkers({ resource: model.uri });
+          tsErrs = markers
+            .filter((m) => m.severity === monaco.MarkerSeverity.Error)
+            .map((m) => ({ message: m.message, line: m.startLineNumber }));
+        }
       }
     }
     setTsErrors(tsErrs);
@@ -99,7 +115,7 @@ export function ExerciseLesson({ lesson }: Props) {
       const v = value ?? "";
       setCode(v);
       if (saveTimer.current) clearTimeout(saveTimer.current);
-      saveTimer.current = setTimeout(() => saveCodeForLesson(lesson.id, v), 500);
+      saveTimer.current = setTimeout(() => saveCodeForLesson(lesson.id, v), TIMING.CODE_SAVE_DEBOUNCE);
     },
     [lesson.id, saveCodeForLesson]
   );
@@ -115,7 +131,7 @@ export function ExerciseLesson({ lesson }: Props) {
 
   const handleMobilePanelTab = (tab: MobilePanel) => {
     setMobilePanelTab(tab);
-    if (tab === "editor") setTimeout(() => editorRef.current?.layout(), 50);
+    if (tab === "editor") setTimeout(() => editorRef.current?.layout(), TIMING.EDITOR_LAYOUT_DELAY);
   };
 
   const handleEditorMount = useCallback<OnMount>((editor, monaco) => {
