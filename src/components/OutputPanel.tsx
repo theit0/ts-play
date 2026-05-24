@@ -1,7 +1,8 @@
-import { Check, X, Play, ChevronRight } from "lucide-react";
-import { PrismLight as SyntaxHighlighter } from "react-syntax-highlighter";
-import { vscDarkPlus } from "react-syntax-highlighter/dist/esm/styles/prism";
+import { Play, ChevronRight } from "lucide-react";
 import { TabButton } from "./TabButton";
+import { TestsPanel } from "./TestsPanel";
+import { ConsolePanel } from "./ConsolePanel";
+import { JsPreviewPanel } from "./JsPreviewPanel";
 import type { Lesson } from "../data/types";
 
 export interface TestResult {
@@ -120,64 +121,9 @@ export function OutputPanel({
       </div>
 
       <div className="flex-1 overflow-y-auto px-4 py-2">
-        {activeTab === "tests" && (
-          <div className="space-y-1">
-            {testResults === null && tsErrors.length === 0 ? (
-              <p className="text-xs text-[var(--vs-muted)] py-2">Haz clic en Run para ejecutar los tests.</p>
-            ) : (
-              <>
-                {tsErrors.map((e, i) => (
-                  <div key={`ts-${i}`} className="flex items-start gap-2 py-0.5">
-                    <span className="text-[var(--vs-error)] flex-shrink-0 mt-0.5"><X className="w-3.5 h-3.5" /></span>
-                    <span className="text-[var(--vs-error)] font-mono text-xs leading-relaxed">
-                      {e.line > 0 ? `L${e.line}: ` : ""}{e.message}
-                    </span>
-                  </div>
-                ))}
-                {testResults?.map((t, i) => (
-                  <div key={i} className="flex flex-col py-0.5">
-                    <div className="flex items-center gap-2 text-sm">
-                      <span className={t.passed ? "text-[var(--vs-success)]" : "text-[var(--vs-error)]"}>
-                        {t.passed ? <Check className="w-3.5 h-3.5" /> : <X className="w-3.5 h-3.5" />}
-                      </span>
-                      <span className={t.passed ? "text-[var(--vs-body)]" : "text-[var(--vs-error)]"}>{t.name}</span>
-                    </div>
-                    {!t.passed && t.error && (
-                      <div className="ml-6 font-mono text-xs text-[var(--vs-error)] opacity-70">{t.error}</div>
-                    )}
-                  </div>
-                ))}
-              </>
-            )}
-          </div>
-        )}
-
-        {activeTab === "console" && (
-          <div className="font-mono text-xs space-y-0.5">
-            {runtimeError && <div className="text-[var(--vs-error)]">{runtimeError}</div>}
-            {output.length === 0 && !runtimeError && (
-              <p className="text-[var(--vs-muted)] italic">Sin salida todavía.</p>
-            )}
-            {output.map((line, i) => <div key={i} className="text-[var(--vs-warn)]">{line}</div>)}
-          </div>
-        )}
-
-        {activeTab === "js" && (
-          <div className="h-full -mx-4 -my-2">
-            {compiledJs.error ? (
-              <div className="px-4 py-2 font-mono text-xs text-[var(--vs-error)]">{compiledJs.error}</div>
-            ) : (
-              <SyntaxHighlighter
-                language="javascript"
-                style={vscDarkPlus}
-                customStyle={{ margin: 0, padding: "8px 16px", background: "transparent", fontSize: "12px", lineHeight: "1.6", height: "100%", overflow: "auto" }}
-                codeTagProps={{ style: { fontFamily: "'JetBrains Mono', Consolas, monospace" } }}
-              >
-                {compiledJs.js}
-              </SyntaxHighlighter>
-            )}
-          </div>
-        )}
+        {activeTab === "tests"   && <TestsPanel testResults={testResults} tsErrors={tsErrors} />}
+        {activeTab === "console" && <ConsolePanel output={output} runtimeError={runtimeError} />}
+        {activeTab === "js"      && <JsPreviewPanel compiledJs={compiledJs} />}
       </div>
     </div>
   );

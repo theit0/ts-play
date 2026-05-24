@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { Header } from "./Header";
 import { Sidebar } from "./Sidebar";
+import { ErrorBoundary } from "./ErrorBoundary";
 import { useAppStore } from "../store";
 
 interface Props {
@@ -12,7 +13,9 @@ export function Layout({ children }: Props) {
 
   return (
     <div className="h-screen flex flex-col bg-[var(--vs-bg)] text-[var(--vs-fg)] overflow-hidden">
-      <Header />
+      <ErrorBoundary fallback={<div className="h-12 flex-shrink-0 border-b border-[var(--vs-border)]" />}>
+        <Header />
+      </ErrorBoundary>
       <div className="flex flex-1 min-h-0 relative">
         {sidebarOpen && (
           <div
@@ -22,7 +25,9 @@ export function Layout({ children }: Props) {
         )}
         {sidebarOpen && (
           <aside className="fixed top-0 left-0 h-screen z-30 md:static md:h-auto md:z-auto w-64 flex-shrink-0 bg-[var(--vs-surface)] border-r border-[var(--vs-border)] flex flex-col">
-            <Sidebar />
+            <ErrorBoundary fallback={null}>
+              <Sidebar />
+            </ErrorBoundary>
           </aside>
         )}
         {children}
