@@ -30,59 +30,62 @@ export function useCodeRunner(lesson: Lesson, code: string) {
 
   const handleRun = useCallback(async () => {
     setIsRunning(true);
-    let tsErrs: { message: string; line: number }[] = [];
+    try {
+      let tsErrs: { message: string; line: number }[] = [];
 
-    const monaco = monacoRef.current;
-    const editor = editorRef.current;
-    if (monaco && editor) {
-      const model = editor.getModel();
-      if (model) {
-        try {
-          const getWorker = await monaco.languages.typescript.getTypeScriptWorker();
-          const tsWorker = await getWorker(model.uri);
-          const uri = model.uri.toString();
-          const [semantic, syntactic] = await Promise.all([
-            tsWorker.getSemanticDiagnostics(uri),
-            tsWorker.getSyntacticDiagnostics(uri),
-          ]);
-          tsErrs = [...semantic, ...syntactic].map((d) => ({
-            message:
-              typeof d.messageText === "string"
-                ? d.messageText
-                : (d.messageText as { messageText: string }).messageText,
-            line: model.getPositionAt(d.start ?? 0).lineNumber,
-          }));
-        } catch {
-          const markers: MonacoEditor.IMarker[] = monaco.editor.getModelMarkers({ resource: model.uri });
-          tsErrs = markers
-            .filter((m) => m.severity === monaco.MarkerSeverity.Error)
-            .map((m) => ({ message: m.message, line: m.startLineNumber }));
+      const monaco = monacoRef.current;
+      const editor = editorRef.current;
+      if (monaco && editor) {
+        const model = editor.getModel();
+        if (model) {
+          try {
+            const getWorker = await monaco.languages.typescript.getTypeScriptWorker();
+            const tsWorker = await getWorker(model.uri);
+            const uri = model.uri.toString();
+            const [semantic, syntactic] = await Promise.all([
+              tsWorker.getSemanticDiagnostics(uri),
+              tsWorker.getSyntacticDiagnostics(uri),
+            ]);
+            tsErrs = [...semantic, ...syntactic].map((d) => ({
+              message:
+                typeof d.messageText === "string"
+                  ? d.messageText
+                  : (d.messageText as { messageText: string }).messageText,
+              line: model.getPositionAt(d.start ?? 0).lineNumber,
+            }));
+          } catch {
+            const markers: MonacoEditor.IMarker[] = monaco.editor.getModelMarkers({ resource: model.uri });
+            tsErrs = markers
+              .filter((m) => m.severity === monaco.MarkerSeverity.Error)
+              .map((m) => ({ message: m.message, line: m.startLineNumber }));
+          }
         }
       }
-    }
-    setTsErrors(tsErrs);
+      setTsErrors(tsErrs);
 
-    const { output: out, error } = runCode(code);
-    setOutput(out);
-    setRuntimeError(error ?? null);
+      const { output: out, error } = runCode(code);
+      setOutput(out);
+      setRuntimeError(error ?? null);
 
-    if (lesson.tests && lesson.tests.length > 0) {
-      const results = lesson.tests.map((t) => {
-        try   { return { name: t.name, passed: t.run(code) }; }
-        catch (e) { return { name: t.name, passed: false, error: e instanceof Error ? e.message : String(e) }; }
-      });
-      setTestResults(results);
-      setActiveBottomTab("tests");
+      if (lesson.tests && lesson.tests.length > 0) {
+        const results = lesson.tests.map((t) => {
+          try   { return { name: t.name, passed: t.run(code) }; }
+          catch (e) { return { name: t.name, passed: false, error: e instanceof Error ? e.message : String(e) }; }
+        });
+        setTestResults(results);
+        setActiveBottomTab("tests");
 
-      if (results.every((r) => r.passed) && tsErrs.length === 0) {
-        markComplete(lesson.id);
-        playSuccess();
-        confetti({ particleCount: 120, spread: 80, origin: { y: 0.6 } });
+        if (results.every((r) => r.passed) && tsErrs.length === 0) {
+          markComplete(lesson.id);
+          playSuccess();
+          confetti({ particleCount: 120, spread: 80, origin: { y: 0.6 } });
+        }
+      } else {
+        setActiveBottomTab(tsErrs.length > 0 ? "tests" : "console");
       }
-    } else {
-      setActiveBottomTab(tsErrs.length > 0 ? "tests" : "console");
+    } finally {
+      setIsRunning(false);
     }
-    setIsRunning(false);
   }, [code, lesson, markComplete]);
 
   handleRunRef.current = handleRun;

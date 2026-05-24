@@ -32,6 +32,14 @@ function loadCode(): Record<string, string> {
   return {};
 }
 
+function loadLastLessonId(): string | null {
+  try {
+    return localStorage.getItem(LAST_LESSON_KEY);
+  } catch {
+    return null;
+  }
+}
+
 function saveCode(codes: Record<string, string>): void {
   try {
     localStorage.setItem(CODE_KEY, JSON.stringify(codes));
@@ -58,7 +66,7 @@ export const useAppStore = create<AppState>((set, get) => ({
   completedLessons: loadProgress(),
   savedCode: loadCode(),
   sidebarOpen: typeof window !== "undefined" ? window.innerWidth >= 768 : true,
-  lastLessonId: (() => { try { return localStorage.getItem(LAST_LESSON_KEY); } catch { return null; } })(),
+  lastLessonId: loadLastLessonId(),
 
   markComplete: (id) => {
     const next = new Set(get().completedLessons);

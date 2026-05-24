@@ -49,14 +49,7 @@ export function transpileToJs(tsCode: string): { js: string; error?: string } {
 export function runCode(userCode: string, appendCode = ""): RunResult {
   const output: string[] = [];
 
-  let jsCode: string;
-  try {
-    jsCode = transpile(userCode + "\n" + appendCode);
-  } catch (e) {
-    return { output, error: String(e) };
-  }
-
-    function serialize(a: unknown): string {
+  function serialize(a: unknown): string {
     if (typeof a === "string") return a;
     if (a === null) return "null";
     if (a === undefined) return "undefined";
@@ -72,6 +65,13 @@ export function runCode(userCode: string, appendCode = ""): RunResult {
     } catch {
       return String(a);
     }
+  }
+
+  let jsCode: string;
+  try {
+    jsCode = transpile(userCode + "\n" + appendCode);
+  } catch (e) {
+    return { output, error: String(e) };
   }
 
   const capturedConsole = {
