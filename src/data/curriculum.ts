@@ -37,6 +37,7 @@ export function getAdjacentLessons(lessonId: string): {
 } {
   const allLessons = chapters.flatMap((c) => c.lessons);
   const idx = allLessons.findIndex((l) => l.id === lessonId);
+  if (idx === -1) return { prev: null, next: null };
   return {
     prev: idx > 0 ? allLessons[idx - 1] : null,
     next: idx < allLessons.length - 1 ? allLessons[idx + 1] : null,
