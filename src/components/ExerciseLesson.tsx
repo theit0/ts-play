@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef, useMemo } from "react";
+import { useState, useCallback, useRef, useMemo, useEffect } from "react";
 import { Check, X, Play, ChevronRight } from "lucide-react";
 import type { ComponentProps } from "react";
 import confetti from "canvas-confetti";
@@ -9,7 +9,7 @@ import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { vscDarkPlus } from "react-syntax-highlighter/dist/esm/styles/prism";
 import type { Lesson } from "../data/types";
 import { getAdjacentLessons } from "../data/curriculum";
-import { runCode, transpileToJs } from "../utils/runner";
+import { runCode, transpileToJs, isBabelReady, preloadBabel } from "../utils/runner";
 import { useDragResize } from "../hooks/useDragResize";
 import { useAppStore } from "../store";
 
@@ -66,6 +66,13 @@ export function ExerciseLesson({ lesson }: Props) {
   const [showHint, setShowHint] = useState(false);
   const [activeBottomTab, setActiveBottomTab] = useState<"tests" | "console" | "js">("tests");
   const [mobilePanelTab, setMobilePanelTab] = useState<"editor" | "instructions">("editor");
+  const [babelReady, setBabelReady] = useState(isBabelReady());
+
+  useEffect(() => {
+    if (!babelReady) {
+      preloadBabel().then(() => setBabelReady(true));
+    }
+  }, []); // intentionally empty — run once on mount
 
   const isDone = completedLessons.has(lesson.id);
 
@@ -127,7 +134,10 @@ export function ExerciseLesson({ lesson }: Props) {
     }
   };
 
-  const compiledJs = useMemo(() => transpileToJs(code), [code]);
+  const compiledJs = useMemo(() => {
+    if (!babelReady) return { js: "", error: undefined };
+    return transpileToJs(code);
+  }, [code, babelReady]);
 
   const passedCount = testResults?.filter((r) => r.passed).length ?? 0;
   const totalCount = testResults?.length ?? 0;
@@ -382,11 +392,12 @@ export function ExerciseLesson({ lesson }: Props) {
             )}
             <button
               onClick={handleRun}
-              className="flex items-center gap-1.5 px-2.5 py-1 text-xs rounded bg-[var(--vs-accent)] text-white font-semibold hover:bg-[var(--vs-accent-dark)] transition-colors whitespace-nowrap"
+              disabled={!babelReady}
+              className="flex items-center gap-1.5 px-2.5 py-1 text-xs rounded bg-[var(--vs-accent)] text-white font-semibold hover:bg-[var(--vs-accent-dark)] disabled:opacity-50 disabled:cursor-wait transition-colors whitespace-nowrap"
             >
               <Play className="w-3 h-3" fill="currentColor" />
-              Run
-              <span className="text-white/60 text-[10px] hidden sm:inline">Ctrl+Enter</span>
+              {babelReady ? "Run" : "Cargando..."}
+              {babelReady && <span className="text-white/60 text-[10px] hidden sm:inline">Ctrl+Enter</span>}
             </button>
             {(allPassed || isDone) && next && (
               <button

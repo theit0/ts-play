@@ -1,4 +1,6 @@
-import * as BabelStandalone from "@babel/standalone";
+import { beforeAll } from "vitest";
+import { preloadBabel } from "../utils/runner";
 
-// runner.ts uses Babel as a browser CDN global; provide it for the Node test env
-(globalThis as unknown as Record<string, unknown>).Babel = BabelStandalone;
+beforeAll(async () => {
+  await preloadBabel();
+});

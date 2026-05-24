@@ -1,9 +1,23 @@
-declare const Babel: {
-  transform: (
-    code: string,
-    options: Record<string, unknown>
-  ) => { code: string };
+type BabelMod = {
+  transform: (code: string, options: Record<string, unknown>) => { code: string };
 };
+
+let _babel: BabelMod | null = null;
+let _promise: Promise<void> | null = null;
+
+export function preloadBabel(): Promise<void> {
+  if (_babel) return Promise.resolve();
+  if (!_promise) {
+    _promise = import("@babel/standalone").then((m) => {
+      _babel = m as unknown as BabelMod;
+    });
+  }
+  return _promise;
+}
+
+export function isBabelReady(): boolean {
+  return _babel !== null;
+}
 
 export interface RunResult {
   output: string[];
@@ -11,7 +25,8 @@ export interface RunResult {
 }
 
 function transpile(tsCode: string): string {
-  return Babel.transform(tsCode, {
+  if (!_babel) throw new Error("Babel not loaded yet");
+  return _babel.transform(tsCode, {
     presets: ["typescript"],
     filename: "code.ts",
     retainLines: true,
@@ -19,8 +34,9 @@ function transpile(tsCode: string): string {
 }
 
 export function transpileToJs(tsCode: string): { js: string; error?: string } {
+  if (!_babel) return { js: "", error: "Babel not loaded yet" };
   try {
-    const result = Babel.transform(tsCode, {
+    const result = _babel.transform(tsCode, {
       presets: ["typescript"],
       filename: "code.ts",
     });
