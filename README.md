@@ -8,11 +8,6 @@ Una plataforma web interactiva para aprender TypeScript en español, con un edit
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-06B6D4?style=flat&logo=tailwindcss&logoColor=white)
 ![CI](https://github.com/theit0/ts-play/actions/workflows/ci.yml/badge.svg)
 ![Vitest](https://img.shields.io/badge/Vitest-passing-6E9F18?style=flat&logo=vitest&logoColor=white)
-
-![Performance](https://img.shields.io/lighthouse/performance/https/ts-play-online.vercel.app?label=Performance&style=flat)
-![Accessibility](https://img.shields.io/lighthouse/accessibility/https/ts-play-online.vercel.app?label=Accessibility&style=flat)
-![Best Practices](https://img.shields.io/lighthouse/best-practices/https/ts-play-online.vercel.app?label=Best%20Practices&style=flat)
-![SEO](https://img.shields.io/lighthouse/seo/https/ts-play-online.vercel.app?label=SEO&style=flat)
 ---
 
 ## ¿De qué trata?
