@@ -18,6 +18,18 @@ function transpile(tsCode: string): string {
   }).code;
 }
 
+export function transpileToJs(tsCode: string): { js: string; error?: string } {
+  try {
+    const result = Babel.transform(tsCode, {
+      presets: ["typescript"],
+      filename: "code.ts",
+    });
+    return { js: result.code ?? "" };
+  } catch (e) {
+    return { js: "", error: String(e) };
+  }
+}
+
 export function runCode(userCode: string, appendCode = ""): RunResult {
   const output: string[] = [];
 

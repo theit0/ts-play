@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { runCode, runExpr } from "../utils/runner";
+import { runCode, runExpr, transpileToJs } from "../utils/runner";
 
 describe("runCode", () => {
   it("executes JavaScript and captures console.log output", () => {
@@ -74,6 +74,54 @@ describe("runCode", () => {
   it("logs multiple arguments space-joined", () => {
     const { output } = runCode(`console.log("a", "b", "c");`);
     expect(output).toContain("a b c");
+  });
+});
+
+describe("transpileToJs", () => {
+  it("strips type annotations from a typed variable", () => {
+    const { js, error } = transpileToJs(`const x: number = 42;`);
+    expect(error).toBeUndefined();
+    expect(js).toContain("const x");
+    expect(js).not.toContain(": number");
+  });
+
+  it("strips interface declarations entirely", () => {
+    const { js, error } = transpileToJs(`interface User { name: string; age: number; }`);
+    expect(error).toBeUndefined();
+    expect(js).not.toContain("interface");
+    expect(js).not.toContain("name: string");
+  });
+
+  it("strips function parameter and return type annotations", () => {
+    const { js, error } = transpileToJs(`function add(a: number, b: number): number { return a + b; }`);
+    expect(error).toBeUndefined();
+    expect(js).toContain("function add");
+    expect(js).not.toContain(": number");
+  });
+
+  it("strips generic type parameters", () => {
+    const { js, error } = transpileToJs(`function identity<T>(x: T): T { return x; }`);
+    expect(error).toBeUndefined();
+    expect(js).toContain("function identity");
+    expect(js).not.toContain("<T>");
+  });
+
+  it("preserves runtime logic in output", () => {
+    const { js, error } = transpileToJs(`const arr: number[] = [1, 2, 3];`);
+    expect(error).toBeUndefined();
+    expect(js).toContain("[1, 2, 3]");
+  });
+
+  it("returns error for invalid TypeScript syntax", () => {
+    const { js, error } = transpileToJs(`const x: = 5;`);
+    expect(error).toBeDefined();
+    expect(js).toBe("");
+  });
+
+  it("strips type-only imports", () => {
+    const { js, error } = transpileToJs(`type Alias = string;`);
+    expect(error).toBeUndefined();
+    expect(js).not.toContain("type Alias");
   });
 });
 

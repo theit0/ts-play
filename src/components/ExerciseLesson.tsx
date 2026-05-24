@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef } from "react";
+import { useState, useCallback, useRef, useMemo } from "react";
 import { Check, X, Play, ChevronRight } from "lucide-react";
 import type { ComponentProps } from "react";
 import confetti from "canvas-confetti";
@@ -9,7 +9,7 @@ import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { vscDarkPlus } from "react-syntax-highlighter/dist/esm/styles/prism";
 import type { Lesson } from "../data/types";
 import { getAdjacentLessons } from "../data/curriculum";
-import { runCode } from "../utils/runner";
+import { runCode, transpileToJs } from "../utils/runner";
 import { useAppStore } from "../store";
 
 type CodeProps = ComponentProps<"code"> & { inline?: boolean };
@@ -60,7 +60,7 @@ export function ExerciseLesson({ lesson }: Props) {
   const [runtimeError, setRuntimeError] = useState<string | null>(null);
   const [testResults, setTestResults] = useState<TestResult[] | null>(null);
   const [showHint, setShowHint] = useState(false);
-  const [activeBottomTab, setActiveBottomTab] = useState<"tests" | "console">("tests");
+  const [activeBottomTab, setActiveBottomTab] = useState<"tests" | "console" | "js">("tests");
   const [mobilePanelTab, setMobilePanelTab] = useState<"editor" | "instructions">("editor");
 
   const isDone = completedLessons.has(lesson.id);
@@ -122,6 +122,8 @@ export function ExerciseLesson({ lesson }: Props) {
       setTimeout(() => editorRef.current?.layout(), 50);
     }
   };
+
+  const compiledJs = useMemo(() => transpileToJs(code), [code]);
 
   const passedCount = testResults?.filter((r) => r.passed).length ?? 0;
   const totalCount = testResults?.length ?? 0;
@@ -327,6 +329,16 @@ export function ExerciseLesson({ lesson }: Props) {
           >
             Consola
           </button>
+          <button
+            onClick={() => setActiveBottomTab("js")}
+            className={`flex-shrink-0 px-4 py-2 text-sm transition-colors ${
+              activeBottomTab === "js"
+                ? "text-[var(--vs-fg)] border-b-2 border-[var(--vs-accent)]"
+                : "text-[var(--vs-muted)] hover:text-[var(--vs-subtle)]"
+            }`}
+          >
+            JS
+          </button>
 
           <div className="ml-auto flex items-center gap-1.5 px-2 flex-shrink-0">
             {lesson.hint && !showHint && (
@@ -404,6 +416,33 @@ export function ExerciseLesson({ lesson }: Props) {
               {output.map((line, i) => (
                 <div key={i} className="text-[var(--vs-warn)]">{line}</div>
               ))}
+            </div>
+          )}
+
+          {activeBottomTab === "js" && (
+            <div className="h-full -mx-4 -my-2">
+              {compiledJs.error ? (
+                <div className="px-4 py-2 font-mono text-xs text-[var(--vs-error)]">
+                  {compiledJs.error}
+                </div>
+              ) : (
+                <SyntaxHighlighter
+                  language="javascript"
+                  style={vscDarkPlus}
+                  customStyle={{
+                    margin: 0,
+                    padding: "8px 16px",
+                    background: "transparent",
+                    fontSize: "12px",
+                    lineHeight: "1.6",
+                    height: "100%",
+                    overflow: "auto",
+                  }}
+                  codeTagProps={{ style: { fontFamily: "'JetBrains Mono', Consolas, monospace" } }}
+                >
+                  {compiledJs.js}
+                </SyntaxHighlighter>
+              )}
             </div>
           )}
         </div>
