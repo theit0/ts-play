@@ -10,6 +10,7 @@ import { vscDarkPlus } from "react-syntax-highlighter/dist/esm/styles/prism";
 import type { Lesson } from "../data/types";
 import { getAdjacentLessons } from "../data/curriculum";
 import { runCode, transpileToJs } from "../utils/runner";
+import { useDragResize } from "../hooks/useDragResize";
 import { useAppStore } from "../store";
 
 type CodeProps = ComponentProps<"code"> & { inline?: boolean };
@@ -53,6 +54,9 @@ export function ExerciseLesson({ lesson }: Props) {
   const { next } = getAdjacentLessons(lesson.id);
   const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const editorRef = useRef<Parameters<OnMount>[0] | null>(null);
+
+  const { size: bottomHeight, onMouseDown: onBottomDragStart } = useDragResize(208, "vertical", 80, 500);
+  const { size: rightWidth, onMouseDown: onRightDragStart } = useDragResize(320, "horizontal", 200, 600);
 
   const savedCode = getCodeForLesson(lesson.id);
   const [code, setCode] = useState(savedCode ?? lesson.starterCode ?? "");
@@ -158,7 +162,7 @@ export function ExerciseLesson({ lesson }: Props) {
       <div className="flex flex-1 min-h-0">
         {/* Editor */}
         <div
-          className={`flex-col min-w-0 border-r border-[var(--vs-border)] flex-1 ${
+          className={`flex-col min-w-0 flex-1 ${
             mobilePanelTab === "instructions" ? "hidden md:flex" : "flex"
           }`}
         >
@@ -196,11 +200,18 @@ export function ExerciseLesson({ lesson }: Props) {
           </div>
         </div>
 
+        {/* Right-panel resize handle */}
+        <div
+          onMouseDown={onRightDragStart}
+          className="w-1 flex-shrink-0 self-stretch cursor-col-resize bg-[var(--vs-border)] hover:bg-[var(--vs-accent)] transition-colors hidden md:block"
+        />
+
         {/* Instructions panel */}
         <div
-          className={`flex-col overflow-hidden flex-shrink-0 md:w-80 xl:w-96 ${
+          className={`flex-col overflow-hidden flex-shrink-0 ${
             mobilePanelTab === "editor" ? "hidden md:flex" : "flex w-full"
           }`}
+          style={{ width: rightWidth }}
         >
           <div className="flex border-b border-[var(--vs-border)]">
             <button className="px-4 py-2 text-sm text-[var(--vs-fg)] border-b-2 border-[var(--vs-accent)] bg-transparent">
@@ -297,8 +308,14 @@ export function ExerciseLesson({ lesson }: Props) {
         </div>
       </div>
 
+      {/* Bottom panel resize handle */}
+      <div
+        onMouseDown={onBottomDragStart}
+        className="h-1 flex-shrink-0 cursor-row-resize bg-[var(--vs-border)] hover:bg-[var(--vs-accent)] transition-colors"
+      />
+
       {/* Bottom panel: tests + console */}
-      <div className="h-52 flex-shrink-0 border-t border-[var(--vs-border)] flex flex-col">
+      <div className="flex-shrink-0 flex flex-col" style={{ height: bottomHeight }}>
         <div className="flex items-center border-b border-[var(--vs-border)] overflow-x-auto">
           <button
             onClick={() => setActiveBottomTab("tests")}
