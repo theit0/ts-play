@@ -1,22 +1,22 @@
 import { BookOpen, Code2 } from "lucide-react";
 import type { Lesson } from "../data/types";
 
-export function NodeTooltip({ lesson, right }: { lesson: Lesson; right: boolean }) {
-  const caret: React.CSSProperties = {
-    position: "absolute",
-    top: "50%",
-    transform: "translateY(-50%) rotate(45deg)",
-    width: 8, height: 8,
-    background: "var(--vs-elevated)",
-    ...(right
-      ? { left: -5, borderLeft: "1px solid var(--vs-border)", borderBottom: "1px solid var(--vs-border)" }
-      : { right: -5, borderRight: "1px solid var(--vs-border)", borderTop: "1px solid var(--vs-border)" }),
-  };
+const caret: React.CSSProperties = {
+  position: "absolute",
+  top: "50%",
+  transform: "translateY(-50%) rotate(45deg)",
+  width: 8, height: 8,
+  background: "var(--vs-elevated)",
+  left: -5,
+  borderLeft: "1px solid var(--vs-border)",
+  borderBottom: "1px solid var(--vs-border)",
+};
 
+export function NodeTooltip({ lesson }: { lesson: Lesson }) {
   return (
     <div
       className="pointer-events-none"
-      style={{ position: "absolute", top: "50%", transform: "translateY(-50%)", zIndex: 10, ...(right ? { left: "calc(100% + 14px)" } : { right: "calc(100% + 14px)" }) }}
+      style={{ position: "absolute", top: "50%", transform: "translateY(-50%)", zIndex: 10, left: "calc(100% + 14px)" }}
     >
       <div
         className="relative flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold text-[var(--vs-fg)] leading-snug whitespace-nowrap"

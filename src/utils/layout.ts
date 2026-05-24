@@ -24,8 +24,18 @@ export const OUTER_Y  = 24;
 
 export const ZIGZAG_X = [0, 72, 0, -72];
 
-export interface NodeInfo   { x: number; y: number; lessonId: string; chapterIdx: number; localIdx: number }
-export interface HeaderInfo { y: number; chapterIdx: number; absY: number }
+export interface NodeInfo   { 
+  x: number; 
+  y: number; 
+  lessonId: string; 
+  chapterIdx: number; 
+  localIdx: number 
+}
+export interface HeaderInfo { 
+  y: number; 
+  chapterIdx: number; 
+  absY: number 
+}
 
 export type NodeState = "done" | "active" | "todo";
 

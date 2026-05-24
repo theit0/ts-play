@@ -17,8 +17,6 @@ import { chapters } from "../data/curriculum";
 
 const totalLessons = chapters.reduce((sum, ch) => sum + ch.lessons.length, 0);
 
-// ─── Constants ────────────────────────────────────────────────
-
 describe("layout constants", () => {
   it("CENTER_X is exactly half of PATH_W", () => {
     expect(CENTER_X).toBe(PATH_W / 2);
@@ -50,7 +48,6 @@ describe("layout constants", () => {
   });
 });
 
-// ─── computeLayout ────────────────────────────────────────────
 
 describe("computeLayout", () => {
   const { nodes, headers, totalHeight } = computeLayout();
@@ -121,7 +118,6 @@ describe("computeLayout", () => {
   });
 });
 
-// ─── buildSvgPath ─────────────────────────────────────────────
 
 describe("buildSvgPath", () => {
   it("returns empty string for empty node list", () => {

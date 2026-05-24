@@ -82,7 +82,7 @@ export function HomePage() {
                     x={x} y={y}
                     lesson={chapters[chapterIdx].lessons[localIdx]}
                     state={getState(lessonId)}
-                    localIdx={localIdx}
+                    chapterIdx={chapterIdx}
                     onNavigate={() => navigate(`/lesson/${lessonId}`)}
                   />
                 ))}

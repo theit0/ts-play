@@ -74,11 +74,11 @@ body {
 .lesson-node.state-done:active { transform: translateY(5px); box-shadow: none; }
 
 .lesson-node.state-active {
-  background: #3b82f6;
-  box-shadow: 0 5px 0 #1d4ed8;
+  background: var(--active-bg, #3b82f6);
+  box-shadow: 0 5px 0 var(--active-shadow, #1d4ed8);
   color: white;
 }
-.lesson-node.state-active:hover  { transform: translateY(2px); box-shadow: 0 3px 0 #1d4ed8; }
+.lesson-node.state-active:hover  { transform: translateY(2px); box-shadow: 0 3px 0 var(--active-shadow, #1d4ed8); }
 .lesson-node.state-active:active { transform: translateY(5px); box-shadow: none; }
 
 .lesson-node.state-todo {

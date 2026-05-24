@@ -1,20 +1,24 @@
 import { useState } from "react";
 import { Check, Star, Code2, BookOpen } from "lucide-react";
 import type { Lesson } from "../data/types";
-import { NODE_R } from "../utils/layout";
+import { NODE_R, CHAPTER_COLORS } from "../utils/layout";
 import type { NodeState } from "../utils/layout";
 import { NodeTooltip } from "./NodeTooltip";
 
-export function LessonNode({ x, y, lesson, state, localIdx, onNavigate }: {
-  x: number; y: number; lesson: Lesson; state: NodeState; localIdx: number; onNavigate: () => void;
+export function LessonNode({ x, y, lesson, state, chapterIdx, onNavigate }: {
+  x: number; y: number; lesson: Lesson; state: NodeState; chapterIdx: number; onNavigate: () => void;
 }) {
   const [hovered, setHovered] = useState(false);
-  const tooltipRight = localIdx % 4 === 0 || localIdx % 4 === 3;
+  const color = CHAPTER_COLORS[chapterIdx % CHAPTER_COLORS.length];
+
+  const activeVars = state === "active"
+    ? { "--active-bg": color.progress, "--active-shadow": color.bg } as React.CSSProperties
+    : {};
 
   return (
-    <div style={{ position: "absolute", left: x - NODE_R, top: y - NODE_R, width: NODE_R * 2, height: NODE_R * 2, zIndex: 2 }}>
+    <div style={{ position: "absolute", left: x - NODE_R, top: y - NODE_R, width: NODE_R * 2, height: NODE_R * 2, zIndex: 2, ...activeVars }}>
       {state === "active" && (
-        <div className="absolute rounded-full animate-ping bg-blue-400 pointer-events-none" style={{ inset: -6, opacity: 0.2 }} />
+        <div className="absolute rounded-full animate-ping pointer-events-none" style={{ inset: -6, opacity: 0.25, backgroundColor: color.progress }} />
       )}
 
       <button
@@ -29,7 +33,7 @@ export function LessonNode({ x, y, lesson, state, localIdx, onNavigate }: {
         :                              <BookOpen size={18} />}
       </button>
 
-      {hovered && <NodeTooltip lesson={lesson} right={tooltipRight} />}
+      {hovered && <NodeTooltip lesson={lesson} />}
     </div>
   );
 }
