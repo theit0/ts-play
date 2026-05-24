@@ -5,6 +5,7 @@ import { useDragResize } from "../hooks/useDragResize";
 import { useCodeRunner } from "../hooks/useCodeRunner";
 import { useAppStore } from "../store";
 import { useNavigate } from "react-router-dom";
+import { navigateTo } from "../utils/navigation";
 import { TIMING } from "../config";
 import { EditorPanel } from "./EditorPanel";
 import { InstructionsPanel } from "./InstructionsPanel";
@@ -123,7 +124,7 @@ export function ExerciseLesson({ lesson }: Props) {
         onReset={handleReset}
         onShowHint={() => setShowHint(true)}
         onShowSolution={() => lesson.solution && setCode(lesson.solution)}
-        onNavigateNext={() => { setIsNavigating(true); navigate(`/lesson/${next!.id}`); }}
+        onNavigateNext={() => { setIsNavigating(true); navigateTo(navigate, `/lesson/${next!.id}`); }}
       />
     </div>
   );

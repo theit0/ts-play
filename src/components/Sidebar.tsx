@@ -2,6 +2,7 @@ import { Code2, BookOpen, Check } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 import { chapters, allLessons } from "../data/curriculum";
 import { useAppStore } from "../store";
+import { navigateTo } from "../utils/navigation";
 
 function LessonIcon({ type }: { type: "explanation" | "exercise" }) {
   if (type === "exercise") return <Code2 className="w-3.5 h-3.5 flex-shrink-0" />;
@@ -45,7 +46,7 @@ export function Sidebar() {
                 return (
                   <button
                     key={lesson.id}
-                    onClick={() => navigate(`/lesson/${lesson.id}`)}
+                    onClick={() => navigateTo(navigate, `/lesson/${lesson.id}`)}
                     className={`w-full flex items-center gap-2.5 px-4 py-1.5 text-sm text-left transition-colors ${
                       isActive
                         ? "bg-[var(--vs-hover)] text-[var(--vs-fg)]"

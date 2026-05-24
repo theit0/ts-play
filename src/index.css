@@ -2,6 +2,17 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+  font-family: 'Inter Variable';
+  font-style: normal;
+  font-display: optional;
+  font-weight: 100 900;
+  src: url('/fonts/inter-variable.woff2') format('woff2-variations');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122,
+    U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
 * {
   box-sizing: border-box;
 }
@@ -88,6 +99,23 @@ body {
 }
 .lesson-node.state-todo:hover  { transform: translateY(2px); box-shadow: 0 3px 0 #1a202c; }
 .lesson-node.state-todo:active { transform: translateY(5px); box-shadow: none; }
+
+/* View Transitions */
+::view-transition-old(root) {
+  animation: vt-fade-out 280ms ease-in-out both;
+}
+::view-transition-new(root) {
+  animation: vt-fade-in 280ms ease-in-out both;
+}
+
+@keyframes vt-fade-out {
+  from { opacity: 1; }
+  to   { opacity: 0; }
+}
+@keyframes vt-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
 
 /* Monaco editor background fix */
 .monaco-editor,

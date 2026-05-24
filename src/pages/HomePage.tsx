@@ -4,6 +4,7 @@ import { chapters, allLessons } from "../data/curriculum";
 import { useAppStore } from "../store";
 import { ArrowUp } from "lucide-react";
 import { Layout } from "../components/Layout";
+import { navigateTo } from "../utils/navigation";
 import { ChapterBanner } from "../components/ChapterBanner";
 import { ChapterDivider } from "../components/ChapterDivider";
 import { LessonNode } from "../components/LessonNode";
@@ -72,7 +73,7 @@ export function HomePage() {
                   lesson={chapters[chapterIdx].lessons[localIdx]}
                   state={getState(lessonId)}
                   chapterIdx={chapterIdx}
-                  onNavigate={() => navigate(`/lesson/${lessonId}`)}
+                  onNavigate={() => navigateTo(navigate, `/lesson/${lessonId}`)}
                 />
               ))}
             </div>

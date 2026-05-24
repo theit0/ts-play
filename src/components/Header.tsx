@@ -2,6 +2,7 @@ import { Menu, ChevronRight, Map } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 import { getAdjacentLessons, findLesson, allLessons } from "../data/curriculum";
 import { useAppStore } from "../store";
+import { navigateTo } from "../utils/navigation";
 
 export function Header() {
   const { lessonId: currentLessonId } = useParams<{ lessonId: string }>();
@@ -17,8 +18,8 @@ export function Header() {
   const continueTarget = lastLessonId ?? firstIncomplete?.id ?? allLessons[0]?.id;
 
   const handleContinue = () => {
-    if (isHome) navigate(`/lesson/${continueTarget}`);
-    else if (next) navigate(`/lesson/${next.id}`);
+    if (isHome) navigateTo(navigate, `/lesson/${continueTarget}`);
+    else if (next) navigateTo(navigate, `/lesson/${next.id}`);
   };
 
   const continueDisabled = isHome ? !continueTarget : !next;
@@ -35,7 +36,7 @@ export function Header() {
       </button>
 
       <button
-        onClick={() => navigate("/")}
+        onClick={() => navigateTo(navigate, "/")}
         className="flex items-center gap-2 hover:opacity-80 transition-opacity"
         aria-label="Volver al mapa"
         title="Volver al mapa"
@@ -46,7 +47,7 @@ export function Header() {
 
       {!isHome && (
         <button
-          onClick={() => navigate("/")}
+          onClick={() => navigateTo(navigate, "/")}
           className="flex items-center gap-1.5 px-2.5 py-1.5 text-xs rounded text-[var(--vs-muted)] hover:text-[var(--vs-fg)] hover:bg-[var(--vs-hover)] transition-colors"
           aria-label="Volver al mapa"
           title="Volver al mapa"
