@@ -1,6 +1,9 @@
 import { lazy, Suspense, useEffect } from "react";
+import { useParams, Navigate } from "react-router-dom";
 import { Sidebar } from "./components/Sidebar";
 import { Header } from "./components/Header";
+import { findLesson, firstLessonId } from "./data/curriculum";
+import { useAppStore } from "./store";
 
 const ExplanationLesson = lazy(() =>
   import("./components/ExplanationLesson").then((m) => ({ default: m.ExplanationLesson }))
@@ -8,12 +11,11 @@ const ExplanationLesson = lazy(() =>
 const ExerciseLesson = lazy(() =>
   import("./components/ExerciseLesson").then((m) => ({ default: m.ExerciseLesson }))
 );
-import { findLesson } from "./data/curriculum";
-import { useAppStore } from "./store";
 
 export default function App() {
-  const { currentLessonId, sidebarOpen, toggleSidebar } = useAppStore();
-  const lesson = findLesson(currentLessonId);
+  const { lessonId } = useParams<{ lessonId: string }>();
+  const { sidebarOpen, toggleSidebar } = useAppStore();
+  const lesson = findLesson(lessonId ?? "");
 
   useEffect(() => {
     document.title = lesson ? `${lesson.title} — PlayTS` : "PlayTS";
@@ -22,9 +24,9 @@ export default function App() {
   useEffect(() => {
     const { sidebarOpen: open, toggleSidebar: toggle } = useAppStore.getState();
     if (window.innerWidth < 768 && open) toggle();
-  }, [currentLessonId]);
+  }, [lessonId]);
 
-  if (!lesson) return null;
+  if (!lesson) return <Navigate to={`/lesson/${firstLessonId}`} replace />;
 
   return (
     <div className="h-screen flex flex-col bg-[var(--vs-bg)] text-[var(--vs-fg)] overflow-hidden">

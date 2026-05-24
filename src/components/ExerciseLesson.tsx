@@ -11,16 +11,17 @@ import typescript from "react-syntax-highlighter/dist/esm/languages/prism/typesc
 import javascript from "react-syntax-highlighter/dist/esm/languages/prism/javascript";
 import bash from "react-syntax-highlighter/dist/esm/languages/prism/bash";
 import json from "react-syntax-highlighter/dist/esm/languages/prism/json";
-
-SyntaxHighlighter.registerLanguage("typescript", typescript);
-SyntaxHighlighter.registerLanguage("javascript", javascript);
-SyntaxHighlighter.registerLanguage("bash", bash);
-SyntaxHighlighter.registerLanguage("json", json);
 import type { Lesson } from "../data/types";
 import { getAdjacentLessons } from "../data/curriculum";
 import { runCode, transpileToJs, isBabelReady, preloadBabel } from "../utils/runner";
 import { useDragResize } from "../hooks/useDragResize";
 import { useAppStore } from "../store";
+import { useNavigate } from "react-router-dom";
+
+SyntaxHighlighter.registerLanguage("typescript", typescript);
+SyntaxHighlighter.registerLanguage("javascript", javascript);
+SyntaxHighlighter.registerLanguage("bash", bash);
+SyntaxHighlighter.registerLanguage("json", json);
 
 type CodeProps = ComponentProps<"code"> & { inline?: boolean };
 
@@ -51,13 +52,13 @@ function playSuccess() {
 }
 
 export function ExerciseLesson({ lesson }: Props) {
+  const navigate = useNavigate();
   const {
     markComplete,
     unmarkComplete,
     completedLessons,
     saveCodeForLesson,
     getCodeForLesson,
-    setCurrentLesson,
   } = useAppStore();
 
   const { next } = getAdjacentLessons(lesson.id);
@@ -410,7 +411,7 @@ export function ExerciseLesson({ lesson }: Props) {
             </button>
             {(allPassed || isDone) && next && (
               <button
-                onClick={() => setCurrentLesson(next.id)}
+                onClick={() => navigate(`/lesson/${next.id}`)}
                 className="flex items-center gap-1.5 px-2.5 py-1 text-xs rounded bg-[var(--vs-accent)] text-white font-semibold hover:bg-[var(--vs-accent-dark)] transition-colors whitespace-nowrap"
               >
                 Siguiente

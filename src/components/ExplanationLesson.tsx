@@ -1,4 +1,5 @@
 import { Check, ChevronRight } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { PrismLight as SyntaxHighlighter } from "react-syntax-highlighter";
@@ -24,13 +25,14 @@ interface Props {
 type CodeProps = ComponentProps<"code"> & { inline?: boolean };
 
 export function ExplanationLesson({ lesson }: Props) {
-  const { markComplete, completedLessons, setCurrentLesson } = useAppStore();
+  const navigate = useNavigate();
+  const { markComplete, completedLessons } = useAppStore();
   const isDone = completedLessons.has(lesson.id);
   const { next } = getAdjacentLessons(lesson.id);
 
   function handleContinue() {
     markComplete(lesson.id);
-    if (next) setCurrentLesson(next.id);
+    if (next) navigate(`/lesson/${next.id}`);
   }
 
   return (

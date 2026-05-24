@@ -1,12 +1,14 @@
 import { Menu, ChevronLeft, ChevronRight } from "lucide-react";
+import { useNavigate, useParams } from "react-router-dom";
 import { getAdjacentLessons, findLesson } from "../data/curriculum";
 import { useAppStore } from "../store";
 
 export function Header() {
-  const { currentLessonId, setCurrentLesson, toggleSidebar, sidebarOpen } =
-    useAppStore();
-  const lesson = findLesson(currentLessonId);
-  const { prev, next } = getAdjacentLessons(currentLessonId);
+  const { lessonId: currentLessonId } = useParams<{ lessonId: string }>();
+  const navigate = useNavigate();
+  const { toggleSidebar, sidebarOpen } = useAppStore();
+  const lesson = findLesson(currentLessonId ?? "");
+  const { prev, next } = getAdjacentLessons(currentLessonId ?? "");
 
   return (
     <header className="h-12 flex items-center px-4 gap-3 border-b border-[var(--vs-border)] flex-shrink-0">
@@ -30,7 +32,7 @@ export function Header() {
 
         <div className="flex gap-1">
           <button
-            onClick={() => prev && setCurrentLesson(prev.id)}
+            onClick={() => prev && navigate(`/lesson/${prev.id}`)}
             disabled={!prev}
             className="flex items-center gap-1 px-3 py-1.5 text-sm rounded text-[var(--vs-subtle)] hover:text-[var(--vs-fg)] hover:bg-[var(--vs-hover)] disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
           >
@@ -38,7 +40,7 @@ export function Header() {
             <span className="hidden sm:inline">Atrás</span>
           </button>
           <button
-            onClick={() => next && setCurrentLesson(next.id)}
+            onClick={() => next && navigate(`/lesson/${next.id}`)}
             disabled={!next}
             className="flex items-center gap-1 px-3 py-1.5 text-sm rounded bg-[var(--vs-accent)] text-white font-medium hover:bg-[var(--vs-accent-dark)] disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
           >

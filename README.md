@@ -22,10 +22,12 @@ La plataforma combina explicaciones claras en español con un entorno de código
 
 - **Editor Monaco integrado** — el mismo motor que usa VS Code, con resaltado de sintaxis TypeScript y detección de errores en tiempo real
 - **Ejecución en el navegador** — el código TypeScript se transpila y ejecuta sin necesidad de un servidor backend
+- **Visualización del JS compilado** — panel en tiempo real que muestra el JavaScript resultante de transpilar el código TypeScript del usuario
 - **Sistema de tests automáticos** — cada ejercicio incluye tests que verifican si la solución es correcta
 - **Progreso persistente** — el progreso y el código de cada ejercicio se guardan en `localStorage`
 - **10 capítulos de contenido** — desde introducción hasta funciones avanzadas, con más de 50 lecciones
 - **Dos tipos de lecciones**: explicaciones teóricas con markdown enriquecido y ejercicios interactivos con playground
+- **Diseño responsive** — interfaz adaptada para móviles con sidebar drawer y tab switcher en el editor
 - **Diseño dark theme** — interfaz moderna orientada a desarrolladores
 
 ---
@@ -97,10 +99,11 @@ La plataforma combina explicaciones claras en español con un entorno de código
 | **React 18** | UI y gestión de componentes |
 | **TypeScript** | Tipado estático en toda la app |
 | **Vite** | Build tool y dev server |
+| **React Router v6** | Navegación URL por lección (`/lesson/:lessonId`) |
 | **Monaco Editor** | Editor de código embebido |
-| **Babel Standalone** | Transpilación de TypeScript en el browser |
+| **Babel Standalone** | Transpilación de TypeScript en el browser (carga lazy) |
 | **Tailwind CSS** | Estilos utilitarios, dark theme |
-| **Zustand** | Estado global (lección activa, progreso) |
+| **Zustand** | Estado global (progreso, código guardado, sidebar) |
 | **React Markdown** | Renderizado de contenido de lecciones |
 | **ESLint + typescript-eslint** | Linting del código fuente |
 
@@ -157,8 +160,8 @@ src/
 El playground funciona completamente en el cliente:
 
 1. El usuario escribe TypeScript en el editor Monaco
-2. Al hacer clic en **Run**, el código se transpila usando **Babel Standalone** (cargado desde CDN)
-3. El código JavaScript resultante se ejecuta en un contexto aislado con `new Function()`, capturando el output de `console.log`
+2. El código se transpila en tiempo real con **Babel Standalone** — el JS resultante se muestra en el panel de visualización
+3. Al hacer clic en **Run**, el código transpilado se ejecuta en un contexto aislado con `new Function()`, capturando el output de `console.log`
 4. Los tests predefinidos de cada ejercicio analizan el código fuente y/o el output para determinar si la solución es correcta
 5. El progreso se persiste en `localStorage`
 

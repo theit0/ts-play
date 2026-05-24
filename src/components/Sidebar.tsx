@@ -1,4 +1,5 @@
 import { Code2, BookOpen, Check } from "lucide-react";
+import { useNavigate, useParams } from "react-router-dom";
 import { chapters } from "../data/curriculum";
 import { useAppStore } from "../store";
 
@@ -8,7 +9,9 @@ function LessonIcon({ type }: { type: "explanation" | "exercise" }) {
 }
 
 export function Sidebar() {
-  const { currentLessonId, completedLessons, setCurrentLesson } = useAppStore();
+  const { lessonId: currentLessonId } = useParams<{ lessonId: string }>();
+  const navigate = useNavigate();
+  const { completedLessons } = useAppStore();
   const totalLessons = chapters.flatMap((c) => c.lessons).length;
   const completedCount = completedLessons.size;
   const progressPct = totalLessons > 0 ? Math.round((completedCount / totalLessons) * 100) : 0;
@@ -42,7 +45,7 @@ export function Sidebar() {
                 return (
                   <button
                     key={lesson.id}
-                    onClick={() => setCurrentLesson(lesson.id)}
+                    onClick={() => navigate(`/lesson/${lesson.id}`)}
                     className={`w-full flex items-center gap-2.5 px-4 py-1.5 text-sm text-left transition-colors ${
                       isActive
                         ? "bg-[var(--vs-hover)] text-[var(--vs-fg)]"

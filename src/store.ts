@@ -1,5 +1,4 @@
 import { create } from "zustand";
-import { firstLessonId } from "./data/curriculum";
 
 const PROGRESS_KEY = "ts-play-progress";
 const CODE_KEY = "ts-play-code";
@@ -33,12 +32,10 @@ function saveCode(codes: Record<string, string>): void {
 }
 
 interface AppState {
-  currentLessonId: string;
   completedLessons: Set<string>;
   savedCode: Record<string, string>;
   sidebarOpen: boolean;
 
-  setCurrentLesson: (id: string) => void;
   markComplete: (id: string) => void;
   unmarkComplete: (id: string) => void;
   saveCodeForLesson: (lessonId: string, code: string) => void;
@@ -47,12 +44,9 @@ interface AppState {
 }
 
 export const useAppStore = create<AppState>((set, get) => ({
-  currentLessonId: firstLessonId,
   completedLessons: loadProgress(),
   savedCode: loadCode(),
   sidebarOpen: typeof window !== "undefined" ? window.innerWidth >= 768 : true,
-
-  setCurrentLesson: (id) => set({ currentLessonId: id }),
 
   markComplete: (id) => {
     const next = new Set(get().completedLessons);
