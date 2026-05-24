@@ -1,17 +1,12 @@
 import { Menu, ChevronLeft, ChevronRight } from "lucide-react";
-import { getAdjacentLessons, findLesson, chapters } from "../data/curriculum";
+import { getAdjacentLessons, findLesson } from "../data/curriculum";
 import { useAppStore } from "../store";
 
-const totalLessons = chapters.flatMap((c) => c.lessons).length;
-
 export function Header() {
-  const { currentLessonId, setCurrentLesson, toggleSidebar, sidebarOpen, completedLessons } =
+  const { currentLessonId, setCurrentLesson, toggleSidebar, sidebarOpen } =
     useAppStore();
   const lesson = findLesson(currentLessonId);
   const { prev, next } = getAdjacentLessons(currentLessonId);
-
-  const completedCount = completedLessons.size;
-  const progressPct = Math.round((completedCount / totalLessons) * 100);
 
   return (
     <header className="h-12 flex items-center px-4 gap-3 border-b border-[var(--vs-border)] flex-shrink-0">
@@ -32,18 +27,6 @@ export function Header() {
         {lesson && (
           <span className="text-sm text-[var(--vs-fg)] hidden sm:block">{lesson.title}</span>
         )}
-
-        <div className="hidden sm:flex items-center gap-2">
-          <div className="w-24 h-1.5 bg-[var(--vs-elevated)] rounded-full overflow-hidden">
-            <div
-              className="h-full bg-[var(--vs-accent)] rounded-full transition-all duration-300"
-              style={{ width: `${progressPct}%` }}
-            />
-          </div>
-          <span className="text-xs text-[var(--vs-muted)] tabular-nums">
-            {completedCount}/{totalLessons}
-          </span>
-        </div>
 
         <div className="flex gap-1">
           <button

@@ -9,9 +9,26 @@ function LessonIcon({ type }: { type: "explanation" | "exercise" }) {
 
 export function Sidebar() {
   const { currentLessonId, completedLessons, setCurrentLesson } = useAppStore();
+  const totalLessons = chapters.flatMap((c) => c.lessons).length;
+  const completedCount = completedLessons.size;
+  const progressPct = totalLessons > 0 ? Math.round((completedCount / totalLessons) * 100) : 0;
 
   return (
     <div className="h-full overflow-y-auto py-3">
+      <div className="px-4 mb-4 pb-4 border-b border-[var(--vs-border)]">
+        <div className="flex justify-between items-center mb-1.5">
+          <span className="text-xs font-semibold text-[var(--vs-subtle)] uppercase tracking-wider">Progreso</span>
+          <span className="text-xs text-[var(--vs-muted)] tabular-nums font-semibold">
+            {completedCount}/{totalLessons} ({progressPct}%)
+          </span>
+        </div>
+        <div className="w-full h-1.5 bg-[var(--vs-elevated)] rounded-full overflow-hidden">
+          <div
+            className="h-full bg-[var(--vs-accent)] rounded-full transition-all duration-300"
+            style={{ width: `${progressPct}%` }}
+          />
+        </div>
+      </div>
       {chapters.map((chapter) => (
         <div key={chapter.id} className="mb-1">
           <div className="px-4 py-2 text-xs font-semibold text-[var(--vs-subtle)] uppercase tracking-wider">
