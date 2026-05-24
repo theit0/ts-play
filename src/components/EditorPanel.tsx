@@ -40,6 +40,7 @@ export function EditorPanel({ code, onChange, onMount, isDone, className = "" }:
             padding: { top: 12, bottom: 12 },
             fontFamily: "'JetBrains Mono', 'Fira Code', Consolas, monospace",
             fontLigatures: true,
+          mouseWheelZoom: true,
           }}
         />
       </div>

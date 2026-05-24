@@ -1,7 +1,7 @@
 import { chapters } from "../data/curriculum";
 
 export const CHAPTER_COLORS = [
-  { bg: "#1d4ed8", progress: "#3b82f6" },
+  { bg: "#3178c6", progress: "#5b9bd5" },
   { bg: "#7c3aed", progress: "#8b5cf6" },
   { bg: "#047857", progress: "#10b981" },
   { bg: "#b45309", progress: "#f59e0b" },
