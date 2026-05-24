@@ -1,5 +1,6 @@
 import { flushSync } from "react-dom";
 import type { NavigateFunction, NavigateOptions } from "react-router-dom";
+import { FEATURES } from "../config";
 
 type DocWithVT = Document & {
   startViewTransition: (callback: () => void) => void;
@@ -10,7 +11,7 @@ export function navigateTo(
   path: string,
   options?: NavigateOptions
 ): void {
-  if (!("startViewTransition" in document)) {
+  if (!FEATURES.VIEW_TRANSITIONS || !("startViewTransition" in document)) {
     navigate(path, options);
     return;
   }

@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import type { Lesson } from "../data/types";
 import { useAppStore } from "../store";
 import { getAdjacentLessons } from "../data/curriculum";
+import { navigateTo } from "../utils/navigation";
 import { MarkdownContent } from "./MarkdownContent";
 
 interface Props {
@@ -17,7 +18,7 @@ export function ExplanationLesson({ lesson }: Props) {
 
   function handleContinue() {
     markComplete(lesson.id);
-    if (next) navigate(`/lesson/${next.id}`);
+    if (next) navigateTo(navigate, `/lesson/${next.id}`);
   }
 
   return (
