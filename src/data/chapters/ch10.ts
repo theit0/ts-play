@@ -418,7 +418,7 @@ logPurchase("Mouse", 29, 3);`,
       type: "explanation",
       content: `# Parámetros opcionales
 
-A veces quieres que un parámetro sea **opcional** — que la función pueda llamarse con o sin él.
+A veces quieres que un parámetro sea **opcional** - que la función pueda llamarse con o sin él.
 
 ## Sintaxis
 
@@ -675,7 +675,7 @@ console.log(isEven(6));`,
       id: "ch10-14",
       title: "Resumen del capítulo",
       type: "explanation",
-      content: `# Resumen — Functions
+      content: `# Resumen - Functions
 
 ¡Excelente trabajo! En este capítulo aprendiste todo sobre las funciones en TypeScript.
 
@@ -705,7 +705,7 @@ const log = (msg: string): void => console.log(msg);
 
 ## ¿Qué sigue?
 
-En el capítulo 11 aprenderemos sobre los **módulos** (import/export) — cómo organizar el código TypeScript en múltiples archivos.
+En el capítulo 11 aprenderemos sobre los **módulos** (import/export) - cómo organizar el código TypeScript en múltiples archivos.
 
 ¡Sigue así, vas muy bien! 🎉
 `,

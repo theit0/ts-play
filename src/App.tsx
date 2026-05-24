@@ -2,6 +2,7 @@ import { lazy, Suspense, useEffect } from "react";
 import { useParams, Navigate } from "react-router-dom";
 import { Sidebar } from "./components/Sidebar";
 import { Header } from "./components/Header";
+import { ErrorBoundary } from "./components/ErrorBoundary";
 import { findLesson, firstLessonId } from "./data/curriculum";
 import { useAppStore } from "./store";
 
@@ -18,7 +19,7 @@ export default function App() {
   const lesson = findLesson(lessonId ?? "");
 
   useEffect(() => {
-    document.title = lesson ? `${lesson.title} — PlayTS` : "PlayTS";
+    document.title = lesson ? `${lesson.title} - PlayTS` : "PlayTS";
   }, [lesson]);
 
   useEffect(() => {
@@ -45,13 +46,15 @@ export default function App() {
           </aside>
         )}
         <main className="flex-1 flex flex-col min-w-0 min-h-0">
-          <Suspense fallback={<div className="flex-1 bg-[var(--vs-bg)]" />}>
-            {lesson.type === "explanation" ? (
-              <ExplanationLesson key={lesson.id} lesson={lesson} />
-            ) : (
-              <ExerciseLesson key={lesson.id} lesson={lesson} />
-            )}
-          </Suspense>
+          <ErrorBoundary key={lesson.id}>
+            <Suspense fallback={<div className="flex-1 bg-[var(--vs-bg)]" />}>
+              {lesson.type === "explanation" ? (
+                <ExplanationLesson key={lesson.id} lesson={lesson} />
+              ) : (
+                <ExerciseLesson key={lesson.id} lesson={lesson} />
+              )}
+            </Suspense>
+          </ErrorBoundary>
         </main>
       </div>
     </div>

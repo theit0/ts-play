@@ -21,16 +21,16 @@ Este curso cubre TypeScript desde cero hasta conceptos avanzados como generics, 
 
 Para aprovechar al máximo este curso necesitas:
 
-- **JavaScript sólido** — variables, funciones, arrays, objetos, arrow functions, desestructuración
-- **Un editor de código** — recomendamos [VS Code](https://code.visualstudio.com/), que tiene soporte nativo para TypeScript
-- **Node.js instalado** — para compilar TypeScript fuera del navegador
+- **JavaScript sólido** - variables, funciones, arrays, objetos, arrow functions, desestructuración
+- **Un editor de código** - recomendamos [VS Code](https://code.visualstudio.com/), que tiene soporte nativo para TypeScript
+- **Node.js instalado** - para compilar TypeScript fuera del navegador
 
 ## Formato del curso
 
 Cada capítulo incluye:
 
-- **Lecciones explicativas** (ícono de texto ≡) — aprende los conceptos con ejemplos
-- **Ejercicios prácticos** (ícono de código ⟨/⟩) — aplica lo que aprendiste en un editor interactivo
+- **Lecciones explicativas** (ícono de texto ≡) - aprende los conceptos con ejemplos
+- **Ejercicios prácticos** (ícono de código ⟨/⟩) - aplica lo que aprendiste en un editor interactivo
 
 El playground en los ejercicios compila TypeScript en tiempo real. Puedes ver los errores de TypeScript mientras escribes.
 
@@ -294,9 +294,9 @@ console.log(getPlanName("Free"));  // Estás en el plan Free`,
 La función \`createFlashcard\` crea una tarjeta de estudio con tres parámetros, pero ninguno tiene tipo.
 
 **Tu tarea:** Añade las anotaciones de tipo correctas:
-- \`pregunta\` — texto de la pregunta (\`string\`)
-- \`respuesta\` — texto de la respuesta (\`string\`)
-- \`nivel\` — nivel de dificultad (\`number\`)`,
+- \`pregunta\` - texto de la pregunta (\`string\`)
+- \`respuesta\` - texto de la respuesta (\`string\`)
+- \`nivel\` - nivel de dificultad (\`number\`)`,
       starterCode: `function createFlashcard(pregunta, respuesta, nivel) {
     return \`[Nivel \${nivel}] \${pregunta} → \${respuesta}\`;
 }

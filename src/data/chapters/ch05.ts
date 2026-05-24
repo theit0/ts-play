@@ -90,7 +90,7 @@ Cuando \`hasPaid\` es \`undefined\`, la función debe retornar \`"Trial"\` (igua
 // Sample usage (do not modify)
 console.log(getUserPlan(true));       // "Pro"
 console.log(getUserPlan(false));      // "Trial"
-console.log(getUserPlan(undefined));  // "Trial" — Esto debe funcionar`,
+console.log(getUserPlan(undefined));  // "Trial" - Esto debe funcionar`,
       solution: `function getUserPlan(hasPaid: boolean | undefined) {
     if (hasPaid === true) {
         return "Pro";
@@ -497,7 +497,7 @@ console.log(getFullName({ first: "Sam", last: "García" }));`,
       id: "ch05-10",
       title: "Resumen del capítulo",
       type: "explanation",
-      content: `# Resumen — Union types
+      content: `# Resumen - Union types
 
 En este capítulo aprendiste sobre los tipos de unión y el estrechamiento de tipos en TypeScript.
 
@@ -523,7 +523,7 @@ if (typeof value === "string") {
 
 ## Lo que viene
 
-En el próximo capítulo aprenderemos sobre los **type aliases** — cómo darle nombre a tipos complejos para reutilizarlos.
+En el próximo capítulo aprenderemos sobre los **type aliases** - cómo darle nombre a tipos complejos para reutilizarlos.
 `,
     },
   ],

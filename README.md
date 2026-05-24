@@ -1,4 +1,4 @@
-# TS Play — Aprende TypeScript en español
+# TS Play - Aprende TypeScript en español
 
 Una plataforma web interactiva para aprender TypeScript en español, con un editor de código en tiempo real, ejercicios prácticos y seguimiento de progreso.
 
@@ -140,7 +140,7 @@ npm run preview
 El playground funciona completamente en el cliente:
 
 1. El usuario escribe TypeScript en el editor Monaco
-2. El código se transpila en tiempo real con **Babel Standalone** — el JS resultante se muestra en el panel de visualización
+2. El código se transpila en tiempo real con **Babel Standalone** - el JS resultante se muestra en el panel de visualización
 3. Al hacer clic en **Run**, el código transpilado se ejecuta en un contexto aislado con `new Function()`, capturando el output de `console.log`
 4. Los tests predefinidos de cada ejercicio analizan el código fuente y/o el output para determinar si la solución es correcta
 5. El progreso se persiste en `localStorage`

@@ -104,9 +104,9 @@ TypeScript permite silenciar sus advertencias con comentarios especiales. Sin em
 ## Comentarios que TypeScript reconoce
 
 \`\`\`typescript
-// @ts-ignore     — ignora el error en la siguiente línea
-// @ts-expect-error — espera un error en la siguiente línea
-// @ts-nocheck   — desactiva TypeScript en todo el archivo
+// @ts-ignore     - ignora el error en la siguiente línea
+// @ts-expect-error - espera un error en la siguiente línea
+// @ts-nocheck   - desactiva TypeScript en todo el archivo
 \`\`\`
 
 ## El problema con \`@ts-ignore\`
@@ -139,7 +139,7 @@ greet(42);
 Si genuinamente necesitas suprimir un error (muy raramente), usa \`@ts-expect-error\` en su lugar:
 
 \`\`\`typescript
-// @ts-expect-error — este error es intencional para el test
+// @ts-expect-error - este error es intencional para el test
 greet(42);
 \`\`\`
 
@@ -322,7 +322,7 @@ console.log(describePerson("Ana", 25, true));
       id: "ch03-08",
       title: "Resumen del capítulo",
       type: "explanation",
-      content: `# Resumen — TypeScript ESLint
+      content: `# Resumen - TypeScript ESLint
 
 En este capítulo aprendiste sobre TypeScript ESLint y las reglas más importantes para mantener un código TypeScript de calidad.
 
@@ -337,7 +337,7 @@ En este capítulo aprendiste sobre TypeScript ESLint y las reglas más important
 ## Puntos clave
 
 - TypeScript ESLint es un plugin que añade reglas específicas de TypeScript a ESLint.
-- \`@ts-ignore\` silencia errores sin arreglarlos — evítalo.
+- \`@ts-ignore\` silencia errores sin arreglarlos - evítalo.
 - Si necesitas suprimir un error de forma excepcional, usa \`@ts-expect-error\` con una explicación.
 - Siempre usa tipos primitivos en minúscula: \`string\`, \`number\`, \`boolean\`.
 

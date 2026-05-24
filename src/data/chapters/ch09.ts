@@ -43,7 +43,7 @@ move("sur");   // ✓
 move("arriba"); // ✗ Error: "arriba" no es un Direction válido
 \`\`\`
 
-Esto es como tener un enum de strings — TypeScript solo acepta los valores que especificaste.
+Esto es como tener un enum de strings - TypeScript solo acepta los valores que especificaste.
 
 ## Tipos literales de número
 
@@ -273,7 +273,7 @@ explodePlanet("Marte"); // ✓`,
       id: "ch09-06",
       title: "Resumen del capítulo",
       type: "explanation",
-      content: `# Resumen — Literal types
+      content: `# Resumen - Literal types
 
 En este capítulo aprendiste sobre los tipos literales en TypeScript.
 
@@ -298,7 +298,7 @@ const dir2: "norte" = "norte"; // tipo: "norte"
 
 ## Lo que viene
 
-En el próximo capítulo profundizamos en las **funciones** — tipos de retorno, parámetros opcionales, void, y más.
+En el próximo capítulo profundizamos en las **funciones** - tipos de retorno, parámetros opcionales, void, y más.
 `,
     },
   ],

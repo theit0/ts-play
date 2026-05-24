@@ -229,8 +229,8 @@ console.log(contarTruthy([true, true]));`,
 
 Tienes un sistema de registro de temperaturas. Necesitas dos funciones:
 
-1. \`promedioTemp\` — recibe \`number[]\` y retorna el promedio como \`number\`
-2. \`tempMaxima\` — recibe \`number[]\` y retorna la temperatura máxima como \`number\`
+1. \`promedioTemp\` - recibe \`number[]\` y retorna el promedio como \`number\`
+2. \`tempMaxima\` - recibe \`number[]\` y retorna la temperatura máxima como \`number\`
 
 Añade los tipos correctos e implementa ambas funciones.`,
       starterCode: `function promedioTemp(temps) {
@@ -286,7 +286,7 @@ console.log(tempMaxima(registro));`,
       id: "ch07-06",
       title: "Array type literal continuación",
       type: "explanation",
-      content: `# Array type literal — continuación
+      content: `# Array type literal - continuación
 
 Ahora que conoces la sintaxis básica \`tipo[]\`, veamos más formas de usarla.
 
@@ -363,10 +363,10 @@ TypeScript infiere el tipo de un array según sus elementos iniciales. Tu tarea 
 
 Añade el tipo correcto a cada variable:
 
-1. \`colores\` — array de strings
-2. \`precios\` — array de números
-3. \`flags\` — array de booleanos
-4. \`mixto\` — array de strings y números`,
+1. \`colores\` - array de strings
+2. \`precios\` - array de números
+3. \`flags\` - array de booleanos
+4. \`mixto\` - array de strings y números`,
       starterCode: `const colores = ["rojo", "verde", "azul"];
 const precios = [9.99, 14.99, 4.50];
 const flags = [true, false, true, false];
@@ -379,7 +379,7 @@ const flags: boolean[] = [true, false, true, false];
 const mixto: (string | number)[] = ["hola", 42, "mundo", 7];
 
 console.log(colores, precios, flags, mixto);`,
-      hint: "Para `mixto`, el tipo es `(string | number)[]` — con paréntesis.",
+      hint: "Para `mixto`, el tipo es `(string | number)[]` - con paréntesis.",
       tests: [
         {
           name: "colores tiene tipo string[]",
@@ -407,8 +407,8 @@ console.log(colores, precios, flags, mixto);`,
 
 Implementa dos funciones para procesar arrays de strings:
 
-1. \`convertirMayusculas(palabras: string[]): string[]\` — retorna un nuevo array con todas las palabras en mayúsculas
-2. \`filtrarLargas(palabras: string[], minLength: number): string[]\` — retorna solo las palabras con longitud mayor o igual a \`minLength\`
+1. \`convertirMayusculas(palabras: string[]): string[]\` - retorna un nuevo array con todas las palabras en mayúsculas
+2. \`filtrarLargas(palabras: string[], minLength: number): string[]\` - retorna solo las palabras con longitud mayor o igual a \`minLength\`
 
 Añade todos los tipos correctos.`,
       starterCode: `function convertirMayusculas(palabras) {
@@ -490,7 +490,7 @@ function formatearNombres(nombres: string[]): string[] {
 
 const nombres = ["ana", "sam", "carlos"];
 console.log(formatearNombres(nombres));`,
-      hint: "En `obtenerEdades` el parámetro dice `string[]` pero retorna `number[]` — los tipos deben coincidir. En `formatearNombres` el parámetro dice `number[]` pero `.toUpperCase()` solo existe en strings.",
+      hint: "En `obtenerEdades` el parámetro dice `string[]` pero retorna `number[]` - los tipos deben coincidir. En `formatearNombres` el parámetro dice `number[]` pero `.toUpperCase()` solo existe en strings.",
       tests: [
         {
           name: "formatearNombres recibe string[]",
@@ -544,7 +544,7 @@ function sumarStrings(nums: number[]): number {
 
 console.log(duplicarTextos(["hola", "mundo"]));
 console.log(sumarStrings([1, 2, 3]));`,
-      hint: "`duplicarTextos` trabaja con strings, no con números. `sumarStrings` en realidad suma números — cambia el nombre conceptual o el tipo del parámetro a `number[]`.",
+      hint: "`duplicarTextos` trabaja con strings, no con números. `sumarStrings` en realidad suma números - cambia el nombre conceptual o el tipo del parámetro a `number[]`.",
       tests: [
         {
           name: "duplicarTextos recibe string[]",
@@ -578,9 +578,9 @@ console.log(sumarStrings([1, 2, 3]));`,
 
 Estás construyendo un sistema de notas para un aula. Implementa las siguientes funciones con los tipos correctos:
 
-1. \`calcularPromedio(notas: number[]): number\` — promedio de notas (redondeado a 2 decimales)
-2. \`alumnosAprobados(nombres: string[], notas: number[]): string[]\` — retorna los nombres de alumnos con nota >= 60
-3. \`resumen(nombres: string[], notas: number[]): string\` — retorna un string con el formato \`"Aprobados: X/Y"\``,
+1. \`calcularPromedio(notas: number[]): number\` - promedio de notas (redondeado a 2 decimales)
+2. \`alumnosAprobados(nombres: string[], notas: number[]): string[]\` - retorna los nombres de alumnos con nota >= 60
+3. \`resumen(nombres: string[], notas: number[]): string\` - retorna un string con el formato \`"Aprobados: X/Y"\``,
       starterCode: `function calcularPromedio(notas) {
     return 0;
 }
@@ -619,7 +619,7 @@ const notas   = [85, 42, 91, 58, 76];
 console.log(calcularPromedio(notas));
 console.log(alumnosAprobados(nombres, notas));
 console.log(resumen(nombres, notas));`,
-      hint: "Para `alumnosAprobados` usa `nombres.filter((_, i) => notas[i] >= 60)` — el segundo parámetro del callback es el índice.",
+      hint: "Para `alumnosAprobados` usa `nombres.filter((_, i) => notas[i] >= 60)` - el segundo parámetro del callback es el índice.",
       tests: [
         {
           name: "Usa number[] y string[] correctamente",
@@ -652,13 +652,13 @@ console.log(resumen(nombres, notas));`,
       id: "ch07-12",
       title: "Resumen del capítulo",
       type: "explanation",
-      content: `# Resumen — Arrays
+      content: `# Resumen - Arrays
 
 En este capítulo aprendiste a trabajar con arrays tipados en TypeScript.
 
 ## Puntos clave
 
-- \`tipo[]\` es la sintaxis del **array type literal** — la forma más común de tipar arrays.
+- \`tipo[]\` es la sintaxis del **array type literal** - la forma más común de tipar arrays.
 - TypeScript **infiere** el tipo del array a partir de sus elementos iniciales.
 - Con el tipo correcto, TypeScript protege los accesos y el autocompletado es preciso.
 - Funciona con cualquier tipo: primitivos, aliases, objetos, uniones.
@@ -689,7 +689,7 @@ function primero(items: string[]): string {
 
 ## Lo que viene
 
-En el próximo capítulo aprenderemos sobre los **tuples** — arrays de longitud fija donde cada posición tiene un tipo específico.
+En el próximo capítulo aprenderemos sobre los **tuples** - arrays de longitud fija donde cada posición tiene un tipo específico.
 `,
     },
   ],

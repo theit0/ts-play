@@ -21,7 +21,7 @@ function logValue(value: any) {
 logValue("hola");  // ✓
 logValue(42);      // ✓
 logValue(true);    // ✓
-logValue([1,2,3]); // ✓ — any acepta todo
+logValue([1,2,3]); // ✓ - any acepta todo
 \`\`\`
 
 ## El problema con \`any\`
@@ -36,7 +36,7 @@ function double(n: any) {
 double("hola"); // TypeScript no advierte nada, pero el resultado es NaN
 \`\`\`
 
-Usar \`any\` es como escribir JavaScript normal — pierdes todos los beneficios de TypeScript.
+Usar \`any\` es como escribir JavaScript normal - pierdes todos los beneficios de TypeScript.
 
 ## \`any\` implícito
 
@@ -201,7 +201,7 @@ Para proyectos nuevos, siempre usa \`"strict": true\`. Te forzará a escribir c�
       id: "ch02-04",
       title: "Resumen del capítulo",
       type: "explanation",
-      content: `# Resumen — The any type
+      content: `# Resumen - The any type
 
 En este capítulo aprendiste sobre el tipo \`any\` en TypeScript.
 

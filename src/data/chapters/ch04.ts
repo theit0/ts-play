@@ -92,8 +92,8 @@ usuario = "Ana"; // ahora tiene un valor
 La función \`applyDiscount\` calcula el precio final después de aplicar un descuento, pero sus parámetros no tienen tipos.
 
 **Tu tarea:** Añade las anotaciones de tipo correctas a los parámetros:
-- \`price\` — el precio original (\`number\`)
-- \`discountPercent\` — el porcentaje de descuento (\`number\`)
+- \`price\` - el precio original (\`number\`)
+- \`discountPercent\` - el porcentaje de descuento (\`number\`)
 
 La función debe retornar un \`number\`.`,
       starterCode: `function applyDiscount(price, discountPercent) {
@@ -140,7 +140,7 @@ console.log(applyDiscount(200, 25)); // 150`,
       type: "exercise",
       instructions: `## Visualizar tipos inferidos
 
-El código de abajo tiene anotaciones de tipo **redundantes** — TypeScript puede inferirlas automáticamente a partir de los valores asignados.
+El código de abajo tiene anotaciones de tipo **redundantes** - TypeScript puede inferirlas automáticamente a partir de los valores asignados.
 
 **Tu tarea:** Elimina las anotaciones de tipo explícitas donde TypeScript puede inferirlas por sí mismo. El código debe seguir funcionando igual.
 
@@ -185,7 +185,7 @@ console.log(age, isActive, score);`,
       id: "ch04-04",
       title: "Resumen del capítulo",
       type: "explanation",
-      content: `# Resumen — Tipos primitivos
+      content: `# Resumen - Tipos primitivos
 
 En este capítulo aprendiste sobre los tipos primitivos de TypeScript.
 
@@ -195,7 +195,7 @@ En este capítulo aprendiste sobre los tipos primitivos de TypeScript.
 - TypeScript tiene un tipo para cada uno de ellos.
 - Puedes anotar variables con la sintaxis \`const x: string = "valor"\`.
 - TypeScript puede inferir tipos automáticamente cuando el valor inicial lo deja claro.
-- Cuando la inferencia funciona, **no necesitas** escribir la anotación — es redundante.
+- Cuando la inferencia funciona, **no necesitas** escribir la anotación - es redundante.
 - Usa \`undefined\` para variables sin valor asignado, y \`null\` para ausencia intencional de valor.
 
 ## Cuándo anotar y cuándo no
@@ -209,7 +209,7 @@ En este capítulo aprendiste sobre los tipos primitivos de TypeScript.
 
 ## Lo que viene
 
-En el próximo capítulo aprenderemos sobre los **tipos de unión** — cómo indicar que algo puede ser uno de varios tipos.
+En el próximo capítulo aprenderemos sobre los **tipos de unión** - cómo indicar que algo puede ser uno de varios tipos.
 `,
     },
   ],

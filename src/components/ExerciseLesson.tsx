@@ -54,7 +54,7 @@ export function ExerciseLesson({ lesson }: Props) {
 
   useEffect(() => {
     if (!babelReady) preloadBabel().then(() => setBabelReady(true));
-  }, []); // intentionally empty — run once on mount
+  }, []); // intentionally empty - run once on mount
 
   const isDone = completedLessons.has(lesson.id);
 

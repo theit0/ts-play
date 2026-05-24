@@ -71,7 +71,7 @@ function getMinMax(numbers: number[]): { min: number; max: number } {
 const { min, max } = getMinMax([3, 1, 4, 1, 5, 9]);
 \`\`\`
 
-Ambos son válidos — elige el que sea más claro para tu caso.
+Ambos son válidos - elige el que sea más claro para tu caso.
 
 ## Ejemplo de uso real: React's useState
 
@@ -203,9 +203,9 @@ printCatalog(catalog);`,
 
 Declara las siguientes variables con los tipos tuple correctos:
 
-1. \`rgb\` — un color RGB: tres números para rojo, verde y azul (usa el valor \`[255, 128, 0]\`)
-2. \`nameAge\` — nombre y edad: un string y un número (usa \`["Ana", 25]\`)
-3. \`point3D\` — coordenada 3D: tres números (usa \`[1, 2, 3]\`)`,
+1. \`rgb\` - un color RGB: tres números para rojo, verde y azul (usa el valor \`[255, 128, 0]\`)
+2. \`nameAge\` - nombre y edad: un string y un número (usa \`["Ana", 25]\`)
+3. \`point3D\` - coordenada 3D: tres números (usa \`[1, 2, 3]\`)`,
       starterCode: `const rgb = [255, 128, 0];
 const nameAge = ["Ana", 25];
 const point3D = [1, 2, 3];
@@ -279,14 +279,14 @@ console.log(countPoints(route));`,
       id: "ch08-06",
       title: "Resumen del capítulo",
       type: "explanation",
-      content: `# Resumen — Tuples
+      content: `# Resumen - Tuples
 
 En este capítulo aprendiste sobre las tuplas en TypeScript.
 
 ## Puntos clave
 
 - Un **tuple** es un array de longitud fija con tipos específicos por posición.
-- Sintaxis: \`[tipo1, tipo2]\` — por ejemplo, \`[string, number]\`
+- Sintaxis: \`[tipo1, tipo2]\` - por ejemplo, \`[string, number]\`
 - Un array de tuples se escribe como \`[string, number][]\`
 - Se desestructuran igual que los arrays normales
 - Son útiles para retornar múltiples valores de una función
@@ -308,7 +308,7 @@ const [min, max] = getRange([3, 1, 5, 2]);
 
 ## Lo que viene
 
-En el próximo capítulo aprenderemos sobre los **literal types** — cuando el tipo no es solo "un string" sino "exactamente este string".
+En el próximo capítulo aprenderemos sobre los **literal types** - cuando el tipo no es solo "un string" sino "exactamente este string".
 `,
     },
   ],

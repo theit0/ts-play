@@ -65,7 +65,7 @@ function getUser(id: UserId): Username {
 }
 \`\`\`
 
-Esto hace el código más legible — cuando ves \`UserId\`, sabes exactamente para qué sirve ese número.
+Esto hace el código más legible - cuando ves \`UserId\`, sabes exactamente para qué sirve ese número.
 
 ## Aliases complejos
 
@@ -205,7 +205,7 @@ console.log(isWeekend("domingo"));`,
       id: "ch06-04",
       title: "Resumen del capítulo",
       type: "explanation",
-      content: `# Resumen — The type alias
+      content: `# Resumen - The type alias
 
 En este capítulo aprendiste a crear y usar type aliases en TypeScript.
 
@@ -234,7 +234,7 @@ type Coordinate = [number, number];
 
 ## Lo que viene
 
-En el próximo capítulo aprenderemos sobre los **arrays** en TypeScript — cómo tipamos listas de elementos.
+En el próximo capítulo aprenderemos sobre los **arrays** en TypeScript - cómo tipamos listas de elementos.
 `,
     },
   ],
