@@ -76,6 +76,8 @@ export function ExerciseLesson({ lesson }: Props) {
   const [runtimeError, setRuntimeError] = useState<string | null>(null);
   const [testResults, setTestResults] = useState<TestResult[] | null>(null);
   const [tsErrors, setTsErrors] = useState<{ message: string; line: number }[]>([]);
+  const [isRunning, setIsRunning] = useState(false);
+  const [isNavigating, setIsNavigating] = useState(false);
   const [showHint, setShowHint] = useState(false);
   const [activeBottomTab, setActiveBottomTab] = useState<"tests" | "console" | "js">("tests");
   const [mobilePanelTab, setMobilePanelTab] = useState<"editor" | "instructions">("editor");
@@ -90,6 +92,7 @@ export function ExerciseLesson({ lesson }: Props) {
   const isDone = completedLessons.has(lesson.id);
 
   const handleRun = useCallback(async () => {
+    setIsRunning(true);
     let tsErrs: { message: string; line: number }[] = [];
     const monaco = monacoRef.current;
     const editor = editorRef.current;
@@ -131,6 +134,7 @@ export function ExerciseLesson({ lesson }: Props) {
     } else {
       setActiveBottomTab("console");
     }
+    setIsRunning(false);
   }, [code, lesson, markComplete]);
 
   const handleCodeChange = useCallback(
@@ -431,20 +435,34 @@ export function ExerciseLesson({ lesson }: Props) {
             )}
             <button
               onClick={handleRun}
-              disabled={!babelReady}
+              disabled={!babelReady || isRunning}
               className="flex items-center gap-1.5 px-2.5 py-1 text-xs rounded bg-[var(--vs-accent)] text-white font-semibold hover:bg-[var(--vs-accent-dark)] disabled:opacity-50 disabled:cursor-wait transition-colors whitespace-nowrap"
             >
-              <Play className="w-3 h-3" fill="currentColor" />
-              {babelReady ? "Run" : "Cargando..."}
-              {babelReady && <span className="text-white/60 text-[10px] hidden sm:inline">Ctrl+Enter</span>}
+              {isRunning ? (
+                <span className="w-3 h-3 border-2 border-white/40 border-t-white rounded-full animate-spin" />
+              ) : (
+                <Play className="w-3 h-3" fill="currentColor" />
+              )}
+              {!babelReady ? "Cargando..." : isRunning ? "Ejecutando..." : "Run"}
+              {babelReady && !isRunning && <span className="text-white/60 text-[10px] hidden sm:inline">Ctrl+Enter</span>}
             </button>
             {(allPassed || isDone) && next && (
               <button
-                onClick={() => navigate(`/lesson/${next.id}`)}
-                className="flex items-center gap-1.5 px-2.5 py-1 text-xs rounded bg-[var(--vs-accent)] text-white font-semibold hover:bg-[var(--vs-accent-dark)] transition-colors whitespace-nowrap"
+                onClick={() => {
+                  setIsNavigating(true);
+                  navigate(`/lesson/${next.id}`);
+                }}
+                disabled={isNavigating}
+                className="flex items-center gap-1.5 px-2.5 py-1 text-xs rounded bg-[var(--vs-accent)] text-white font-semibold hover:bg-[var(--vs-accent-dark)] disabled:opacity-75 disabled:cursor-wait transition-colors whitespace-nowrap"
               >
-                Siguiente
-                <ChevronRight className="w-3 h-3" />
+                {isNavigating ? (
+                  <span className="w-3 h-3 border-2 border-white/40 border-t-white rounded-full animate-spin" />
+                ) : (
+                  <>
+                    Siguiente
+                    <ChevronRight className="w-3 h-3" />
+                  </>
+                )}
               </button>
             )}
           </div>
