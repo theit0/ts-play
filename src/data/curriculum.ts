@@ -23,20 +23,19 @@ export const chapters: Chapter[] = [
   ch10,
 ];
 
+const allLessons: Lesson[] = chapters.flatMap((c) => c.lessons);
+const lessonIndexMap = new Map(allLessons.map((l, i) => [l.id, i]));
+
 export function findLesson(lessonId: string): Lesson | undefined {
-  for (const chapter of chapters) {
-    const lesson = chapter.lessons.find((l) => l.id === lessonId);
-    if (lesson) return lesson;
-  }
-  return undefined;
+  const idx = lessonIndexMap.get(lessonId);
+  return idx !== undefined ? allLessons[idx] : undefined;
 }
 
 export function getAdjacentLessons(lessonId: string): {
   prev: Lesson | null;
   next: Lesson | null;
 } {
-  const allLessons = chapters.flatMap((c) => c.lessons);
-  const idx = allLessons.findIndex((l) => l.id === lessonId);
+  const idx = lessonIndexMap.get(lessonId) ?? -1;
   if (idx === -1) return { prev: null, next: null };
   return {
     prev: idx > 0 ? allLessons[idx - 1] : null,
