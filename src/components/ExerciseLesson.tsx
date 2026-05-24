@@ -66,6 +66,7 @@ export function ExerciseLesson({ lesson }: Props) {
   const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const editorRef = useRef<Parameters<OnMount>[0] | null>(null);
   const monacoRef = useRef<Monaco | null>(null);
+  const handleRunRef = useRef<() => void>(() => {});
 
   const { size: bottomHeight, onMouseDown: onBottomDragStart } = useDragResize(208, "vertical", 80, 500);
   const { size: rightWidth, onMouseDown: onRightDragStart } = useDragResize(320, "horizontal", 200, 600);
@@ -136,6 +137,8 @@ export function ExerciseLesson({ lesson }: Props) {
     }
     setIsRunning(false);
   }, [code, lesson, markComplete]);
+
+  handleRunRef.current = handleRun;
 
   const handleCodeChange = useCallback(
     (value: string | undefined) => {
@@ -230,6 +233,12 @@ export function ExerciseLesson({ lesson }: Props) {
               onMount={(editor, monaco) => {
                 editorRef.current = editor;
                 monacoRef.current = monaco;
+                editor.addAction({
+                  id: "run-code",
+                  label: "Run Code",
+                  keybindings: [monaco.KeyMod.CtrlCmd | monaco.KeyCode.Enter],
+                  run: () => handleRunRef.current(),
+                });
               }}
               options={{
                 fontSize: 16,
