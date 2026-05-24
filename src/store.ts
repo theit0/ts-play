@@ -2,6 +2,7 @@ import { create } from "zustand";
 
 const PROGRESS_KEY = "ts-play-progress";
 const CODE_KEY = "ts-play-code";
+const LAST_LESSON_KEY = "ts-play-last-lesson";
 
 function loadProgress(): Set<string> {
   try {
@@ -35,18 +36,21 @@ interface AppState {
   completedLessons: Set<string>;
   savedCode: Record<string, string>;
   sidebarOpen: boolean;
+  lastLessonId: string | null;
 
   markComplete: (id: string) => void;
   unmarkComplete: (id: string) => void;
   saveCodeForLesson: (lessonId: string, code: string) => void;
   getCodeForLesson: (lessonId: string) => string | undefined;
   toggleSidebar: () => void;
+  setLastLessonId: (id: string) => void;
 }
 
 export const useAppStore = create<AppState>((set, get) => ({
   completedLessons: loadProgress(),
   savedCode: loadCode(),
   sidebarOpen: typeof window !== "undefined" ? window.innerWidth >= 768 : true,
+  lastLessonId: localStorage.getItem(LAST_LESSON_KEY),
 
   markComplete: (id) => {
     const next = new Set(get().completedLessons);
@@ -71,4 +75,9 @@ export const useAppStore = create<AppState>((set, get) => ({
   getCodeForLesson: (lessonId) => get().savedCode[lessonId],
 
   toggleSidebar: () => set((s) => ({ sidebarOpen: !s.sidebarOpen })),
+
+  setLastLessonId: (id) => {
+    localStorage.setItem(LAST_LESSON_KEY, id);
+    set({ lastLessonId: id });
+  },
 }));

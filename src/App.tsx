@@ -14,7 +14,7 @@ const ExerciseLesson = lazy(() =>
 
 export default function App() {
   const { lessonId } = useParams<{ lessonId: string }>();
-  const { sidebarOpen, toggleSidebar } = useAppStore();
+  const { sidebarOpen, toggleSidebar, setLastLessonId } = useAppStore();
   const lesson = findLesson(lessonId ?? "");
 
   useEffect(() => {
@@ -24,6 +24,7 @@ export default function App() {
   useEffect(() => {
     const { sidebarOpen: open, toggleSidebar: toggle } = useAppStore.getState();
     if (window.innerWidth < 768 && open) toggle();
+    if (lessonId) setLastLessonId(lessonId);
   }, [lessonId]);
 
   if (!lesson) return <Navigate to={`/lesson/${firstLessonId}`} replace />;
