@@ -50,7 +50,7 @@ export const useAppStore = create<AppState>((set, get) => ({
   currentLessonId: firstLessonId,
   completedLessons: loadProgress(),
   savedCode: loadCode(),
-  sidebarOpen: true,
+  sidebarOpen: typeof window !== "undefined" ? window.innerWidth >= 768 : true,
 
   setCurrentLesson: (id) => set({ currentLessonId: id }),
 

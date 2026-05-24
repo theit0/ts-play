@@ -164,18 +164,8 @@ El playground funciona completamente en el cliente:
 
 ---
 
-## Capturas
-
-> *Screenshots del proyecto en funcionamiento*
-
-| Lección explicativa | Ejercicio interactivo |
-|--------------------|-----------------------|
-| Vista de teoría con markdown enriquecido | Editor Monaco + panel de tests |
-
----
-
 ## Autor
 
-**Theo Pelegrina** — Frontend Engineer
+**Theo Pelegrina** — Frontend Engineer | Systems Engineer
 
 [![GitHub](https://img.shields.io/badge/GitHub-181717?style=flat&logo=github&logoColor=white)](https://github.com/theopelegrina)

@@ -7,21 +7,32 @@ import { findLesson } from "./data/curriculum";
 import { useAppStore } from "./store";
 
 export default function App() {
-  const { currentLessonId, sidebarOpen } = useAppStore();
+  const { currentLessonId, sidebarOpen, toggleSidebar } = useAppStore();
   const lesson = findLesson(currentLessonId);
 
   useEffect(() => {
     document.title = lesson ? `${lesson.title} — PlayTS` : "PlayTS";
   }, [lesson]);
 
+  useEffect(() => {
+    const { sidebarOpen: open, toggleSidebar: toggle } = useAppStore.getState();
+    if (window.innerWidth < 768 && open) toggle();
+  }, [currentLessonId]);
+
   if (!lesson) return null;
 
   return (
     <div className="h-screen flex flex-col bg-[var(--vs-bg)] text-[var(--vs-fg)] overflow-hidden">
       <Header />
-      <div className="flex flex-1 min-h-0">
+      <div className="flex flex-1 min-h-0 relative">
         {sidebarOpen && (
-          <aside className="w-64 flex-shrink-0 bg-[var(--vs-surface)] border-r border-[var(--vs-border)] flex flex-col">
+          <div
+            className="fixed inset-0 z-20 bg-black/50 md:hidden"
+            onClick={toggleSidebar}
+          />
+        )}
+        {sidebarOpen && (
+          <aside className="fixed top-0 left-0 h-screen z-30 md:static md:h-auto md:z-auto w-64 flex-shrink-0 bg-[var(--vs-surface)] border-r border-[var(--vs-border)] flex flex-col">
             <Sidebar />
           </aside>
         )}

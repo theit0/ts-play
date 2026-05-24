@@ -2,7 +2,7 @@ import { useState, useCallback, useRef } from "react";
 import { Check, X, Play, ChevronRight } from "lucide-react";
 import type { ComponentProps } from "react";
 import confetti from "canvas-confetti";
-import Editor from "@monaco-editor/react";
+import Editor, { type OnMount } from "@monaco-editor/react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
@@ -52,6 +52,7 @@ export function ExerciseLesson({ lesson }: Props) {
 
   const { next } = getAdjacentLessons(lesson.id);
   const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const editorRef = useRef<Parameters<OnMount>[0] | null>(null);
 
   const savedCode = getCodeForLesson(lesson.id);
   const [code, setCode] = useState(savedCode ?? lesson.starterCode ?? "");
@@ -60,6 +61,7 @@ export function ExerciseLesson({ lesson }: Props) {
   const [testResults, setTestResults] = useState<TestResult[] | null>(null);
   const [showHint, setShowHint] = useState(false);
   const [activeBottomTab, setActiveBottomTab] = useState<"tests" | "console">("tests");
+  const [mobilePanelTab, setMobilePanelTab] = useState<"editor" | "instructions">("editor");
 
   const isDone = completedLessons.has(lesson.id);
 
@@ -114,15 +116,50 @@ export function ExerciseLesson({ lesson }: Props) {
     unmarkComplete(lesson.id);
   };
 
+  const handleMobilePanelTab = (tab: "editor" | "instructions") => {
+    setMobilePanelTab(tab);
+    if (tab === "editor") {
+      setTimeout(() => editorRef.current?.layout(), 50);
+    }
+  };
+
   const passedCount = testResults?.filter((r) => r.passed).length ?? 0;
   const totalCount = testResults?.length ?? 0;
   const allPassed = totalCount > 0 && passedCount === totalCount;
 
   return (
     <div className="flex-1 flex flex-col min-h-0">
+      {/* Mobile tab switcher */}
+      <div className="flex md:hidden flex-shrink-0 border-b border-[var(--vs-border)] bg-[var(--vs-surface)]">
+        <button
+          onClick={() => handleMobilePanelTab("editor")}
+          className={`flex-1 py-2 text-sm font-medium transition-colors ${
+            mobilePanelTab === "editor"
+              ? "text-[var(--vs-fg)] border-b-2 border-[var(--vs-accent)]"
+              : "text-[var(--vs-muted)] hover:text-[var(--vs-subtle)]"
+          }`}
+        >
+          Editor
+        </button>
+        <button
+          onClick={() => handleMobilePanelTab("instructions")}
+          className={`flex-1 py-2 text-sm font-medium transition-colors ${
+            mobilePanelTab === "instructions"
+              ? "text-[var(--vs-fg)] border-b-2 border-[var(--vs-accent)]"
+              : "text-[var(--vs-muted)] hover:text-[var(--vs-subtle)]"
+          }`}
+        >
+          Instrucciones
+        </button>
+      </div>
+
       <div className="flex flex-1 min-h-0">
         {/* Editor */}
-        <div className="flex-1 flex flex-col min-w-0 border-r border-[var(--vs-border)]">
+        <div
+          className={`flex-col min-w-0 border-r border-[var(--vs-border)] flex-1 ${
+            mobilePanelTab === "instructions" ? "hidden md:flex" : "flex"
+          }`}
+        >
           <div className="flex items-center px-3 py-1.5 bg-[var(--vs-surface)] border-b border-[var(--vs-border)] text-xs text-[var(--vs-muted)] gap-2">
             <span className="text-[var(--vs-fg)]">index.ts</span>
             {isDone && (
@@ -139,6 +176,7 @@ export function ExerciseLesson({ lesson }: Props) {
               value={code}
               onChange={handleCodeChange}
               theme="vs-dark"
+              onMount={(editor) => { editorRef.current = editor; }}
               options={{
                 fontSize: 16,
                 minimap: { enabled: false },
@@ -157,7 +195,11 @@ export function ExerciseLesson({ lesson }: Props) {
         </div>
 
         {/* Instructions panel */}
-        <div className="w-80 xl:w-96 flex-shrink-0 flex flex-col overflow-hidden">
+        <div
+          className={`flex-col overflow-hidden flex-shrink-0 md:w-80 xl:w-96 ${
+            mobilePanelTab === "editor" ? "hidden md:flex" : "flex w-full"
+          }`}
+        >
           <div className="flex border-b border-[var(--vs-border)]">
             <button className="px-4 py-2 text-sm text-[var(--vs-fg)] border-b-2 border-[var(--vs-accent)] bg-transparent">
               Instrucciones
@@ -255,10 +297,10 @@ export function ExerciseLesson({ lesson }: Props) {
 
       {/* Bottom panel: tests + console */}
       <div className="h-52 flex-shrink-0 border-t border-[var(--vs-border)] flex flex-col">
-        <div className="flex items-center border-b border-[var(--vs-border)]">
+        <div className="flex items-center border-b border-[var(--vs-border)] overflow-x-auto">
           <button
             onClick={() => setActiveBottomTab("tests")}
-            className={`px-4 py-2 text-sm transition-colors ${
+            className={`flex-shrink-0 px-4 py-2 text-sm transition-colors ${
               activeBottomTab === "tests"
                 ? "text-[var(--vs-fg)] border-b-2 border-[var(--vs-accent)]"
                 : "text-[var(--vs-muted)] hover:text-[var(--vs-subtle)]"
@@ -277,7 +319,7 @@ export function ExerciseLesson({ lesson }: Props) {
           </button>
           <button
             onClick={() => setActiveBottomTab("console")}
-            className={`px-4 py-2 text-sm transition-colors ${
+            className={`flex-shrink-0 px-4 py-2 text-sm transition-colors ${
               activeBottomTab === "console"
                 ? "text-[var(--vs-fg)] border-b-2 border-[var(--vs-accent)]"
                 : "text-[var(--vs-muted)] hover:text-[var(--vs-subtle)]"
@@ -286,41 +328,41 @@ export function ExerciseLesson({ lesson }: Props) {
             Consola
           </button>
 
-          <div className="ml-auto flex items-center gap-2 px-3">
+          <div className="ml-auto flex items-center gap-1.5 px-2 flex-shrink-0">
             {lesson.hint && !showHint && (
               <button
                 onClick={() => setShowHint(true)}
-                className="px-3 py-1 text-xs rounded bg-[var(--vs-elevated)] text-[var(--vs-subtle)] hover:text-[var(--vs-fg)] transition-colors"
+                className="px-2.5 py-1 text-xs rounded bg-[var(--vs-elevated)] text-[var(--vs-subtle)] hover:text-[var(--vs-fg)] transition-colors whitespace-nowrap"
               >
-                Obtener pista
+                Pista
               </button>
             )}
             <button
               onClick={handleReset}
-              className="px-3 py-1 text-xs rounded bg-[var(--vs-elevated)] text-[var(--vs-subtle)] hover:text-[var(--vs-fg)] transition-colors"
+              className="px-2.5 py-1 text-xs rounded bg-[var(--vs-elevated)] text-[var(--vs-subtle)] hover:text-[var(--vs-fg)] transition-colors whitespace-nowrap"
             >
               Reiniciar
             </button>
             {lesson.solution && (
               <button
                 onClick={handleShowSolution}
-                className="px-3 py-1 text-xs rounded bg-[var(--vs-elevated)] text-[var(--vs-subtle)] hover:text-[var(--vs-fg)] transition-colors"
+                className="px-2.5 py-1 text-xs rounded bg-[var(--vs-elevated)] text-[var(--vs-subtle)] hover:text-[var(--vs-fg)] transition-colors whitespace-nowrap"
               >
                 Solución
               </button>
             )}
             <button
               onClick={handleRun}
-              className="flex items-center gap-1.5 px-3 py-1 text-xs rounded bg-[var(--vs-accent)] text-white font-semibold hover:bg-[var(--vs-accent-dark)] transition-colors"
+              className="flex items-center gap-1.5 px-2.5 py-1 text-xs rounded bg-[var(--vs-accent)] text-white font-semibold hover:bg-[var(--vs-accent-dark)] transition-colors whitespace-nowrap"
             >
               <Play className="w-3 h-3" fill="currentColor" />
               Run
-              <span className="text-white/60 text-[10px]">Ctrl+Enter</span>
+              <span className="text-white/60 text-[10px] hidden sm:inline">Ctrl+Enter</span>
             </button>
             {(allPassed || isDone) && next && (
               <button
                 onClick={() => setCurrentLesson(next.id)}
-                className="flex items-center gap-1.5 px-3 py-1 text-xs rounded bg-[var(--vs-accent)] text-white font-semibold hover:bg-[var(--vs-accent-dark)] transition-colors"
+                className="flex items-center gap-1.5 px-2.5 py-1 text-xs rounded bg-[var(--vs-accent)] text-white font-semibold hover:bg-[var(--vs-accent-dark)] transition-colors whitespace-nowrap"
               >
                 Siguiente
                 <ChevronRight className="w-3 h-3" />
@@ -333,7 +375,7 @@ export function ExerciseLesson({ lesson }: Props) {
           {activeBottomTab === "tests" && (
             <div className="space-y-1">
               {testResults === null ? (
-                <p className="text-xs text-[var(--vs-muted)] italic py-2">
+                <p className="text-xs text-[var(--vs-muted)] py-2">
                   Haz clic en Run para ejecutar los tests.
                 </p>
               ) : (
