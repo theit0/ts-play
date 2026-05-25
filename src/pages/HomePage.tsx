@@ -9,7 +9,7 @@ import { ChapterBanner } from "../components/ChapterBanner";
 import { ChapterDivider } from "../components/ChapterDivider";
 import { LessonNode } from "../components/LessonNode";
 import { ChapterPanel } from "../components/ChapterPanel";
-import { computeLayout, buildSvgPath, PATH_W, NODE_R, OUTER_Y } from "../utils/layout";
+import { computeLayout, buildSvgPath, buildSegmentPaths, PATH_W, NODE_R, OUTER_Y, CHAPTER_COLORS } from "../utils/layout";
 import { TIMING } from "../config";
 import type { NodeState } from "../utils/layout";
 
@@ -24,7 +24,8 @@ export function HomePage() {
   const firstIncomplete = allLessons.findIndex((l) => !completedLessons.has(l.id));
   const activeLessonId  = firstIncomplete >= 0 ? allLessons[firstIncomplete].id : null;
 
-  const svgPath = useMemo(() => buildSvgPath(nodes), [nodes]);
+  const svgPath   = useMemo(() => buildSvgPath(nodes), [nodes]);
+  const segments  = useMemo(() => buildSegmentPaths(nodes), [nodes]);
 
   function getState(lessonId: string): NodeState {
     if (completedLessons.has(lessonId)) return "done";
@@ -59,7 +60,22 @@ export function HomePage() {
 
               <svg width={PATH_W} height={totalHeight} style={{ position: "absolute", top: 0, left: 0, pointerEvents: "none", zIndex: 0 }}>
                 <path d={svgPath} stroke="#ffffff" strokeWidth="8"  fill="none" strokeLinecap="round" opacity="0.04" />
-                <path d={svgPath} stroke="#3178c6" strokeWidth="5"  fill="none" strokeLinecap="round" opacity="0.15" strokeDasharray="1 14" />
+                <path d={svgPath} stroke="#ffffff" strokeWidth="5"  fill="none" strokeLinecap="round" opacity="0.06" strokeDasharray="1 14" />
+                {segments.map((seg, i) => {
+                  const isDone = completedLessons.has(nodes[i].lessonId);
+                  if (!isDone) return null;
+                  const color = CHAPTER_COLORS[seg.chapterIdx % CHAPTER_COLORS.length];
+                  return (
+                    <path
+                      key={i}
+                      d={seg.d}
+                      stroke={color.progress}
+                      strokeWidth="5"
+                      fill="none"
+                      strokeLinecap="round"
+                    />
+                  );
+                })}
               </svg>
 
               {headers.map(({ y, chapterIdx }) => (

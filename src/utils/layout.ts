@@ -75,3 +75,16 @@ export function buildSvgPath(nodes: NodeInfo[]): string {
   }
   return d;
 }
+
+export function buildSegmentPaths(nodes: NodeInfo[]): { d: string; chapterIdx: number }[] {
+  const segments: { d: string; chapterIdx: number }[] = [];
+  for (let i = 0; i < nodes.length - 1; i++) {
+    const p = nodes[i], c = nodes[i + 1];
+    const midY = (p.y + c.y) / 2;
+    segments.push({
+      d: `M ${p.x} ${p.y} C ${p.x} ${midY}, ${c.x} ${midY}, ${c.x} ${c.y}`,
+      chapterIdx: p.chapterIdx,
+    });
+  }
+  return segments;
+}
