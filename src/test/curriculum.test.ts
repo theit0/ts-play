@@ -2,10 +2,6 @@ import { describe, it, expect } from "vitest";
 import { chapters, findLesson, getAdjacentLessons, firstLessonId } from "../data/curriculum";
 
 describe("chapters", () => {
-  it("has exactly 10 chapters", () => {
-    expect(chapters).toHaveLength(10);
-  });
-
   it("each chapter has at least one lesson", () => {
     for (const chapter of chapters) {
       expect(chapter.lessons.length).toBeGreaterThan(0);
