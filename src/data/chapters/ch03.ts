@@ -3,331 +3,661 @@ import { runCode } from "../../utils/runner";
 
 export const ch03: Chapter = {
   id: "ch03",
-  title: "TypeScript ESLint",
+  title: "TypeScript Types",
   lessons: [
     {
       id: "ch03-01",
-      title: "TypeScript ESLint: no any explícito",
+      title: "Primitive Types",
       type: "explanation",
-      content: `# TypeScript ESLint: sin \`any\` explícito
+      content: `# Primitive Types
 
-**ESLint** es una herramienta que analiza tu código en busca de problemas y hace cumplir buenas prácticas. Con el plugin **typescript-eslint**, puedes añadir reglas específicas para TypeScript.
+TypeScript hereda los tipos primitivos de JavaScript y añade control estático sobre ellos.
 
-## La regla \`@typescript-eslint/no-explicit-any\`
-
-Esta regla prohíbe el uso explícito del tipo \`any\`. Si intentas escribir \`: any\` en tu código, ESLint te mostrará un error:
+## boolean
 
 \`\`\`typescript
-// ✗ Error de ESLint: Unexpected any. Specify a different type.
-function getValue(input: any) {
-    return input;
-}
+const isActive: boolean = true;
+const hasPermission: boolean = false;
+\`\`\`
 
-// ✓ Correcto: usa un tipo específico
-function getValue(input: string) {
-    return input;
+## number
+
+TypeScript usa \`number\` para todos los números — enteros y decimales. No existe \`int\` ni \`float\`.
+
+\`\`\`typescript
+const price: number = 29.99;
+const quantity: number = 100;
+const temperature: number = -5;
+const hex: number = 0xFF;        // hexadecimal — sigue siendo number
+\`\`\`
+
+## string
+
+\`\`\`typescript
+const username: string = "ana_garcia";
+const greeting: string = \`Hola, \${username}\`; // template literals también son string
+\`\`\`
+
+## void
+
+Representa la ausencia de valor de retorno. Se usa en funciones que no retornan nada útil:
+
+\`\`\`typescript
+function logMessage(msg: string): void {
+    console.log(msg);
+    // no retorna nada
 }
 \`\`\`
 
-## ¿Por qué prohibir \`any\`?
+## undefined y null
 
-Si estás trabajando en un proyecto con \`strict: true\` y la regla \`no-explicit-any\`, TypeScript te fuerza a pensar en los tipos correctos en lugar de tomar el camino fácil.
+\`undefined\` es el valor de algo no inicializado. \`null\` es la ausencia intencional de un valor.
 
-Esto lleva a código más seguro y mejor documentado.
+Con \`"strict": true\` en el tsconfig, **no son asignables a otros tipos**:
 
-## Configuración típica
+\`\`\`typescript
+let name: string = null;           // Error: null no es string
+let name: string | null = null;    // ✓ unión explícita
 
-\`\`\`json
-// .eslintrc.json
-{
-  "rules": {
-    "@typescript-eslint/no-explicit-any": "error"
-  }
-}
+let count: number = undefined;     // Error
+let count: number | undefined = undefined; // ✓
 \`\`\`
 
-## Alternativas a \`any\`
-
-Cuando no sabes el tipo de antemano, en lugar de \`any\` puedes usar:
-
-- **\`unknown\`**: más seguro que \`any\`, requiere verificar el tipo antes de usarlo
-- Un tipo **unión** específico: \`string | number | boolean\`
-- **Generics**: para funciones que trabajan con múltiples tipos (lo veremos más adelante)
+Este comportamiento — llamado \`strictNullChecks\` — previene el error más común en JavaScript: *"Cannot read properties of null"*. TypeScript te fuerza a verificar si un valor puede ser null antes de usarlo.
 `,
     },
     {
       id: "ch03-02",
-      title: "No explícito any",
-      type: "exercise",
-      instructions: `## No explícito any
+      title: "Object Types",
+      type: "explanation",
+      content: `# Object Types
 
-La función \`getLength\` viola la regla \`@typescript-eslint/no-explicit-any\`.
+Además de los primitivos, TypeScript tiene tipos para estructuras más complejas.
 
-Reemplaza \`any\` con el tipo correcto. Analiza el cuerpo de la función para determinarlo.`,
-      starterCode: `function getLength(str: any): number {
-    return str.length;
+## Array
+
+Dos sintaxis equivalentes:
+
+\`\`\`typescript
+const names: string[] = ["Ana", "Luis", "María"];
+const prices: Array<number> = [9.99, 19.99, 4.99]; // sintaxis genérica
+\`\`\`
+
+Para arrays que mezclan tipos:
+
+\`\`\`typescript
+const mixed: (string | number)[] = ["Ana", 28, "Luis", 35];
+\`\`\`
+
+## Tuple
+
+Un array de **longitud fija** donde cada posición tiene un tipo específico:
+
+\`\`\`typescript
+const coordinate: [number, number] = [40.7128, -74.0060]; // [lat, lng]
+const entry: [string, number] = ["Ana", 28];              // [name, age]
+\`\`\`
+
+TypeScript 4.0+ permite nombrar las posiciones:
+
+\`\`\`typescript
+const coordinate: [latitude: number, longitude: number] = [40.7128, -74.0060];
+\`\`\`
+
+La diferencia clave con \`number[]\`: TypeScript sabe exactamente cuántos elementos tiene el tuple y qué tipo ocupa cada posición. Con un array, solo sabe el tipo de los elementos.
+
+## Enum
+
+Define un conjunto de constantes con nombre:
+
+\`\`\`typescript
+// String enum — el más recomendado
+enum OrderStatus {
+    Pending   = "pending",
+    Shipped   = "shipped",
+    Delivered = "delivered",
+    Cancelled = "cancelled"
 }
 
-console.log(getLength("hola"));       // 4
-console.log(getLength("TypeScript")); // 10`,
-      solution: `function getLength(str: string): number {
-    return str.length;
+function processOrder(status: OrderStatus) {
+    if (status === OrderStatus.Pending) { /* ... */ }
 }
 
-console.log(getLength("hola"));       // 4
-console.log(getLength("TypeScript")); // 10`,
-      hint: "Observa qué propiedad se accede en el parámetro. No todos los tipos la tienen.",
-      tests: [
-        {
-          name: "@typescript-eslint: sin any explícito",
-          run: (code) => !/(:\s*any\b)/.test(code),
-        },
-        {
-          name: "getLength('hola') retorna 4",
-          run: (code) => {
-            const { output, error } = runCode(code);
-            return !error && output[0] === "4";
-          },
-        },
-      ],
+processOrder(OrderStatus.Pending); // ✓
+processOrder("pending");           // Error: usa el enum, no el string directamente
+\`\`\`
+
+### const enum
+
+Los \`const enum\` se reemplazan inline en el JavaScript compilado — no generan un objeto en runtime:
+
+\`\`\`typescript
+const enum Direction { Up = "UP", Down = "DOWN", Left = "LEFT", Right = "RIGHT" }
+\`\`\`
+
+### Enum vs union literal
+
+Para casos simples, los **union literals** son más directos y no requieren importar nada:
+
+\`\`\`typescript
+// Más simple para la mayoría de casos
+type OrderStatus = "pending" | "shipped" | "delivered" | "cancelled";
+\`\`\`
+
+Usa \`enum\` cuando necesites iterar sobre los valores o cuando el nombre del enum añade claridad semántica al dominio.
+
+## object
+
+El tipo \`object\` (lowercase) representa cualquier no-primitivo. En la práctica, rara vez lo usas directamente — las interfaces y types son más precisas:
+
+\`\`\`typescript
+// Evitar: demasiado amplio, TypeScript no sabe qué propiedades tiene
+function process(data: object) { ... }
+
+// Preferir: describe exactamente la forma esperada
+function process(data: { id: number; name: string }) { ... }
+\`\`\`
+`,
     },
     {
       id: "ch03-03",
-      title: "Ban Comentario TS",
+      title: "Top & Bottom Types",
       type: "explanation",
-      content: `# Ban de comentarios \`@ts-\`
+      content: `# Top & Bottom Types
 
-TypeScript permite silenciar sus advertencias con comentarios especiales. Sin embargo, esto puede ser problemático.
+TypeScript tiene tipos especiales que representan los extremos del sistema de tipos.
 
-## Comentarios que TypeScript reconoce
+## Top Types — aceptan cualquier valor
+
+### any
+
+Opt-out completo del sistema de tipos. TypeScript deja de verificar ese valor:
 
 \`\`\`typescript
-// @ts-ignore     - ignora el error en la siguiente línea
-// @ts-expect-error - espera un error en la siguiente línea
-// @ts-nocheck   - desactiva TypeScript en todo el archivo
+let value: any = "hola";
+value = 42;              // ✓ sin error
+value.metodoInventado(); // ✓ sin error — TypeScript no verifica nada
+value();                 // ✓ sin error — puede crashear en runtime
 \`\`\`
 
-## El problema con \`@ts-ignore\`
+\`any\` es contagioso: al asignarlo a otra variable, esa variable también pierde su tipo. Úsalo solo para migraciones de código JavaScript legacy.
 
-\`// @ts-ignore\` silencia cualquier error sin explicación:
+### unknown
+
+La versión segura de \`any\`. Acepta cualquier valor, pero **TypeScript no te deja usarlo hasta que verifiques su tipo**:
 
 \`\`\`typescript
-function greet(name: string) {
-    return "Hola " + name;
+function processInput(value: unknown) {
+    value.toUpperCase(); // Error: TypeScript no sabe si value es string
+
+    if (typeof value === "string") {
+        value.toUpperCase(); // ✓ dentro del if, TypeScript sabe que es string
+    }
+}
+\`\`\`
+
+**Regla:** si necesitas aceptar "cualquier tipo" (datos de API, JSON externo, inputs del usuario), usa \`unknown\` en lugar de \`any\`. Fuerza que quien usa el valor lo verifique antes.
+
+## Bottom Type — ningún valor posible
+
+### never
+
+\`never\` representa un valor que **nunca puede existir**. Aparece en dos situaciones:
+
+**1. Funciones que nunca retornan:**
+
+\`\`\`typescript
+function throwError(message: string): never {
+    throw new Error(message); // siempre lanza, nunca retorna
 }
 
-// @ts-ignore
-greet(42); // TypeScript no dice nada, pero esto es un bug
+function infiniteLoop(): never {
+    while (true) {} // nunca termina
+}
 \`\`\`
 
-El problema es que estás ocultando un error real sin arreglarlo.
+**2. Exhaustive checks en switch:**
 
-## La regla \`@typescript-eslint/ban-ts-comment\`
-
-Esta regla prohíbe el uso de \`@ts-ignore\` y otros comentarios que suprimen errores:
+Cuando un switch cubre todos los casos de un union type, el \`default\` tiene tipo \`never\`. Puedes usarlo para que TypeScript detecte cuando alguien añade un caso y olvida actualizar el switch:
 
 \`\`\`typescript
-// ✗ Error: Do not use "@ts-ignore" because it alters compilation errors
-// @ts-ignore
-greet(42);
+type PaymentMethod = "card" | "paypal" | "crypto";
+
+function getFee(method: PaymentMethod): number {
+    switch (method) {
+        case "card":   return 2.5;
+        case "paypal": return 3.0;
+        case "crypto": return 1.0;
+        default:
+            const _never: never = method; // TypeScript marca error si hay caso no manejado
+            throw new Error(\`Método no manejado: \${_never}\`);
+    }
+}
 \`\`\`
 
-## La alternativa: \`@ts-expect-error\`
-
-Si genuinamente necesitas suprimir un error (muy raramente), usa \`@ts-expect-error\` en su lugar:
-
-\`\`\`typescript
-// @ts-expect-error - este error es intencional para el test
-greet(42);
-\`\`\`
-
-La diferencia: si el error desaparece, \`@ts-expect-error\` te avisa que ya no es necesario. \`@ts-ignore\` silencia en silencio aunque no haya error.
-
-## Regla general
-
-> En lugar de suprimir el error, **arréglalo**.
+Si alguien añade \`"bank_transfer"\` al union y olvida el case, TypeScript marcará error en la asignación a \`never\`. Sin este patrón, el \`default\` pasaría en silencio.
 `,
     },
     {
       id: "ch03-04",
-      title: "Silenciar un error",
-      type: "exercise",
-      instructions: `## Silenciar un error
-
-El código suprime un error de TypeScript en lugar de arreglarlo. Eso es mala práctica.
-
-Elimina el supresor y corrige el error subyacente.`,
-      starterCode: `function multiply(n: number): number {
-    return n * 3;
-}
-
-// @ts-ignore
-console.log(multiply("cinco")); // Esto es un bug oculto`,
-      solution: `function multiply(n: number): number {
-    return n * 3;
-}
-
-console.log(multiply(5)); // 15`,
-      hint: "Mira el tipo del parámetro de `multiply` y el tipo del argumento que se le pasa.",
-      tests: [
-        {
-          name: "@typescript-eslint: sin @ts-ignore",
-          run: (code) => !/@ts-ignore/.test(code),
-        },
-        {
-          name: "El código funciona sin errores",
-          run: (code) => {
-            const { error } = runCode(code);
-            return !error;
-          },
-        },
-      ],
-    },
-    {
-      id: "ch03-05",
-      title: "Prohibir TS Comment",
-      type: "exercise",
-      instructions: `## Prohibir TS Comment
-
-Este archivo desactiva TypeScript completamente para ocultar un error real.
-
-Quita el mecanismo de supresión y arregla el código para que funcione sin atajos.`,
-      starterCode: `// @ts-nocheck
-function greet(name: string) {
-    console.log("Hola " + name);
-}
-
-greet(42); // Este es el error que estaba ocultando`,
-      solution: `function greet(name: string) {
-    console.log("Hola " + name);
-}
-
-greet("Mundo"); // Arreglado: argumento correcto`,
-      hint: "Mira la firma de `greet` para entender qué tipo de argumento acepta.",
-      tests: [
-        {
-          name: "@typescript-eslint: sin @ts-nocheck",
-          run: (code) => !/@ts-nocheck/.test(code) && !/@ts-ignore/.test(code),
-        },
-        {
-          name: "El código funciona sin errores",
-          run: (code) => {
-            const { error } = runCode(code);
-            return !error;
-          },
-        },
-      ],
-    },
-    {
-      id: "ch03-06",
-      title: "Tipos de Ban",
+      title: "Type Inference",
       type: "explanation",
-      content: `# Prohibición de tipos
+      content: `# Type Inference
 
-Algunos tipos en TypeScript parecen correctos pero en realidad son problemáticos. La regla \`@typescript-eslint/ban-types\` prohíbe ciertos tipos que no deberían usarse.
+TypeScript puede deducir el tipo de una expresión sin que lo declares explícitamente. Esto reduce el ruido en el código sin perder seguridad.
 
-## El problema con los tipos en mayúscula
-
-JavaScript tiene objetos envolventes para los primitivos: \`String\`, \`Number\`, \`Boolean\`. Estos son **objetos**, no primitivos:
+## Variables
 
 \`\`\`typescript
-// ✗ Incorrecto: tipos de objeto (wrapper objects)
-const nombre: String = "Ana";   // String con mayúscula
-const edad: Number = 25;        // Number con mayúscula
-const activo: Boolean = true;   // Boolean con mayúscula
-
-// ✓ Correcto: tipos primitivos
-const nombre: string = "Ana";   // string con minúscula
-const edad: number = 25;        // number con minúscula
-const activo: boolean = true;   // boolean con minúscula
+const name = "Ana";    // TypeScript infiere: string
+const age = 28;        // TypeScript infiere: number
+const active = true;   // TypeScript infiere: boolean
+const items = [];      // TypeScript infiere: never[] (array vacío — sin info)
+const items2 = ["a", "b"]; // TypeScript infiere: string[]
 \`\`\`
 
-## ¿Por qué es un problema?
+## const vs let — widening
 
-Los tipos en mayúscula (\`String\`, \`Number\`, \`Boolean\`) representan los objetos envolventes de JavaScript. Aunque funcionan en la mayoría de los casos, no son lo mismo que los primitivos y pueden causar confusión.
+\`const\` y \`let\` producen tipos diferentes:
 
 \`\`\`typescript
-const a: string = "hola"; // primitivo
-const b: String = "hola"; // objeto String
+const direction = "norte";
+// Tipo inferido: "norte" (tipo literal)
+// Porque const no puede cambiar — el valor siempre será "norte"
 
-// Puedes asignar un primitivo a String, pero no al revés:
-const c: string = b; // ✗ Error en TypeScript estricto
+let direction = "norte";
+// Tipo inferido: string (tipo general, "widened")
+// Porque let puede cambiar a cualquier string más adelante
 \`\`\`
 
-## Regla general
+Esto importa cuando una función espera un tipo literal:
 
-> Siempre usa tipos primitivos en **minúscula**: \`string\`, \`number\`, \`boolean\`.
+\`\`\`typescript
+type Direction = "norte" | "sur" | "este" | "oeste";
+function move(d: Direction) { ... }
 
-Lo mismo aplica para \`object\` vs \`Object\`, y \`symbol\` vs \`Symbol\`.
+const dir = "norte";  // tipo: "norte" — ✓ compatible con Direction
+let dir2 = "norte";   // tipo: string — Error: string no es Direction
+\`\`\`
+
+## Retorno de funciones
+
+TypeScript infiere el tipo de retorno a partir de los \`return\` statements:
+
+\`\`\`typescript
+function double(n: number) {
+    return n * 2; // TypeScript infiere: number
+}
+
+function getLabel(active: boolean) {
+    return active ? "activo" : "inactivo"; // TypeScript infiere: string
+}
+\`\`\`
+
+Anotar el tipo de retorno explícitamente es opcional, pero útil en APIs públicas: si cambias la implementación y el tipo de retorno cambia, TypeScript te avisa si callers esperaban el tipo anterior.
+
+## Contextual typing
+
+TypeScript usa el contexto para inferir tipos en callbacks:
+
+\`\`\`typescript
+const numbers = [1, 2, 3];
+
+numbers.map(n => n * 2);         // n inferido como number ✓
+numbers.filter(n => n > 2);      // n inferido como number ✓
+numbers.forEach(n => {
+    n.toUpperCase();             // Error: n es number, no tiene toUpperCase
+});
+\`\`\`
+
+TypeScript sabe que \`.map()\` en \`number[]\` pasa \`number\` a cada callback.
+
+## Cuándo anotar tipos explícitamente
+
+- **Parámetros de función**: TypeScript no puede inferirlos
+- **Variables con array vacío inicial**: \`const items: string[] = []\`
+- **APIs públicas exportadas**: la anotación sirve de documentación y contrato
+- **Cuando el tipo inferido es más amplio de lo que quieres**: anota para restringir
 `,
     },
     {
-      id: "ch03-07",
-      title: "Prohibición de Tipos",
+      id: "ch03-05",
+      title: "Type Compatibility",
+      type: "explanation",
+      content: `# Type Compatibility — Structural Typing
+
+TypeScript usa un sistema de tipos **estructural** (también llamado duck typing): dos tipos son compatibles si tienen la misma "forma", independientemente de su nombre.
+
+## Structural vs Nominal
+
+En lenguajes con tipado **nominal** (Java, C#), el nombre del tipo determina la compatibilidad:
+
+\`\`\`java
+// Java: Point y Coordinate son tipos distintos aunque sean idénticos
+class Point { int x; int y; }
+class Coordinate { int x; int y; }
+
+Point p = new Coordinate(); // Error en Java — tipos distintos
+\`\`\`
+
+TypeScript no funciona así:
+
+\`\`\`typescript
+// TypeScript: compatibles porque tienen la misma forma
+interface Point { x: number; y: number; }
+interface Coordinate { x: number; y: number; }
+
+const c: Coordinate = { x: 10, y: 20 };
+const p: Point = c; // ✓ misma forma — compatible
+\`\`\`
+
+## Propiedades extra son permitidas
+
+Si un objeto tiene más propiedades de las requeridas, sigue siendo compatible:
+
+\`\`\`typescript
+interface User {
+    name: string;
+    age: number;
+}
+
+const employee = {
+    name: "Ana",
+    age: 28,
+    department: "Engineering", // propiedad extra
+    salary: 75000              // propiedad extra
+};
+
+const user: User = employee; // ✓ employee "cumple" con User — tiene name y age
+\`\`\`
+
+Nota: el **excess property check** sí marca error cuando asignas un object literal directamente con propiedades extra, como protección contra typos. Pero si el objeto viene de una variable, las propiedades extra se ignoran.
+
+\`\`\`typescript
+const user: User = { name: "Ana", age: 28, role: "admin" }; // Error: excess property
+const user: User = employee; // ✓ la variable employee puede tener más propiedades
+\`\`\`
+
+## Compatibilidad en funciones
+
+Para que una función sea asignable a un tipo función, sus parámetros y retorno deben ser compatibles:
+
+\`\`\`typescript
+type Handler = (event: string) => void;
+
+const h1: Handler = (e) => console.log(e);          // ✓
+const h2: Handler = (e, extra) => console.log(e);   // Error: parámetro extra
+\`\`\`
+
+## Por qué structural typing
+
+JavaScript es inherentemente duck-typed: si un objeto tiene los métodos y propiedades que necesitas, funciona. TypeScript refleja esa realidad en lugar de imponer un sistema nominal que sería más rígido y menos compatible con cómo realmente se usa JavaScript.
+`,
+    },
+    {
+      id: "ch03-06",
+      title: "Anotando un catálogo",
       type: "exercise",
-      instructions: `## Prohibición de Tipos
+      instructions: `## Anotando un catálogo
 
-La función \`describePerson\` usa tipos que la regla \`@typescript-eslint/ban-types\` prohíbe.
+La función \`createProduct\` genera la descripción de un producto para un catálogo. TypeScript está reportando implicit \`any\` en todos sus parámetros porque no tienen anotaciones.
 
-Corrígelos. TypeScript tiene alternativas más apropiadas para cada uno.`,
-      starterCode: `function describePerson(name: String, age: Number, isActive: Boolean): String {
-    const status = isActive ? "activo" : "inactivo";
-    return \`\${name}, \${age} años, \${status}\`;
+Añade las anotaciones correctas basándote en cómo se usa cada parámetro dentro de la función.`,
+      starterCode: `function createProduct(name, price, inStock, quantity) {
+    return \`\${name}: $\${price.toFixed(2)} — \${inStock ? "en stock" : "agotado"} (\${quantity} unidades)\`;
 }
 
-console.log(describePerson("Ana", 25, true));
-// Ana, 25 años, activo`,
-      solution: `function describePerson(name: string, age: number, isActive: boolean): string {
-    const status = isActive ? "activo" : "inactivo";
-    return \`\${name}, \${age} años, \${status}\`;
+console.log(createProduct("Laptop", 999.99, true, 15));
+console.log(createProduct("Teclado", 49.90, false, 0));`,
+      solution: `function createProduct(name: string, price: number, inStock: boolean, quantity: number): string {
+    return \`\${name}: $\${price.toFixed(2)} — \${inStock ? "en stock" : "agotado"} (\${quantity} unidades)\`;
 }
 
-console.log(describePerson("Ana", 25, true));
-// Ana, 25 años, activo`,
-      hint: "Los tipos primitivos de TypeScript siempre van en minúscula.",
+console.log(createProduct("Laptop", 999.99, true, 15));
+console.log(createProduct("Teclado", 49.90, false, 0));`,
+      hint: "Analiza qué hace el código con cada parámetro. `.toFixed()` solo existe en ciertos tipos. El operador ternario `? :` espera cierto tipo en la condición.",
       tests: [
         {
-          name: "@typescript-eslint: sin tipos String/Number/Boolean en mayúscula",
+          name: "Los parámetros tienen anotaciones de tipo",
           run: (code) =>
-            !/:\s*String\b/.test(code) &&
-            !/:\s*Number\b/.test(code) &&
-            !/:\s*Boolean\b/.test(code),
+            /\bname\s*:\s*string/.test(code) &&
+            /\bprice\s*:\s*number/.test(code) &&
+            /\binStock\s*:\s*boolean/.test(code) &&
+            /\bquantity\s*:\s*number/.test(code),
         },
         {
-          name: "describePerson funciona correctamente",
+          name: "createProduct('Laptop', 999.99, true, 15) genera el formato correcto",
           run: (code) => {
             const { output, error } = runCode(code);
-            return !error && output[0]?.includes("Ana");
+            return (
+              !error &&
+              output[0]?.includes("Laptop") &&
+              output[0]?.includes("999.99") &&
+              output[0]?.includes("en stock")
+            );
+          },
+        },
+        {
+          name: "createProduct('Teclado', 49.90, false, 0) indica agotado",
+          run: (code) => {
+            const { output, error } = runCode(code);
+            return !error && output[1]?.includes("agotado");
+          },
+        },
+      ],
+    },
+    {
+      id: "ch03-07",
+      title: "Más que un array",
+      type: "exercise",
+      instructions: `## Más que un array
+
+La función \`parseRGB\` descompone un color hexadecimal en sus tres componentes. Retorna \`number[]\`, pero ese tipo no garantiza nada sobre la longitud — TypeScript no sabe si el array tiene 1 elemento o 10.
+
+Cambia el tipo de retorno para expresar exactamente que siempre retorna tres números: rojo, verde y azul.`,
+      starterCode: `function parseRGB(hex: string): number[] {
+    const r = parseInt(hex.slice(1, 3), 16);
+    const g = parseInt(hex.slice(3, 5), 16);
+    const b = parseInt(hex.slice(5, 7), 16);
+    return [r, g, b];
+}
+
+const [red, green, blue] = parseRGB("#FF5733");
+console.log(\`R:\${red} G:\${green} B:\${blue}\`);`,
+      solution: `function parseRGB(hex: string): [number, number, number] {
+    const r = parseInt(hex.slice(1, 3), 16);
+    const g = parseInt(hex.slice(3, 5), 16);
+    const b = parseInt(hex.slice(5, 7), 16);
+    return [r, g, b];
+}
+
+const [red, green, blue] = parseRGB("#FF5733");
+console.log(\`R:\${red} G:\${green} B:\${blue}\`);`,
+      hint: "Un tuple expresa longitud fija y tipo por posición. La sintaxis es `[Tipo1, Tipo2, Tipo3]` como tipo de retorno de la función.",
+      tests: [
+        {
+          name: "El tipo de retorno es un tuple de tres números",
+          run: (code) =>
+            /\)\s*:\s*\[number\s*,\s*number\s*,\s*number\]/.test(code),
+        },
+        {
+          name: "parseRGB('#FF5733') retorna R:255 G:87 B:51",
+          run: (code) => {
+            const { output, error } = runCode(code);
+            return (
+              !error &&
+              output[0]?.includes("R:255") &&
+              output[0]?.includes("G:87") &&
+              output[0]?.includes("B:51")
+            );
           },
         },
       ],
     },
     {
       id: "ch03-08",
+      title: "Datos del exterior",
+      type: "exercise",
+      instructions: `## Datos del exterior
+
+La función \`parseAPIResponse\` recibe datos de una fuente externa. Usa \`any\`, lo que desactiva completamente la protección de TypeScript — si recibes un número o \`null\`, el código crashea en silencio.
+
+Cambia el tipo a \`unknown\` y agrega la verificación necesaria. La función debe retornar el string en mayúsculas si recibe un string, o \`"[dato inválido]"\` para cualquier otro tipo.`,
+      starterCode: `function parseAPIResponse(data: any): string {
+    return data.toUpperCase();
+}
+
+console.log(parseAPIResponse("éxito"));  // ÉXITO
+console.log(parseAPIResponse(404));      // [dato inválido]
+console.log(parseAPIResponse(null));     // [dato inválido]`,
+      solution: `function parseAPIResponse(data: unknown): string {
+    if (typeof data === "string") {
+        return data.toUpperCase();
+    }
+    return "[dato inválido]";
+}
+
+console.log(parseAPIResponse("éxito"));
+console.log(parseAPIResponse(404));
+console.log(parseAPIResponse(null));`,
+      hint: "Con `unknown`, TypeScript exige que verifiques el tipo antes de usar el valor. `typeof data === 'string'` es la forma más directa.",
+      tests: [
+        {
+          name: "No usa 'any'",
+          run: (code) => !/(:\s*any\b)/.test(code),
+        },
+        {
+          name: "Usa 'unknown' para el parámetro",
+          run: (code) => /:\s*unknown\b/.test(code),
+        },
+        {
+          name: "parseAPIResponse('éxito') retorna 'ÉXITO'",
+          run: (code) => {
+            const { output, error } = runCode(code);
+            return !error && output[0] === "ÉXITO";
+          },
+        },
+        {
+          name: "parseAPIResponse(404) retorna '[dato inválido]'",
+          run: (code) => {
+            const { output, error } = runCode(code);
+            return !error && output[1] === "[dato inválido]";
+          },
+        },
+      ],
+    },
+    {
+      id: "ch03-09",
+      title: "El switch infalible",
+      type: "exercise",
+      instructions: `## El switch infalible
+
+La función \`getPaymentFee\` retorna la comisión para cada método de pago y cubre todos los casos actuales. El problema: si alguien añade un nuevo método al tipo \`PaymentMethod\` y olvida actualizar el switch, TypeScript no avisa — el \`default: return 0\` lo absorbe silenciosamente.
+
+Implementa un exhaustive check en el \`default\` usando \`never\` para que TypeScript detecte casos no manejados automáticamente.`,
+      starterCode: `type PaymentMethod = "credit_card" | "debit_card" | "paypal";
+
+function getPaymentFee(method: PaymentMethod): number {
+    switch (method) {
+        case "credit_card": return 2.5;
+        case "debit_card":  return 1.0;
+        case "paypal":      return 3.0;
+        default:
+            return 0; // Reemplaza esto con un exhaustive check
+    }
+}
+
+console.log(getPaymentFee("credit_card")); // 2.5
+console.log(getPaymentFee("paypal"));      // 3`,
+      solution: `type PaymentMethod = "credit_card" | "debit_card" | "paypal";
+
+function getPaymentFee(method: PaymentMethod): number {
+    switch (method) {
+        case "credit_card": return 2.5;
+        case "debit_card":  return 1.0;
+        case "paypal":      return 3.0;
+        default:
+            const _never: never = method;
+            throw new Error(\`Método de pago no manejado: \${_never}\`);
+    }
+}
+
+console.log(getPaymentFee("credit_card"));
+console.log(getPaymentFee("paypal"));`,
+      hint: "Asignar el valor del `default` a una variable de tipo `never` es la convención. Si todos los casos están cubiertos, TypeScript acepta la asignación. Si falta un caso, marca error ahí.",
+      tests: [
+        {
+          name: "Usa 'never' para el exhaustive check",
+          run: (code) => /:\s*never\b/.test(code),
+        },
+        {
+          name: "getPaymentFee('credit_card') retorna 2.5",
+          run: (code) => {
+            const { output, error } = runCode(code);
+            return !error && output[0] === "2.5";
+          },
+        },
+        {
+          name: "getPaymentFee('paypal') retorna 3",
+          run: (code) => {
+            const { output, error } = runCode(code);
+            return !error && output[1] === "3";
+          },
+        },
+      ],
+    },
+    {
+      id: "ch03-10",
       title: "Resumen del capítulo",
       type: "explanation",
-      content: `# Resumen - TypeScript ESLint
+      content: `# Resumen — TypeScript Types
 
-En este capítulo aprendiste sobre TypeScript ESLint y las reglas más importantes para mantener un código TypeScript de calidad.
+## Tipos primitivos
 
-## Reglas vistas
+| Tipo | Descripción |
+|------|-------------|
+| \`boolean\` | \`true\` / \`false\` |
+| \`number\` | Enteros y decimales |
+| \`string\` | Texto |
+| \`void\` | Retorno de función sin valor útil |
+| \`undefined\` | Variable sin inicializar |
+| \`null\` | Ausencia intencional de valor |
 
-| Regla | Qué prohíbe |
-|-------|-------------|
-| \`no-explicit-any\` | Uso de \`: any\` explícito |
-| \`ban-ts-comment\` | Comentarios \`@ts-ignore\` y \`@ts-nocheck\` |
-| \`ban-types\` | Tipos wrapper como \`String\`, \`Number\`, \`Boolean\` |
+Con \`strict: true\`, \`null\` y \`undefined\` no son asignables a otros tipos — debes usar una unión explícita: \`string | null\`.
 
-## Puntos clave
+## Object types
 
-- TypeScript ESLint es un plugin que añade reglas específicas de TypeScript a ESLint.
-- \`@ts-ignore\` silencia errores sin arreglarlos - evítalo.
-- Si necesitas suprimir un error de forma excepcional, usa \`@ts-expect-error\` con una explicación.
-- Siempre usa tipos primitivos en minúscula: \`string\`, \`number\`, \`boolean\`.
+- **Array** \`string[]\` — colección de elementos del mismo tipo, longitud variable
+- **Tuple** \`[string, number]\` — longitud fija, cada posición tiene su tipo
+- **Enum** — constantes con nombre; para casos simples, preferir union literals
+- **object** — rara vez útil directamente; usar interfaces/types en su lugar
+
+## Top & Bottom Types
+
+| Tipo | Descripción |
+|------|-------------|
+| \`any\` | Opt-out del type system — evitar |
+| \`unknown\` | Acepta todo pero requiere narrowing antes de usar |
+| \`never\` | Valor que nunca puede existir — funciones que tiran error, exhaustive checks |
+
+**Regla:** \`any\` apaga TypeScript. \`unknown\` lo mantiene activo y te fuerza a verificar.
+
+## Type Inference
+
+TypeScript infiere tipos automáticamente:
+- Variables: del valor inicial
+- Funciones: del \`return\`
+- Callbacks: del contexto
+
+\`const\` infiere tipo literal; \`let\` infiere tipo general.
+
+## Type Compatibility
+
+TypeScript es **structuralmente tipado**: la compatibilidad depende de la forma, no del nombre. Un objeto con más propiedades es compatible con un tipo que tiene menos.
 
 ## Lo que viene
 
-En el próximo capítulo profundizamos en los **tipos primitivos** de TypeScript y aprendemos sobre inferencia de tipos.
+El próximo capítulo cubre **Assertions & Special Syntax** — \`as\`, \`as const\`, el operador non-null \`!\`, y el keyword \`satisfies\`.
 `,
     },
   ],

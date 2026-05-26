@@ -3,221 +3,329 @@ import { runCode } from "../../utils/runner";
 
 export const ch02: Chapter = {
   id: "ch02",
-  title: "The any type",
+  title: "TypeScript ESLint",
   lessons: [
     {
       id: "ch02-01",
-      title: "El any type",
+      title: "TypeScript ESLint: no any explícito",
       type: "explanation",
-      content: `# El tipo \`any\`
+      content: `# TypeScript ESLint: sin \`any\` explícito
 
-El tipo \`any\` es el escape hatch de TypeScript. Cuando asignas \`any\` a una variable o parámetro, le dices a TypeScript: *"no me importa el tipo, acepta cualquier cosa"*.
+**ESLint** es una herramienta que analiza tu código en busca de problemas y hace cumplir buenas prácticas. Con el plugin **typescript-eslint**, puedes añadir reglas específicas para TypeScript.
+
+## La regla \`@typescript-eslint/no-explicit-any\`
+
+Esta regla prohíbe el uso explícito del tipo \`any\`. Si intentas escribir \`: any\` en tu código, ESLint te mostrará un error:
 
 \`\`\`typescript
-function logValue(value: any) {
-    console.log(value);
+// ✗ Error de ESLint: Unexpected any. Specify a different type.
+function getValue(input: any) {
+    return input;
 }
 
-logValue("hola");  // ✓
-logValue(42);      // ✓
-logValue(true);    // ✓
-logValue([1,2,3]); // ✓ - any acepta todo
-\`\`\`
-
-## El problema con \`any\`
-
-Aunque \`any\` parece conveniente, **deshabilita todas las verificaciones de TypeScript** para esa variable:
-
-\`\`\`typescript
-function double(n: any) {
-    return n * 2;
-}
-
-double("hola"); // TypeScript no advierte nada, pero el resultado es NaN
-\`\`\`
-
-Usar \`any\` es como escribir JavaScript normal - pierdes todos los beneficios de TypeScript.
-
-## \`any\` implícito
-
-Si escribes una función **sin** anotaciones de tipo y TypeScript no puede inferir el tipo, automáticamente usa \`any\`. Esto se llama **any implícito**:
-
-\`\`\`typescript
-function greet(name) { // name tiene tipo 'any' implícito
-    return "Hola " + name;
+// ✓ Correcto: usa un tipo específico
+function getValue(input: string) {
+    return input;
 }
 \`\`\`
 
-Con la opción \`noImplicitAny: true\` en tu configuración (la veremos pronto), TypeScript te daría un error aquí.
+## ¿Por qué prohibir \`any\`?
 
-## ¿Cuándo usar \`any\`?
+Si estás trabajando en un proyecto con \`strict: true\` y la regla \`no-explicit-any\`, TypeScript te fuerza a pensar en los tipos correctos en lugar de tomar el camino fácil.
 
-Idealmente **nunca**. Pero hay algunos casos legítimos:
-- Al migrar gradualmente de JavaScript a TypeScript
-- Con datos de fuentes externas que no conocemos de antemano
-- En casos muy específicos donde el tipo es genuinamente desconocido (en ese caso, mejor usar \`unknown\`)
+Esto lleva a código más seguro y mejor documentado.
 
-## Regla general
+## Configuración típica
 
-> Si usas \`any\`, estás apagando TypeScript. Evítalo cuando puedas.
+\`\`\`json
+// .eslintrc.json
+{
+  "rules": {
+    "@typescript-eslint/no-explicit-any": "error"
+  }
+}
+\`\`\`
+
+## Alternativas a \`any\`
+
+Cuando no sabes el tipo de antemano, en lugar de \`any\` puedes usar:
+
+- **\`unknown\`**: más seguro que \`any\`, requiere verificar el tipo antes de usarlo
+- Un tipo **unión** específico: \`string | number | boolean\`
+- **Generics**: para funciones que trabajan con múltiples tipos (lo veremos más adelante)
 `,
     },
     {
       id: "ch02-02",
-      title: "Registrar valor",
+      title: "No explícito any",
       type: "exercise",
-      instructions: `## Registrar valor
+      instructions: `## No explícito any
 
-La función \`logNumber\` usa \`any\` como tipo del parámetro, lo que anula las protecciones de TypeScript.
+La función \`getLength\` viola la regla \`@typescript-eslint/no-explicit-any\`.
 
-Reemplázalo con el tipo más específico y correcto.`,
-      starterCode: `function logNumber(value: any) {
-    console.log(value * 2);
+Reemplaza \`any\` con el tipo correcto. Analiza el cuerpo de la función para determinarlo.`,
+      starterCode: `function getLength(str: any): number {
+    return str.length;
 }
 
-logNumber(5);  // 10
-logNumber(10); // 20
-logNumber(7);  // 14`,
-      solution: `function logNumber(value: number) {
-    console.log(value * 2);
+console.log(getLength("hola"));       // 4
+console.log(getLength("TypeScript")); // 10`,
+      solution: `function getLength(str: string): number {
+    return str.length;
 }
 
-logNumber(5);  // 10
-logNumber(10); // 20
-logNumber(7);  // 14`,
-      hint: "¿Qué operación se hace con `value`? ¿Qué tipos soportan esa operación?",
+console.log(getLength("hola"));       // 4
+console.log(getLength("TypeScript")); // 10`,
+      hint: "Observa qué propiedad se accede en el parámetro. No todos los tipos la tienen.",
       tests: [
         {
-          name: "No usa el tipo any",
+          name: "@typescript-eslint: sin any explícito",
           run: (code) => !/(:\s*any\b)/.test(code),
         },
         {
-          name: "logNumber(5) imprime 10",
+          name: "getLength('hola') retorna 4",
           run: (code) => {
             const { output, error } = runCode(code);
-            return !error && output[0] === "10";
-          },
-        },
-        {
-          name: "logNumber(7) imprime 14",
-          run: (code) => {
-            const { output, error } = runCode(code);
-            return !error && output[2] === "14";
+            return !error && output[0] === "4";
           },
         },
       ],
     },
     {
       id: "ch02-03",
-      title: "tsconfig.json",
+      title: "Ban Comentario TS",
       type: "explanation",
-      content: `# tsconfig.json
+      content: `# Ban de comentarios \`@ts-\`
 
-El archivo \`tsconfig.json\` es el archivo de configuración de TypeScript para tu proyecto. Controla cómo TypeScript compila tu código.
+TypeScript permite silenciar sus advertencias con comentarios especiales. Sin embargo, esto puede ser problemático.
 
-## Estructura básica
-
-\`\`\`json
-{
-  "compilerOptions": {
-    "target": "ES2020",
-    "strict": true
-  }
-}
-\`\`\`
-
-## Opciones importantes
-
-### \`strict\`
-
-La opción más importante. Cuando está en \`true\`, activa un conjunto de verificaciones estrictas:
-
-\`\`\`json
-{
-  "compilerOptions": {
-    "strict": true
-  }
-}
-\`\`\`
-
-Esto incluye:
-- **\`noImplicitAny\`**: Error si TypeScript infiere tipo \`any\` implícitamente
-- **\`strictNullChecks\`**: \`null\` y \`undefined\` no son asignables a otros tipos
-- Y otras verificaciones más
-
-### \`noImplicitAny\`
-
-Activa específicamente el error para \`any\` implícito:
-
-\`\`\`json
-{
-  "compilerOptions": {
-    "noImplicitAny": true
-  }
-}
-\`\`\`
-
-Con esta opción, TypeScript te daría un error en:
+## Comentarios que TypeScript reconoce
 
 \`\`\`typescript
-function greet(name) { // Error: 'name' tiene tipo implícito 'any'
+// @ts-ignore     - ignora el error en la siguiente línea
+// @ts-expect-error - espera un error en la siguiente línea
+// @ts-nocheck   - desactiva TypeScript en todo el archivo
+\`\`\`
+
+## El problema con \`@ts-ignore\`
+
+\`// @ts-ignore\` silencia cualquier error sin explicación:
+
+\`\`\`typescript
+function greet(name: string) {
     return "Hola " + name;
 }
+
+// @ts-ignore
+greet(42); // TypeScript no dice nada, pero esto es un bug
 \`\`\`
 
-### \`target\`
+El problema es que estás ocultando un error real sin arreglarlo.
 
-Especifica la versión de JavaScript a la que compilar:
+## La regla \`@typescript-eslint/ban-ts-comment\`
 
-\`\`\`json
-{
-  "compilerOptions": {
-    "target": "ES2020"
-  }
-}
+Esta regla prohíbe el uso de \`@ts-ignore\` y otros comentarios que suprimen errores:
+
+\`\`\`typescript
+// ✗ Error: Do not use "@ts-ignore" because it alters compilation errors
+// @ts-ignore
+greet(42);
 \`\`\`
 
-## Recomendación
+## La alternativa: \`@ts-expect-error\`
 
-Para proyectos nuevos, siempre usa \`"strict": true\`. Te forzará a escribir código TypeScript de calidad desde el principio.
+Si genuinamente necesitas suprimir un error (muy raramente), usa \`@ts-expect-error\` en su lugar:
 
-\`\`\`json
-{
-  "compilerOptions": {
-    "target": "ES2020",
-    "strict": true,
-    "module": "ESNext",
-    "moduleResolution": "bundler",
-    "jsx": "react-jsx"
-  },
-  "include": ["src"]
-}
+\`\`\`typescript
+// @ts-expect-error - este error es intencional para el test
+greet(42);
 \`\`\`
+
+La diferencia: si el error desaparece, \`@ts-expect-error\` te avisa que ya no es necesario. \`@ts-ignore\` silencia en silencio aunque no haya error.
+
+## Regla general
+
+> En lugar de suprimir el error, **arréglalo**.
 `,
     },
     {
       id: "ch02-04",
+      title: "Silenciar un error",
+      type: "exercise",
+      instructions: `## Silenciar un error
+
+El código suprime un error de TypeScript en lugar de arreglarlo. Eso es mala práctica.
+
+Elimina el supresor y corrige el error subyacente.`,
+      starterCode: `function multiply(n: number): number {
+    return n * 3;
+}
+
+// @ts-ignore
+console.log(multiply("cinco")); // Esto es un bug oculto`,
+      solution: `function multiply(n: number): number {
+    return n * 3;
+}
+
+console.log(multiply(5)); // 15`,
+      hint: "Mira el tipo del parámetro de `multiply` y el tipo del argumento que se le pasa.",
+      tests: [
+        {
+          name: "@typescript-eslint: sin @ts-ignore",
+          run: (code) => !/@ts-ignore/.test(code),
+        },
+        {
+          name: "El código funciona sin errores",
+          run: (code) => {
+            const { error } = runCode(code);
+            return !error;
+          },
+        },
+      ],
+    },
+    {
+      id: "ch02-05",
+      title: "Prohibir TS Comment",
+      type: "exercise",
+      instructions: `## Prohibir TS Comment
+
+Este archivo desactiva TypeScript completamente para ocultar un error real.
+
+Quita el mecanismo de supresión y arregla el código para que funcione sin atajos.`,
+      starterCode: `// @ts-nocheck
+function greet(name: string) {
+    console.log("Hola " + name);
+}
+
+greet(42); // Este es el error que estaba ocultando`,
+      solution: `function greet(name: string) {
+    console.log("Hola " + name);
+}
+
+greet("Mundo"); // Arreglado: argumento correcto`,
+      hint: "Mira la firma de `greet` para entender qué tipo de argumento acepta.",
+      tests: [
+        {
+          name: "@typescript-eslint: sin @ts-nocheck",
+          run: (code) => !/@ts-nocheck/.test(code) && !/@ts-ignore/.test(code),
+        },
+        {
+          name: "El código funciona sin errores",
+          run: (code) => {
+            const { error } = runCode(code);
+            return !error;
+          },
+        },
+      ],
+    },
+    {
+      id: "ch02-06",
+      title: "Tipos de Ban",
+      type: "explanation",
+      content: `# Prohibición de tipos
+
+Algunos tipos en TypeScript parecen correctos pero en realidad son problemáticos. La regla \`@typescript-eslint/ban-types\` prohíbe ciertos tipos que no deberían usarse.
+
+## El problema con los tipos en mayúscula
+
+JavaScript tiene objetos envolventes para los primitivos: \`String\`, \`Number\`, \`Boolean\`. Estos son **objetos**, no primitivos:
+
+\`\`\`typescript
+// ✗ Incorrecto: tipos de objeto (wrapper objects)
+const nombre: String = "Ana";   // String con mayúscula
+const edad: Number = 25;        // Number con mayúscula
+const activo: Boolean = true;   // Boolean con mayúscula
+
+// ✓ Correcto: tipos primitivos
+const nombre: string = "Ana";   // string con minúscula
+const edad: number = 25;        // number con minúscula
+const activo: boolean = true;   // boolean con minúscula
+\`\`\`
+
+## ¿Por qué es un problema?
+
+Los tipos en mayúscula (\`String\`, \`Number\`, \`Boolean\`) representan los objetos envolventes de JavaScript. Aunque funcionan en la mayoría de los casos, no son lo mismo que los primitivos y pueden causar confusión.
+
+\`\`\`typescript
+const a: string = "hola"; // primitivo
+const b: String = "hola"; // objeto String
+
+// Puedes asignar un primitivo a String, pero no al revés:
+const c: string = b; // ✗ Error en TypeScript estricto
+\`\`\`
+
+## Regla general
+
+> Siempre usa tipos primitivos en **minúscula**: \`string\`, \`number\`, \`boolean\`.
+
+Lo mismo aplica para \`object\` vs \`Object\`, y \`symbol\` vs \`Symbol\`.
+`,
+    },
+    {
+      id: "ch02-07",
+      title: "Prohibición de Tipos",
+      type: "exercise",
+      instructions: `## Prohibición de Tipos
+
+La función \`describePerson\` usa tipos que la regla \`@typescript-eslint/ban-types\` prohíbe.
+
+Corrígelos. TypeScript tiene alternativas más apropiadas para cada uno.`,
+      starterCode: `function describePerson(name: String, age: Number, isActive: Boolean): String {
+    const status = isActive ? "activo" : "inactivo";
+    return \`\${name}, \${age} años, \${status}\`;
+}
+
+console.log(describePerson("Ana", 25, true));
+// Ana, 25 años, activo`,
+      solution: `function describePerson(name: string, age: number, isActive: boolean): string {
+    const status = isActive ? "activo" : "inactivo";
+    return \`\${name}, \${age} años, \${status}\`;
+}
+
+console.log(describePerson("Ana", 25, true));
+// Ana, 25 años, activo`,
+      hint: "Los tipos primitivos de TypeScript siempre van en minúscula.",
+      tests: [
+        {
+          name: "@typescript-eslint: sin tipos String/Number/Boolean en mayúscula",
+          run: (code) =>
+            !/:\s*String\b/.test(code) &&
+            !/:\s*Number\b/.test(code) &&
+            !/:\s*Boolean\b/.test(code),
+        },
+        {
+          name: "describePerson funciona correctamente",
+          run: (code) => {
+            const { output, error } = runCode(code);
+            return !error && output[0]?.includes("Ana");
+          },
+        },
+      ],
+    },
+    {
+      id: "ch02-08",
       title: "Resumen del capítulo",
       type: "explanation",
-      content: `# Resumen - The any type
+      content: `# Resumen — TypeScript ESLint
 
-En este capítulo aprendiste sobre el tipo \`any\` en TypeScript.
+## Reglas vistas
+
+| Regla | Qué prohíbe |
+|-------|-------------|
+| \`no-explicit-any\` | Uso de \`: any\` explícito |
+| \`ban-ts-comment\` | Comentarios \`@ts-ignore\` y \`@ts-nocheck\` |
+| \`ban-types\` | Tipos wrapper como \`String\`, \`Number\`, \`Boolean\` |
 
 ## Puntos clave
 
-- El tipo \`any\` desactiva las verificaciones de TypeScript para esa variable o parámetro.
-- Cuando TypeScript no puede inferir el tipo de un parámetro, lo asigna como \`any\` implícito.
-- El archivo \`tsconfig.json\` configura el comportamiento del compilador de TypeScript.
-- La opción \`strict: true\` activa verificaciones estrictas, incluyendo \`noImplicitAny\`.
-- La opción \`noImplicitAny\` genera un error cuando TypeScript infiere tipo \`any\`.
-
-## Regla de oro
-
-> Siempre proporciona tipos explícitos y evita \`any\` cuando sea posible.
+- TypeScript ESLint añade reglas específicas de TypeScript a ESLint que van más allá del compilador.
+- \`@ts-ignore\` silencia errores sin arreglarlos — evítalo.
+- Si necesitas suprimir un error de forma excepcional, usa \`@ts-expect-error\` con una explicación.
+- Siempre usa tipos primitivos en minúscula: \`string\`, \`number\`, \`boolean\`.
 
 ## Lo que viene
 
-En el próximo capítulo aprenderemos sobre **TypeScript ESLint**, una herramienta que nos ayuda a mantener buenas prácticas en nuestro código TypeScript.
+El próximo capítulo cubre **TypeScript Types** — todos los tipos que ofrece el sistema de tipos: primitivos, object types, top types, bottom types, y cómo TypeScript los infiere automáticamente.
 `,
     },
   ],

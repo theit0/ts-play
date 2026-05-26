@@ -3,317 +3,385 @@ import { runCode } from "../../utils/runner";
 
 export const ch01: Chapter = {
   id: "ch01",
-  title: "Intro to TypeScript",
+  title: "Introduction to TypeScript",
   lessons: [
     {
       id: "ch01-01",
-      title: "Introducción y Prerrequisitos",
+      title: "TypeScript vs JavaScript",
       type: "explanation",
-      content: `# Introducción y Prerrequisitos
+      content: `# TypeScript vs JavaScript
 
-Bienvenido al curso de **Aprende TypeScript en español**. Antes de empezar, hay algunas cosas que debes saber.
+TypeScript es un lenguaje creado por Microsoft que extiende JavaScript añadiendo un **sistema de tipos estáticos**.
 
-## ¿Qué vas a aprender?
+## El problema que resuelve
 
-Este curso cubre TypeScript desde cero hasta conceptos avanzados como generics, clases, y más. Al final, serás capaz de escribir código TypeScript en proyectos del mundo real.
+JavaScript es dinámico: cualquier variable puede contener cualquier valor en cualquier momento. Eso es flexible, pero permite bugs que solo aparecen en producción:
 
-## Prerrequisitos
+\`\`\`javascript
+// JavaScript — sin tipos, sin advertencias
+function calcularDescuento(precio, porcentaje) {
+    return precio - (precio * porcentaje / 100);
+}
 
-Para aprovechar al máximo este curso necesitas:
+calcularDescuento(200, "15"); // retorna 185, pero "15" debería ser número
+calcularDescuento("gratis", 10); // retorna NaN — bug silencioso
+\`\`\`
 
-- **JavaScript sólido** - variables, funciones, arrays, objetos, arrow functions, desestructuración
-- **Un editor de código** - recomendamos [VS Code](https://code.visualstudio.com/), que tiene soporte nativo para TypeScript
-- **Node.js instalado** - para compilar TypeScript fuera del navegador
+\`\`\`typescript
+// TypeScript — el error aparece antes de ejecutar
+function calcularDescuento(precio: number, porcentaje: number): number {
+    return precio - (precio * porcentaje / 100);
+}
 
-## Formato del curso
+calcularDescuento(200, "15"); // Error: 'string' no es asignable a 'number'
+calcularDescuento("gratis", 10); // Error: 'string' no es asignable a 'number'
+\`\`\`
 
-Cada capítulo incluye:
+## Lo que TypeScript agrega
 
-- **Lecciones explicativas** (ícono de texto ≡) - aprende los conceptos con ejemplos
-- **Ejercicios prácticos** (ícono de código ⟨/⟩) - aplica lo que aprendiste en un editor interactivo
+- **Tipos en parámetros y variables** — el compilador sabe qué tipo espera cada cosa
+- **Detección de errores temprana** — antes de ejecutar, no en producción
+- **Autocompletado inteligente** — el editor sabe qué propiedades tiene cada objeto
+- **Refactoring seguro** — renombrar algo actualiza todas sus referencias
 
-El playground en los ejercicios compila TypeScript en tiempo real. Puedes ver los errores de TypeScript mientras escribes.
+## Lo que TypeScript NO cambia
 
-## Una nota sobre JavaScript vs TypeScript
+TypeScript **compila a JavaScript**. Los tipos desaparecen en el output:
 
-> Cualquier código JavaScript válido es también código TypeScript válido.
+\`\`\`
+TypeScript (.ts) → compilar (tsc) → JavaScript (.js) → navegador / Node.js
+\`\`\`
 
-Esto significa que puedes empezar con JavaScript puro y agregar tipos gradualmente. TypeScript es un *superconjunto* de JavaScript.
+En runtime no existen los tipos. Son solo una herramienta para el desarrollador durante el desarrollo.
 
-¡Empecemos!
+## La regla fundamental
+
+> Todo JavaScript válido es TypeScript válido.
+
+Puedes tomar cualquier archivo \`.js\`, renombrarlo a \`.ts\`, y funciona. Desde ahí añades tipos gradualmente.
 `,
     },
     {
       id: "ch01-02",
-      title: "Introducción a TypeScript",
+      title: "Interoperabilidad TS y JS",
       type: "explanation",
-      content: `# Introducción a TypeScript
+      content: `# Interoperabilidad entre TypeScript y JavaScript
 
-TypeScript es un lenguaje de programación creado por **Microsoft** que extiende JavaScript añadiendo un sistema de tipos estáticos.
+TypeScript está diseñado para **convivir con JavaScript**, no reemplazarlo de golpe.
 
-## ¿Qué es un sistema de tipos?
+## Inferencia de tipos automática
 
-Un sistema de tipos te permite especificar qué tipo de datos espera tu código. Por ejemplo, puedes decirle a TypeScript: *"este parámetro siempre será un número"*.
-
-\`\`\`typescript
-// JavaScript: sin tipos, cualquier cosa puede pasar
-function double(n) {
-    return n * 2;
-}
-
-// TypeScript: el parámetro n debe ser un número
-function double(n: number) {
-    return n * 2;
-}
-\`\`\`
-
-## La sintaxis de tipos
-
-La anotación de tipo se escribe con **dos puntos** (\`:\`) seguido del tipo:
+TypeScript puede deducir tipos sin que los declares:
 
 \`\`\`typescript
-function greet(name: string) {
-    return "Hola, " + name;
+const nombre = "Ana";     // TypeScript infiere: string
+const edad = 25;          // TypeScript infiere: number
+const activo = true;      // TypeScript infiere: boolean
+
+nombre.toUpperCase();     // ✓ TypeScript sabe que nombre es string
+edad.toUpperCase();       // Error: 'toUpperCase' no existe en 'number'
+\`\`\`
+
+No siempre necesitas escribir el tipo — TypeScript lo deduce del valor.
+
+## Archivos de declaración (.d.ts)
+
+Las librerías JavaScript no tienen tipos nativos, pero TypeScript las puede usar gracias a archivos \`.d.ts\`. Estos archivos describen los tipos sin contener lógica.
+
+\`\`\`typescript
+// lodash está escrito en JavaScript, pero @types/lodash provee los tipos
+import _ from 'lodash';
+_.chunk(['a', 'b', 'c'], 2);
+// TypeScript sabe que retorna string[][]
+\`\`\`
+
+## @types — Tipos de la comunidad
+
+El repositorio **DefinitelyTyped** tiene tipos para miles de librerías JS:
+
+\`\`\`bash
+npm install --save-dev @types/node      # tipos de Node.js
+npm install --save-dev @types/express   # tipos de Express
+\`\`\`
+
+Después de instalarlos, el editor muestra autocompletado y errores de tipo para esas librerías.
+
+## Migración gradual
+
+No necesitas migrar todo el proyecto de una sola vez:
+
+\`\`\`json
+// tsconfig.json
+{
+  "compilerOptions": {
+    "allowJs": true  // acepta .js junto a .ts en el mismo proyecto
+  }
 }
 \`\`\`
 
-Aquí \`name: string\` le dice a TypeScript que el parámetro \`name\` siempre debe ser una cadena de texto.
-
-## ¿Por qué es útil?
-
-Si intentas llamar la función con el tipo incorrecto, TypeScript te mostrará un error **antes** de ejecutar el código:
-
-\`\`\`typescript
-greet(42); // Error: el argumento es de tipo 'number', pero se esperaba 'string'
-\`\`\`
-
-Esto detecta errores durante el desarrollo, no en producción. Es como tener un asistente que revisa tu código constantemente.
-
-## TypeScript compila a JavaScript
-
-Los navegadores no entienden TypeScript directamente. Por eso, TypeScript se **compila** a JavaScript:
-
-\`\`\`
-TypeScript → compilar → JavaScript → navegador lo ejecuta
-\`\`\`
-
-Los tipos desaparecen en la compilación. Son solo para ayudarte durante el desarrollo.
+Estrategia común: renombrar archivos de \`.js\` a \`.ts\` uno por uno, añadiendo tipos donde más importa.
 `,
     },
     {
       id: "ch01-03",
-      title: "Parámetros tipados",
-      type: "exercise",
-      instructions: `## Parámetros tipados
+      title: "tsconfig.json",
+      type: "explanation",
+      content: `# tsconfig.json
 
-La función \`multiply\` genera advertencias en el editor. TypeScript no puede verificar que los parámetros se usen correctamente sin saber su tipo.
+El archivo \`tsconfig.json\` controla cómo TypeScript compila tu proyecto. Vive en la raíz del proyecto.
 
-Añade las anotaciones necesarias para que compile sin advertencias.`,
-      starterCode: `function multiply(x, y) {
-    return x * y;
+## Estructura básica
+
+\`\`\`json
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "strict": true,
+    "module": "ESNext",
+    "moduleResolution": "bundler"
+  },
+  "include": ["src"]
+}
+\`\`\`
+
+## Opciones clave
+
+### \`strict\`
+La opción más importante. Activa un conjunto de verificaciones estrictas:
+
+\`\`\`json
+{ "compilerOptions": { "strict": true } }
+\`\`\`
+
+Incluye automáticamente:
+- **\`noImplicitAny\`** — error si TypeScript infiere \`any\` para un parámetro
+- **\`strictNullChecks\`** — \`null\` y \`undefined\` no son asignables a otros tipos
+- **\`strictFunctionTypes\`** — verificación estricta en tipos de funciones
+- Otras verificaciones de seguridad
+
+### \`target\`
+La versión de JavaScript que genera el compilador:
+
+| target | compatibilidad |
+|--------|---------------|
+| \`ES5\`     | IE11 y similares |
+| \`ES2020\`  | navegadores modernos |
+| \`ESNext\`  | última versión del estándar |
+
+### \`noImplicitAny\`
+Exige tipos explícitos donde TypeScript no puede inferirlos:
+
+\`\`\`typescript
+// Con noImplicitAny: true
+function greet(name) {           // Error: 'name' tiene tipo implícito 'any'
+    return "Hola " + name;
 }
 
-// Sample usage (do not modify)
-console.log(multiply(2, 4)); // 8
-console.log(multiply(5, 3)); // 15`,
-      solution: `function multiply(x: number, y: number) {
-    return x * y;
+function greet(name: string) {   // ✓ tipo explícito
+    return "Hola " + name;
 }
+\`\`\`
 
-// Sample usage (do not modify)
-console.log(multiply(2, 4)); // 8
-console.log(multiply(5, 3)); // 15`,
-      hint: "La sintaxis es `param: tipo`. ¿Qué tipo produce la operación que hace la función?",
-      tests: [
-        {
-          name: "multiply's parameters are typed",
-          run: (code) =>
-            /multiply\s*\(\s*\w+\s*:\s*number\s*,\s*\w+\s*:\s*number/.test(code),
-        },
-        {
-          name: "multiply still works as expected",
-          run: (code) => {
-            const { output, error } = runCode(
-              code,
-              `console.log(multiply(2, 4)); console.log(multiply(5, 3));`
-            );
-            return (
-              !error &&
-              output.some((o) => o.includes("8")) &&
-              output.some((o) => o.includes("15"))
-            );
-          },
-        },
-        {
-          name: "Extra checks",
-          run: (code) => !/:\s*Number/.test(code),
-        },
-      ],
+### \`strictNullChecks\`
+Separa \`null\` y \`undefined\` del resto de tipos:
+
+\`\`\`typescript
+let nombre: string = null;       // Error con strictNullChecks
+let nombre: string | null = null; // ✓ unión explícita
+\`\`\`
+
+## Recomendación
+
+Para proyectos nuevos, siempre usa \`"strict": true\`. Te fuerza a escribir TypeScript real desde el principio y evita que los problemas se acumulen.
+`,
     },
     {
       id: "ch01-04",
-      title: "¿Cómo funciona TypeScript?",
+      title: "Ejecutar TypeScript",
       type: "explanation",
-      content: `# ¿Cómo funciona TypeScript?
+      content: `# Ejecutar TypeScript
 
-TypeScript es un superconjunto de JavaScript que añade tipos al lenguaje.
+TypeScript no corre directamente en navegadores ni en Node.js. Necesita ser compilado primero.
 
-Esto significa que cualquier código JavaScript válido es código TypeScript válido.
+## tsc — El compilador oficial
 
-Esta es la razón por la que aprender JavaScript es un requisito previo para aprender TypeScript.
+\`\`\`bash
+# Compilar un archivo específico
+npx tsc archivo.ts          # genera archivo.js
 
-Los navegadores no son compatibles con TypeScript en este momento. TypeScript se compila a JavaScript para que el navegador pueda ejecutarlo.
+# Compilar el proyecto completo (usa tsconfig.json)
+npx tsc
 
-## TypeScript se compila a JavaScript
+# Watch mode: recompila al guardar
+npx tsc --watch
+\`\`\`
 
-Cuando escribes código TypeScript, necesitarás compilarlo a JavaScript puro para que el navegador pueda ejecutarlo. Esto significa que los tipos de TypeScript desaparecerán del JavaScript compilado.
+El output de \`tsc\` son archivos \`.js\` normales que cualquier runtime puede ejecutar.
 
-Los tipos no pueden ser accedidos en tiempo de ejecución en tu código JavaScript.
+## ts-node — TypeScript directo en Node.js
 
-## Beneficios de TypeScript
+Para desarrollo, \`ts-node\` ejecuta TypeScript sin compilar manualmente:
 
-Aunque los tipos se eliminan en tiempo de compilación, TypeScript todavía tiene los siguientes beneficios:
+\`\`\`bash
+npx ts-node archivo.ts
+\`\`\`
 
-- **Previene errores**: el uso de tipos ayuda a detectar errores relacionados con tipos durante el desarrollo. Si una función espera un número y la llamas con una cadena, tendrás un error durante el desarrollo.
-- **Mejor autocompletado**: al usar editores compatibles como VS Code, te beneficiarás de una experiencia de autocompletado mejorada.
-- **Mejor colaboración**: las anotaciones de tipo explícitas facilitan que los miembros del equipo comprendan y trabajen con la base de código.
+Internamente compila y ejecuta en memoria. Más lento que Node.js puro, pero conveniente para scripts y desarrollo.
 
-## Desventajas de TypeScript
+## Build tools — La forma más común en proyectos reales
 
-Los beneficios anteriores no vienen sin algún costo:
+Herramientas como Vite, webpack, o esbuild manejan TypeScript como parte del proceso de build:
 
-- **Curva de aprendizaje**: como con cualquier cosa nueva, lleva un poco de tiempo aprender TypeScript.
-- **Sobrecarga para proyectos pequeños**: al principio puede sentirse que luchas mucho con TypeScript. Eso desaparece con la práctica.
-- **Proyectos heredados más difíciles de migrar**: si tienes un proyecto JavaScript grande, migrarlo a TypeScript puede llevar tiempo.
+\`\`\`typescript
+// vite.config.ts — Vite entiende TypeScript nativo
+import { defineConfig } from 'vite';
 
-## Resumen
+export default defineConfig({
+  // No necesitas configurar TypeScript manualmente
+  // Vite lo maneja con esbuild internamente
+});
+\`\`\`
 
-- TypeScript es un superconjunto de JavaScript
-- Se compila a JavaScript (los tipos desaparecen en compilación)
-- Ayuda a prevenir errores, mejora el autocompletado y facilita la colaboración
+No necesitas correr \`tsc\` manualmente: el bundler lo hace como parte de \`npm run dev\` o \`npm run build\`.
+
+## TypeScript Playground
+
+**typescriptlang.org/play** — entorno online oficial. Útil para:
+- Experimentar con tipos sin instalar nada
+- Compartir snippets de código
+- Ver el JavaScript generado en tiempo real
+- Probar diferentes versiones de TypeScript
+
+---
+
+En este curso, el playground está integrado en cada ejercicio. Escribes TypeScript y se ejecuta directamente.
 `,
     },
     {
       id: "ch01-05",
-      title: "Di hola",
+      title: "Tu primera anotación",
       type: "exercise",
-      instructions: `## Di hola
+      instructions: `## Tu primera anotación
 
-La función \`greet\` tiene un parámetro sin anotar. TypeScript está emitiendo advertencias.
+La función \`formatUser\` construye un string con los datos de un usuario, pero sus parámetros no tienen anotaciones de tipo. TypeScript no puede verificar que se usen correctamente.
 
-Añade la anotación de tipo correcta para que compile limpiamente.`,
-      starterCode: `function greet(name) {
-    return \`Hola, \${name}!\`;
+Añade las anotaciones necesarias.`,
+      starterCode: `function formatUser(name, age, isPremium) {
+    const badge = isPremium ? "⭐ Premium" : "Free";
+    return \`\${name} (\${age} años) — \${badge}\`;
 }
 
-console.log(greet("María")); // Hola, María!
-console.log(greet("Sam"));   // Hola, Sam!`,
-      solution: `function greet(name: string) {
-    return \`Hola, \${name}!\`;
+console.log(formatUser("Ana", 28, true));
+// Ana (28 años) — ⭐ Premium
+
+console.log(formatUser("Luis", 35, false));
+// Luis (35 años) — Free`,
+      solution: `function formatUser(name: string, age: number, isPremium: boolean): string {
+    const badge = isPremium ? "⭐ Premium" : "Free";
+    return \`\${name} (\${age} años) — \${badge}\`;
 }
 
-console.log(greet("María")); // Hola, María!
-console.log(greet("Sam"));   // Hola, Sam!`,
-      hint: "Mira cómo se usa el parámetro dentro de la función.",
+console.log(formatUser("Ana", 28, true));
+console.log(formatUser("Luis", 35, false));`,
+      hint: "Cada parámetro se usa de forma distinta. Analiza qué operaciones se hacen con cada uno dentro de la función.",
       tests: [
         {
-          name: "greet('María') retorna 'Hola, María!'",
-          run: (code) => {
-            const { output, error } = runCode(
-              code,
-              `console.log(greet("María"));`
-            );
-            return !error && output.some((o) => o.includes("Hola, María!"));
-          },
+          name: "Los parámetros tienen anotaciones de tipo",
+          run: (code) =>
+            /\w+\s*:\s*string/.test(code) &&
+            /\w+\s*:\s*number/.test(code) &&
+            /\w+\s*:\s*boolean/.test(code),
         },
         {
-          name: "greet tiene anotación de tipo en el parámetro",
-          run: (code) => /greet\s*\(\s*\w+\s*:\s*string/.test(code),
+          name: "formatUser funciona correctamente",
+          run: (code) => {
+            const { output, error } = runCode(code);
+            return (
+              !error &&
+              output[0]?.includes("Ana") &&
+              output[0]?.includes("Premium") &&
+              output[1]?.includes("Luis") &&
+              output[1]?.includes("Free")
+            );
+          },
         },
       ],
     },
     {
       id: "ch01-06",
-      title: "Plan roto",
+      title: "El bug silencioso",
       type: "exercise",
-      instructions: `## Plan roto
+      instructions: `## El bug silencioso
 
-El código tiene un error de tipo. TypeScript lo está marcando.
+El siguiente código tiene un error de tipo que JavaScript ejecutaría en silencio — produciendo un resultado incorrecto sin ninguna advertencia.
 
-Encuéntralo y corrígelo.`,
-      starterCode: `function getPlanName(plan: string) {
-    return \`Estás en el plan \${plan}\`;
+Identifica el problema y corrígelo. La función debe retornar \`15\`.`,
+      starterCode: `function addNumbers(a: number, b: number): number {
+    return a + b;
 }
 
-console.log(getPlanName("Pro"));
-console.log(getPlanName("Trial"));
-console.log(getPlanName(5));`,
-      solution: `function getPlanName(plan: string) {
-    return \`Estás en el plan \${plan}\`;
+const x = "10";
+const y = 5;
+
+console.log(addNumbers(x, y));`,
+      solution: `function addNumbers(a: number, b: number): number {
+    return a + b;
 }
 
-console.log(getPlanName("Pro"));    // Estás en el plan Pro
-console.log(getPlanName("Trial")); // Estás en el plan Trial
-console.log(getPlanName("Free"));  // Estás en el plan Free`,
-      hint: "Mira el tipo del parámetro en la declaración de la función.",
+const x = 10;
+const y = 5;
+
+console.log(addNumbers(x, y));`,
+      hint: "JavaScript tiene coerción de tipos. ¿Qué pasa cuando sumas un string y un número con `+`?",
       tests: [
         {
-          name: "No hay llamadas con argumentos numéricos",
-          run: (code) => !/getPlanName\s*\(\s*\d/.test(code),
+          name: "addNumbers retorna 15",
+          run: (code) => {
+            const { output, error } = runCode(code);
+            return !error && output[0] === "15";
+          },
         },
         {
-          name: "El código funciona sin errores",
-          run: (code) => {
-            const { error } = runCode(code);
-            return !error;
-          },
+          name: "x es de tipo number, no string",
+          run: (code) => !/const\s+x\s*=\s*["']/.test(code),
         },
       ],
     },
     {
       id: "ch01-07",
-      title: "Flashcards móviles",
-      type: "exercise",
-      instructions: `## Flashcards móviles
+      title: "Resumen del capítulo",
+      type: "explanation",
+      content: `# Resumen — Introduction to TypeScript
 
-La función \`createFlashcard\` crea tarjetas de estudio pero sus parámetros no tienen anotaciones de tipo.
+## Puntos clave
 
-Añade los tipos correctos a cada parámetro.`,
-      starterCode: `function createFlashcard(pregunta, respuesta, nivel) {
-    return \`[Nivel \${nivel}] \${pregunta} → \${respuesta}\`;
+- TypeScript extiende JavaScript añadiendo **tipos estáticos**
+- Los tipos se verifican en tiempo de desarrollo, no en runtime — el output es JavaScript puro
+- **Todo JavaScript válido es TypeScript válido** — la migración puede ser gradual
+- TypeScript infiere tipos automáticamente cuando puede; los tipos explícitos son para los casos que no puede inferir
+- \`tsconfig.json\` configura el compilador — usa siempre \`"strict": true\`
+- \`tsc\` compila, \`ts-node\` ejecuta directamente, los build tools integran TypeScript en el workflow
+
+## La sintaxis básica
+
+\`\`\`typescript
+// Anotar parámetros y valor de retorno
+function nombre(param: Tipo): TipoRetorno {
+    // ...
 }
 
-console.log(createFlashcard("¿Capital de Francia?", "París", 1));
-// [Nivel 1] ¿Capital de Francia? → París
+// TypeScript infiere el tipo de variables
+const mensaje = "hola"; // string
+const numero = 42;      // number
 
-console.log(createFlashcard("¿Qué es TypeScript?", "Superconjunto de JS con tipos", 3));
-// [Nivel 3] ¿Qué es TypeScript? → Superconjunto de JS con tipos`,
-      solution: `function createFlashcard(pregunta: string, respuesta: string, nivel: number) {
-    return \`[Nivel \${nivel}] \${pregunta} → \${respuesta}\`;
-}
+// Tipo explícito en variable (solo cuando sea necesario)
+const lista: string[] = [];
+\`\`\`
 
-console.log(createFlashcard("¿Capital de Francia?", "París", 1));
-console.log(createFlashcard("¿Qué es TypeScript?", "Superconjunto de JS con tipos", 3));`,
-      hint: "Cada parámetro se usa de forma distinta. Analiza el cuerpo de la función.",
-      tests: [
-        {
-          name: "createFlashcard funciona correctamente",
-          run: (code) => {
-            const { output, error } = runCode(
-              code,
-              `console.log(createFlashcard("¿Hola?", "Mundo", 2));`
-            );
-            return !error && output.some((o) => o.includes("[Nivel 2]"));
-          },
-        },
-        {
-          name: "Los parámetros tienen anotaciones de tipo",
-          run: (code) =>
-            /pregunta\s*:\s*string/.test(code) &&
-            /respuesta\s*:\s*string/.test(code) &&
-            /nivel\s*:\s*number/.test(code),
-        },
-      ],
+## Lo que viene
+
+El próximo capítulo cubre **TypeScript ESLint** — reglas que hacen cumplir buenas prácticas más allá de lo que el compilador verifica por defecto.
+`,
     },
   ],
 };
