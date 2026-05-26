@@ -68,11 +68,9 @@ Idealmente **nunca**. Pero hay algunos casos legítimos:
       type: "exercise",
       instructions: `## Registrar valor
 
-La función \`logNumber\` usa \`any\` como tipo del parámetro. Esto no es ideal porque acepta cualquier tipo de dato y perdemos la protección de TypeScript.
+La función \`logNumber\` usa \`any\` como tipo del parámetro, lo que anula las protecciones de TypeScript.
 
-**Tu tarea:** Reemplaza \`any\` con el tipo correcto.
-
-La función multiplica \`value\` por 2, así que el parámetro debe ser de tipo \`number\`.`,
+Reemplázalo con el tipo más específico y correcto.`,
       starterCode: `function logNumber(value: any) {
     console.log(value * 2);
 }
@@ -87,7 +85,7 @@ logNumber(7);  // 14`,
 logNumber(5);  // 10
 logNumber(10); // 20
 logNumber(7);  // 14`,
-      hint: "Reemplaza `any` con `number`.",
+      hint: "¿Qué operación se hace con `value`? ¿Qué tipos soportan esa operación?",
       tests: [
         {
           name: "No usa el tipo any",

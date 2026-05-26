@@ -106,9 +106,9 @@ Los tipos desaparecen en la compilación. Son solo para ayudarte durante el desa
       type: "exercise",
       instructions: `## Parámetros tipados
 
-Se te proporciona una función \`multiply\`. De forma predeterminada, el editor te está advirtiendo que los parámetros tienen implícitamente el tipo \`any\`. Lo explicaremos en el siguiente capítulo.
+La función \`multiply\` genera advertencias en el editor. TypeScript no puede verificar que los parámetros se usen correctamente sin saber su tipo.
 
-Por ahora, nos gustaría que proporciones el tipo de los parámetros \`x\` e \`y\`. Debe ser \`number\` para ambos. Asegúrate de que la \`n\` esté en minúscula.`,
+Añade las anotaciones necesarias para que compile sin advertencias.`,
       starterCode: `function multiply(x, y) {
     return x * y;
 }
@@ -123,7 +123,7 @@ console.log(multiply(5, 3)); // 15`,
 // Sample usage (do not modify)
 console.log(multiply(2, 4)); // 8
 console.log(multiply(5, 3)); // 15`,
-      hint: "Añade `: number` después de cada parámetro: `multiply(x: number, y: number)`.",
+      hint: "La sintaxis es `param: tipo`. ¿Qué tipo produce la operación que hace la función?",
       tests: [
         {
           name: "multiply's parameters are typed",
@@ -199,19 +199,9 @@ Los beneficios anteriores no vienen sin algún costo:
       type: "exercise",
       instructions: `## Di hola
 
-La función \`greet\` tiene un parámetro \`name\` pero sin tipo.
+La función \`greet\` tiene un parámetro sin anotar. TypeScript está emitiendo advertencias.
 
-**Tu tarea:** Añade la anotación de tipo \`string\` al parámetro \`name\`.
-
-\`\`\`typescript
-// Antes (JavaScript)
-function greet(name) { ... }
-
-// Después (TypeScript)
-function greet(name: string) { ... }
-\`\`\`
-
-Añade el tipo y haz clic en **Run** para verificar.`,
+Añade la anotación de tipo correcta para que compile limpiamente.`,
       starterCode: `function greet(name) {
     return \`Hola, \${name}!\`;
 }
@@ -224,7 +214,7 @@ console.log(greet("Sam"));   // Hola, Sam!`,
 
 console.log(greet("María")); // Hola, María!
 console.log(greet("Sam"));   // Hola, Sam!`,
-      hint: "Añade `: string` justo después del nombre del parámetro `name`.",
+      hint: "Mira cómo se usa el parámetro dentro de la función.",
       tests: [
         {
           name: "greet('María') retorna 'Hola, María!'",
@@ -248,20 +238,15 @@ console.log(greet("Sam"));   // Hola, Sam!`,
       type: "exercise",
       instructions: `## Plan roto
 
-El código de abajo tiene un **error de tipo**: se está llamando \`getPlanName\` con un número, pero el parámetro espera una cadena (\`string\`).
+El código tiene un error de tipo. TypeScript lo está marcando.
 
-**Tu tarea:** Arregla el error cambiando el argumento incorrecto por un \`string\` válido.
-
-Los planes disponibles son: \`"Pro"\`, \`"Trial"\`, \`"Free"\`.`,
+Encuéntralo y corrígelo.`,
       starterCode: `function getPlanName(plan: string) {
     return \`Estás en el plan \${plan}\`;
 }
 
-// Estos están bien:
-console.log(getPlanName("Pro"));    // Estás en el plan Pro
-console.log(getPlanName("Trial")); // Estás en el plan Trial
-
-// Esta línea tiene el error - ¡arréglala!
+console.log(getPlanName("Pro"));
+console.log(getPlanName("Trial"));
 console.log(getPlanName(5));`,
       solution: `function getPlanName(plan: string) {
     return \`Estás en el plan \${plan}\`;
@@ -270,7 +255,7 @@ console.log(getPlanName(5));`,
 console.log(getPlanName("Pro"));    // Estás en el plan Pro
 console.log(getPlanName("Trial")); // Estás en el plan Trial
 console.log(getPlanName("Free"));  // Estás en el plan Free`,
-      hint: "Reemplaza el número `5` por un string de plan como `\"Free\"`.",
+      hint: "Mira el tipo del parámetro en la declaración de la función.",
       tests: [
         {
           name: "No hay llamadas con argumentos numéricos",
@@ -291,12 +276,9 @@ console.log(getPlanName("Free"));  // Estás en el plan Free`,
       type: "exercise",
       instructions: `## Flashcards móviles
 
-La función \`createFlashcard\` crea una tarjeta de estudio con tres parámetros, pero ninguno tiene tipo.
+La función \`createFlashcard\` crea tarjetas de estudio pero sus parámetros no tienen anotaciones de tipo.
 
-**Tu tarea:** Añade las anotaciones de tipo correctas:
-- \`pregunta\` - texto de la pregunta (\`string\`)
-- \`respuesta\` - texto de la respuesta (\`string\`)
-- \`nivel\` - nivel de dificultad (\`number\`)`,
+Añade los tipos correctos a cada parámetro.`,
       starterCode: `function createFlashcard(pregunta, respuesta, nivel) {
     return \`[Nivel \${nivel}] \${pregunta} → \${respuesta}\`;
 }
@@ -312,7 +294,7 @@ console.log(createFlashcard("¿Qué es TypeScript?", "Superconjunto de JS con ti
 
 console.log(createFlashcard("¿Capital de Francia?", "París", 1));
 console.log(createFlashcard("¿Qué es TypeScript?", "Superconjunto de JS con tipos", 3));`,
-      hint: "Añade `: string` a `pregunta` y `respuesta`, y `: number` a `nivel`.",
+      hint: "Cada parámetro se usa de forma distinta. Analiza el cuerpo de la función.",
       tests: [
         {
           name: "createFlashcard funciona correctamente",

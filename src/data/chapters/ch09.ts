@@ -91,13 +91,9 @@ let direction = "norte" as const;
       type: "exercise",
       instructions: `## Const roto
 
-El código de abajo tiene un problema: \`direction\` es declarada con \`let\`, por lo que TypeScript infiere su tipo como \`string\` (no como el literal \`"norte"\`). Cuando se pasa a \`move\`, hay un error de tipo.
+El código falla porque TypeScript infiere un tipo demasiado amplio para \`direction\`, y no es compatible con lo que \`move\` espera.
 
-**Tu tarea:** Arregla el código. Hay dos opciones:
-1. Cambia \`let\` por \`const\`
-2. Añade \`as const\` al final de la declaración
-
-Elige la que te parezca más limpia.`,
+Arréglalo. Puede haber más de una forma válida.`,
       starterCode: `type Direction = "norte" | "sur" | "este" | "oeste";
 
 function move(direction: Direction) {
@@ -115,7 +111,7 @@ function move(direction: Direction) {
 
 const direction = "norte";
 move(direction); // ✓`,
-      hint: "Cambia `let` por `const`. TypeScript entonces infiere el tipo literal `\"norte\"`.",
+      hint: "Piensa en cómo TypeScript infiere tipos de forma distinta según cómo se declara una variable.",
       tests: [
         {
           name: "El código funciona sin errores",
@@ -136,11 +132,9 @@ move(direction); // ✓`,
       type: "exercise",
       instructions: `## Pedir camisa
 
-Necesitas definir los tamaños de camisa disponibles como un tipo literal.
+Una tienda de ropa solo vende camisas en tallas específicas. Sin embargo, la función \`orderShirt\` actualmente acepta cualquier string — incluyendo tallas inválidas como \`"XXXL"\` o \`"gigante"\`.
 
-**Tu tarea:**
-1. Define el type alias \`ShirtSize\` con los valores: \`"XS"\`, \`"S"\`, \`"M"\`, \`"L"\`, \`"XL"\`
-2. Usa \`ShirtSize\` como tipo del parámetro en \`orderShirt\``,
+Define el tipo \`ShirtSize\` que represente las tallas válidas, y úsalo para restringir el parámetro de la función.`,
       starterCode: `// Define ShirtSize aquí
 
 function orderShirt(size: string) {
@@ -157,7 +151,7 @@ function orderShirt(size: ShirtSize) {
 
 orderShirt("M");
 orderShirt("L");`,
-      hint: "Define `type ShirtSize = \"XS\" | \"S\" | \"M\" | \"L\" | \"XL\"` y úsalo en el parámetro.",
+      hint: "TypeScript permite crear tipos que representen un conjunto finito de valores string.",
       tests: [
         {
           name: "Existe el tipo ShirtSize",
@@ -178,14 +172,13 @@ orderShirt("L");`,
       type: "exercise",
       instructions: `## H1 impuestos
 
-La función \`getTaxRate\` recibe un número de tramo fiscal (1, 2 o 3) y retorna el porcentaje de impuesto.
+Implementa la función \`getTaxRate\`, que recibe un tramo fiscal y retorna la tasa de impuesto correspondiente.
 
-**Tu tarea:**
-1. El parámetro \`bracket\` debe tener tipo literal numérico: \`1 | 2 | 3\`
-2. Implementa la función:
-   - Tramo 1: 15%
-   - Tramo 2: 25%
-   - Tramo 3: 35%`,
+El parámetro solo debe aceptar tramos válidos — no cualquier número.
+
+- Tramo 1 → 15%
+- Tramo 2 → 25%
+- Tramo 3 → 35%`,
       starterCode: `function getTaxRate(bracket) {
     // Implementa aquí
     return 0;
@@ -203,7 +196,7 @@ console.log(getTaxRate(3)); // 35`,
 console.log(getTaxRate(1));
 console.log(getTaxRate(2));
 console.log(getTaxRate(3));`,
-      hint: "El tipo literal numérico se escribe como `1 | 2 | 3`.",
+      hint: "TypeScript puede usar valores literales como tipos, no solo categorías como `number`.",
       tests: [
         {
           name: "getTaxRate(1) retorna 15",
@@ -234,11 +227,9 @@ console.log(getTaxRate(3));`,
       type: "exercise",
       instructions: `## Estallido del pasado
 
-La función \`explodePlanet\` acepta un tipo \`Planet\`, pero se está llamando con un valor inválido.
+El código intenta explotar un planeta que no existe en el sistema solar reconocido por el tipo \`Planet\`.
 
-**Tu tarea:** Arregla la llamada a \`explodePlanet\` para que use un planeta válido del tipo \`Planet\`.
-
-Los planetas válidos son: \`"Mercurio"\`, \`"Venus"\`, \`"Tierra"\`, \`"Marte"\`, \`"Júpiter"\`, \`"Saturno"\`, \`"Urano"\`, \`"Neptuno"\`.`,
+Corrígelo.`,
       starterCode: `type Planet = "Mercurio" | "Venus" | "Tierra" | "Marte" | "Júpiter" | "Saturno" | "Urano" | "Neptuno";
 
 function explodePlanet(planet: Planet) {
@@ -246,7 +237,7 @@ function explodePlanet(planet: Planet) {
 }
 
 // Arregla el error:
-explodePlanet("Plutón"); // Error: "Plutón" no es un Planet válido`,
+explodePlanet("Plutón"); // Error: Plutón no es un Planet válido`,
       solution: `type Planet = "Mercurio" | "Venus" | "Tierra" | "Marte" | "Júpiter" | "Saturno" | "Urano" | "Neptuno";
 
 function explodePlanet(planet: Planet) {
@@ -254,7 +245,7 @@ function explodePlanet(planet: Planet) {
 }
 
 explodePlanet("Marte"); // ✓`,
-      hint: "Reemplaza `\"Plutón\"` por un planeta del tipo `Planet`, como `\"Marte\"`.",
+      hint: "El tipo `Planet` ya define qué valores son válidos. Léelo.",
       tests: [
         {
           name: "El código funciona sin errores",

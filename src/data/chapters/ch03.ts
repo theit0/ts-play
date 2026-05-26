@@ -61,11 +61,9 @@ Cuando no sabes el tipo de antemano, en lugar de \`any\` puedes usar:
       type: "exercise",
       instructions: `## No explícito any
 
-La función \`getLength\` usa \`: any\` explícitamente como tipo del parámetro.
+La función \`getLength\` viola la regla \`@typescript-eslint/no-explicit-any\`.
 
-**Tu tarea:** Reemplaza \`any\` con el tipo correcto.
-
-La función llama a \`.length\` en el argumento, que es una propiedad de los strings. Por lo tanto, el parámetro debe ser de tipo \`string\`.`,
+Reemplaza \`any\` con el tipo correcto. Analiza el cuerpo de la función para determinarlo.`,
       starterCode: `function getLength(str: any): number {
     return str.length;
 }
@@ -78,7 +76,7 @@ console.log(getLength("TypeScript")); // 10`,
 
 console.log(getLength("hola"));       // 4
 console.log(getLength("TypeScript")); // 10`,
-      hint: "Reemplaza `any` con `string`.",
+      hint: "Observa qué propiedad se accede en el parámetro. No todos los tipos la tienen.",
       tests: [
         {
           name: "@typescript-eslint: sin any explícito",
@@ -156,15 +154,9 @@ La diferencia: si el error desaparece, \`@ts-expect-error\` te avisa que ya no e
       type: "exercise",
       instructions: `## Silenciar un error
 
-El código de abajo usa \`// @ts-ignore\` para suprimir un error de TypeScript. Esto no es una buena práctica.
+El código suprime un error de TypeScript en lugar de arreglarlo. Eso es mala práctica.
 
-**Tu tarea:** En lugar de silenciar el error, arréglalo correctamente.
-
-La función \`multiply\` espera un \`number\`, pero se está llamando con un \`string\`. Hay dos formas de arreglarlo:
-1. Cambia el argumento a un número
-2. Cambia el tipo del parámetro para aceptar strings también (usando unión)
-
-Elige la que tenga más sentido dado el contexto.`,
+Elimina el supresor y corrige el error subyacente.`,
       starterCode: `function multiply(n: number): number {
     return n * 3;
 }
@@ -176,7 +168,7 @@ console.log(multiply("cinco")); // Esto es un bug oculto`,
 }
 
 console.log(multiply(5)); // 15`,
-      hint: "Elimina el `// @ts-ignore` y cambia el argumento `\"cinco\"` por el número `5`.",
+      hint: "Mira el tipo del parámetro de `multiply` y el tipo del argumento que se le pasa.",
       tests: [
         {
           name: "@typescript-eslint: sin @ts-ignore",
@@ -197,25 +189,21 @@ console.log(multiply(5)); // 15`,
       type: "exercise",
       instructions: `## Prohibir TS Comment
 
-El archivo de abajo usa \`// @ts-nocheck\` al principio, lo que desactiva TypeScript en todo el archivo.
+Este archivo desactiva TypeScript completamente para ocultar un error real.
 
-**Tu tarea:**
-1. Elimina el comentario \`// @ts-nocheck\`
-2. Arregla el error de tipo subyacente que \`@ts-nocheck\` estaba ocultando
-
-Pista: \`greet\` espera un \`string\`, no un número.`,
+Quita el mecanismo de supresión y arregla el código para que funcione sin atajos.`,
       starterCode: `// @ts-nocheck
 function greet(name: string) {
     console.log("Hola " + name);
 }
 
-greet(42); // Este es el error que @ts-nocheck estaba ocultando`,
+greet(42); // Este es el error que estaba ocultando`,
       solution: `function greet(name: string) {
     console.log("Hola " + name);
 }
 
 greet("Mundo"); // Arreglado: argumento correcto`,
-      hint: "Elimina `// @ts-nocheck` y cambia `greet(42)` por `greet(\"Mundo\")`.",
+      hint: "Mira la firma de `greet` para entender qué tipo de argumento acepta.",
       tests: [
         {
           name: "@typescript-eslint: sin @ts-nocheck",
@@ -279,13 +267,9 @@ Lo mismo aplica para \`object\` vs \`Object\`, y \`symbol\` vs \`Symbol\`.
       type: "exercise",
       instructions: `## Prohibición de Tipos
 
-El código de abajo usa los tipos wrapper en mayúscula (\`String\`, \`Number\`, \`Boolean\`). La regla \`@typescript-eslint/ban-types\` prohíbe esto.
+La función \`describePerson\` usa tipos que la regla \`@typescript-eslint/ban-types\` prohíbe.
 
-**Tu tarea:** Reemplaza todos los tipos con mayúscula por sus equivalentes en minúscula.
-
-- \`String\` → \`string\`
-- \`Number\` → \`number\`
-- \`Boolean\` → \`boolean\``,
+Corrígelos. TypeScript tiene alternativas más apropiadas para cada uno.`,
       starterCode: `function describePerson(name: String, age: Number, isActive: Boolean): String {
     const status = isActive ? "activo" : "inactivo";
     return \`\${name}, \${age} años, \${status}\`;
@@ -300,7 +284,7 @@ console.log(describePerson("Ana", 25, true));
 
 console.log(describePerson("Ana", 25, true));
 // Ana, 25 años, activo`,
-      hint: "Busca todos los tipos con letra mayúscula (String, Number, Boolean) y cámbialos a minúscula.",
+      hint: "Los tipos primitivos de TypeScript siempre van en minúscula.",
       tests: [
         {
           name: "@typescript-eslint: sin tipos String/Number/Boolean en mayúscula",
