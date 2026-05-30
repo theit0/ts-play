@@ -34,13 +34,13 @@ function formatValue(value: string | number): string {
     value.toUpperCase(); // Error: number no tiene .toUpperCase()
 
     if (typeof value === "string") {
-        return value.toUpperCase(); // ✓ — TypeScript sabe que es string aquí
+        return value.toUpperCase(); // ✓ - TypeScript sabe que es string aquí
     }
-    return value.toFixed(2); // ✓ — TypeScript sabe que es number aquí
+    return value.toFixed(2); // ✓ - TypeScript sabe que es number aquí
 }
 \`\`\`
 
-## Discriminated unions — el patrón más poderoso
+## Discriminated unions - el patrón más poderoso
 
 Cuando cada variante del union tiene una propiedad común con un valor literal distinto, TypeScript puede usar esa propiedad como **discriminante**:
 
@@ -165,17 +165,17 @@ const record: UserRecord = {
 
 El uso más común es **componer tipos pequeños y reutilizables** en lugar de definir un tipo grande desde cero.
 
-### Error común — intersection de primitivos incompatibles
+### Error común - intersection de primitivos incompatibles
 
 \`\`\`typescript
-type Imposible = string & number; // tipo: never — no existe un valor que sea ambos
+type Imposible = string & number; // tipo: never - no existe un valor que sea ambos
 \`\`\`
 
 El intersection de tipos que no pueden solaparse resulta en \`never\`. Solo tiene sentido con tipos de objeto.
 
 ## Type Aliases
 
-La keyword \`type\` crea un alias — un nombre nuevo para cualquier tipo:
+La keyword \`type\` crea un alias - un nombre nuevo para cualquier tipo:
 
 \`\`\`typescript
 // Alias para un tipo primitivo
@@ -209,7 +209,7 @@ Para la mayoría de los casos, son intercambiables. Cubriremos \`interface\` en 
 
 El sistema tiene usuarios base y permisos de administrador definidos como tipos separados. La función \`describeAdmin\` espera un usuario con ambos conjuntos de propiedades.
 
-El problema: \`AdminUser\` actualmente es solo un alias de \`UserBase\` — le faltan las propiedades de \`AdminPermissions\`. Arreglá la definición del tipo para que combine ambos.`,
+El problema: \`AdminUser\` actualmente es solo un alias de \`UserBase\` - le faltan las propiedades de \`AdminPermissions\`. Arreglá la definición del tipo para que combine ambos.`,
       starterCode: `type UserBase = { id: number; name: string; email: string };
 type AdminPermissions = { canDelete: boolean; canManageUsers: boolean; canViewLogs: boolean };
 
@@ -220,7 +220,7 @@ function describeAdmin(user: AdminUser): string {
     if (user.canDelete) perms.push("eliminar");
     if (user.canManageUsers) perms.push("gestionar usuarios");
     if (user.canViewLogs) perms.push("ver logs");
-    return \`\${user.name} (\${user.email}) — permisos: \${perms.join(", ")}\`;
+    return \`\${user.name} (\${user.email}) - permisos: \${perms.join(", ")}\`;
 }
 
 const admin: AdminUser = {
@@ -243,7 +243,7 @@ function describeAdmin(user: AdminUser): string {
     if (user.canDelete) perms.push("eliminar");
     if (user.canManageUsers) perms.push("gestionar usuarios");
     if (user.canViewLogs) perms.push("ver logs");
-    return \`\${user.name} (\${user.email}) — permisos: \${perms.join(", ")}\`;
+    return \`\${user.name} (\${user.email}) - permisos: \${perms.join(", ")}\`;
 }
 
 const admin: AdminUser = {
@@ -301,14 +301,14 @@ type Product = { name: string; price: number; inStock: boolean };
 type ProductKey = keyof Product; // "name" | "price" | "inStock"
 \`\`\`
 
-## Uso práctico — parámetros de clave seguros
+## Uso práctico - parámetros de clave seguros
 
 El caso más común es tipar un parámetro que representa el nombre de una propiedad:
 
 \`\`\`typescript
 type Config = { theme: string; lang: string; fontSize: number };
 
-// Sin keyof: acepta cualquier string — un typo no se detecta
+// Sin keyof: acepta cualquier string - un typo no se detecta
 function getConfig(config: Config, key: string): unknown {
     return (config as any)[key];
 }
@@ -322,7 +322,7 @@ getConfig(myConfig, "theme");    // ✓
 getConfig(myConfig, "language"); // Error: "language" no es keyof Config
 \`\`\`
 
-## Acceso indexado — \`T[K]\`
+## Acceso indexado - \`T[K]\`
 
 Combinado con \`keyof\`, podés obtener el tipo exacto de una propiedad:
 
@@ -334,7 +334,7 @@ type PriceType   = Product["price"];   // number
 type AnyPropType = Product[keyof Product]; // string | number | boolean
 \`\`\`
 
-Esto es la base para tipos genéricos avanzados — pero ya en esta forma simple es útil para funciones que trabajan sobre propiedades de un tipo específico.
+Esto es la base para tipos genéricos avanzados - pero ya en esta forma simple es útil para funciones que trabajan sobre propiedades de un tipo específico.
 `,
     },
     {
@@ -343,7 +343,7 @@ Esto es la base para tipos genéricos avanzados — pero ya en esta forma simple
       type: "exercise",
       instructions: `## Campo de producto
 
-La función \`listField\` recorre un catálogo de productos y muestra el valor de un campo específico para cada uno. El parámetro \`field\` está tipado como \`string\`, lo que es inseguro — cualquier nombre inválido (un typo, una clave que no existe) pasaría el chequeo de tipos.
+La función \`listField\` recorre un catálogo de productos y muestra el valor de un campo específico para cada uno. El parámetro \`field\` está tipado como \`string\`, lo que es inseguro - cualquier nombre inválido (un typo, una clave que no existe) pasaría el chequeo de tipos.
 
 Cambiá el tipo de \`field\` para que TypeScript solo acepte nombres de propiedades reales de \`Product\`.`,
       starterCode: `type Product = { name: string; price: number; category: string };
@@ -414,7 +414,7 @@ listField(catalog, "price");`,
       id: "ch05-07",
       title: "Resumen del capítulo",
       type: "explanation",
-      content: `# Resumen — Combining Types
+      content: `# Resumen - Combining Types
 
 ## Union Types (\`|\`)
 
@@ -426,12 +426,12 @@ listField(catalog, "price");`,
 
 - Un valor debe cumplir **todos los tipos a la vez**
 - Útil para componer tipos pequeños y reutilizables
-- Solo tiene sentido con tipos de objeto — intersección de primitivos incompatibles resulta en \`never\`
+- Solo tiene sentido con tipos de objeto - intersección de primitivos incompatibles resulta en \`never\`
 
 ## Type Aliases (\`type\`)
 
 - Crea un nombre para cualquier tipo: primitivos, unions, intersections, objetos, tuples
-- Más flexible que \`interface\` — puede representar cualquier forma de tipo
+- Más flexible que \`interface\` - puede representar cualquier forma de tipo
 - Para objetos simples, \`type\` e \`interface\` son intercambiables (diferencias en capítulo 8)
 
 ## \`keyof\`
@@ -442,7 +442,7 @@ listField(catalog, "price");`,
 
 ## Lo que viene
 
-El próximo capítulo cubre **Type Guards / Narrowing** — las técnicas que TypeScript usa para reducir tipos dentro de un bloque: \`typeof\`, \`instanceof\`, equality checks, truthiness, y type predicates.
+El próximo capítulo cubre **Type Guards / Narrowing** - las técnicas que TypeScript usa para reducir tipos dentro de un bloque: \`typeof\`, \`instanceof\`, equality checks, truthiness, y type predicates.
 `,
     },
   ],
