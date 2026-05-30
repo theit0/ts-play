@@ -13,20 +13,20 @@ export const ch10: Chapter = {
 
 ## El problema con \`any\`
 
-Si una función trabaja con múltiples tipos, la solución naive es \`any\` — pero eso pierde toda la información de tipos:
+Si una función trabaja con múltiples tipos, la solución naive es \`any\` - pero eso pierde toda la información de tipos:
 
 \`\`\`typescript
 function primero(arr: any[]): any {
     return arr[0];
 }
 
-const nombre = primero(["Ana", "Luis"]); // tipo: any — TypeScript olvidó que es string
+const nombre = primero(["Ana", "Luis"]); // tipo: any - TypeScript olvidó que es string
 nombre.toUpperCase();                    // TypeScript no verifica nada
 \`\`\`
 
 ## La solución: type parameters
 
-Los **generics** son parámetros de tipo — un placeholder que TypeScript rellena según lo que le pasás:
+Los **generics** son parámetros de tipo - un placeholder que TypeScript rellena según lo que le pasás:
 
 \`\`\`typescript
 function primero<T>(arr: T[]): T {
@@ -40,7 +40,7 @@ const precio = primero([9.99, 19.99]);   // T se infiere como number
 precio.toFixed(2);                       // ✓
 \`\`\`
 
-La \`T\` es solo una convención — podés usar cualquier nombre, pero \`T\` (de *Type*), \`K\` (*Key*), \`V\` (*Value*) son los más comunes.
+La \`T\` es solo una convención - podés usar cualquier nombre, pero \`T\` (de *Type*), \`K\` (*Key*), \`V\` (*Value*) son los más comunes.
 
 ## Múltiples type parameters
 
@@ -58,7 +58,7 @@ TypeScript infiere los type parameters desde los argumentos. También podés esp
 
 \`\`\`typescript
 primero<string>(["Ana", "Luis"]); // explícito
-primero(["Ana", "Luis"]);         // inferido — TypeScript deduce T = string
+primero(["Ana", "Luis"]);         // inferido - TypeScript deduce T = string
 \`\`\`
 
 En la práctica, casi siempre dejás que TypeScript infiera. Solo especificás explícitamente cuando la inferencia falla o cuando el código es ambiguo.
@@ -83,7 +83,7 @@ const largos = filtrar(productos, s => s.length > 5); // string[]
       type: "exercise",
       instructions: `## Paginador genérico
 
-La función \`paginate\` divide cualquier array en páginas. Actualmente usa \`any[]\` para los ítems, lo que hace que el campo \`data\` del resultado pierda su tipo — TypeScript no sabe qué tipo de elementos contiene.
+La función \`paginate\` divide cualquier array en páginas. Actualmente usa \`any[]\` para los ítems, lo que hace que el campo \`data\` del resultado pierda su tipo - TypeScript no sabe qué tipo de elementos contiene.
 
 Hacé la función genérica para que \`data\` preserve el tipo del array de entrada.`,
       starterCode: `function paginate(items: any[], page: number, pageSize: number) {
@@ -157,7 +157,7 @@ console.log(\`Total: \${result.total}, Página: \${result.page}\`);`,
       type: "explanation",
       content: `# Generic Constraints
 
-Sin constraints, TypeScript no sabe nada sobre \`T\` — y eso puede ser un problema:
+Sin constraints, TypeScript no sabe nada sobre \`T\` - y eso puede ser un problema:
 
 \`\`\`typescript
 function getLongitud<T>(value: T): number {
@@ -165,7 +165,7 @@ function getLongitud<T>(value: T): number {
 }
 \`\`\`
 
-## extends — limitar qué puede ser T
+## extends - limitar qué puede ser T
 
 Con \`extends\`, le decís a TypeScript qué debe tener \`T\` como mínimo:
 
@@ -198,7 +198,7 @@ buscar(productos, 1); // T = Product
 buscar(clientes, 2);  // T = Customer
 \`\`\`
 
-La función es genérica — acepta \`Product[]\`, \`Customer[]\`, o cualquier array de objetos con \`id\` y \`name\`. Y el tipo de retorno es \`T | undefined\`, no \`any\`.
+La función es genérica - acepta \`Product[]\`, \`Customer[]\`, o cualquier array de objetos con \`id\` y \`name\`. Y el tipo de retorno es \`T | undefined\`, no \`any\`.
 
 ## Constraint con keyof
 
@@ -215,7 +215,7 @@ getPropiedad(user, "age");    // tipo: number
 getPropiedad(user, "ciudad"); // Error: no es una clave de user
 \`\`\`
 
-El tipo de retorno \`T[K]\` es el tipo exacto de la propiedad \`K\` en \`T\` — TypeScript lo infiere automáticamente.
+El tipo de retorno \`T[K]\` es el tipo exacto de la propiedad \`K\` en \`T\` - TypeScript lo infiere automáticamente.
 `,
     },
     {
@@ -224,7 +224,7 @@ El tipo de retorno \`T[K]\` es el tipo exacto de la propiedad \`K\` en \`T\` —
       type: "exercise",
       instructions: `## Búsqueda tipada
 
-La función \`findItem\` busca en cualquier array por \`id\`, pero usa \`any\` — el resultado pierde su tipo y TypeScript no puede verificar nada sobre lo que retorna.
+La función \`findItem\` busca en cualquier array por \`id\`, pero usa \`any\` - el resultado pierde su tipo y TypeScript no puede verificar nada sobre lo que retorna.
 
 Refactorizá la función para que sea genérica. Debe aceptar cualquier tipo de ítem, siempre que tenga al menos una propiedad \`id\` de tipo \`number\`.`,
       starterCode: `function findItem(items: any[], id: number): any {
@@ -370,7 +370,7 @@ class ProductRepository implements Repository<Product> {
 }
 \`\`\`
 
-\`Repository<T>\` define el contrato. \`ProductRepository\` implementa ese contrato para \`Product\` — si mañana necesitás un \`CustomerRepository\`, implementás la misma interface para \`Customer\`.
+\`Repository<T>\` define el contrato. \`ProductRepository\` implementa ese contrato para \`Product\` - si mañana necesitás un \`CustomerRepository\`, implementás la misma interface para \`Customer\`.
 `,
     },
     {
@@ -379,7 +379,7 @@ class ProductRepository implements Repository<Product> {
       type: "exercise",
       instructions: `## Stack genérico
 
-La clase \`Stack\` implementa una pila (LIFO — el último en entrar es el primero en salir). Funciona, pero está tipada con \`any\` en todas partes — al hacer \`pop()\` o \`peek()\`, TypeScript no sabe qué tipo de valor va a recibir.
+La clase \`Stack\` implementa una pila (LIFO - el último en entrar es el primero en salir). Funciona, pero está tipada con \`any\` en todas partes - al hacer \`pop()\` o \`peek()\`, TypeScript no sabe qué tipo de valor va a recibir.
 
 Hacé la clase genérica para que preserve el tipo de los elementos que se almacenan.`,
       starterCode: `class Stack {
@@ -485,7 +485,7 @@ console.log(messages.pop());`,
       id: "ch10-07",
       title: "Resumen del capítulo",
       type: "explanation",
-      content: `# Resumen — Generics
+      content: `# Resumen - Generics
 
 ## Por qué generics
 
@@ -529,7 +529,7 @@ class Pila<T> { private items: T[] = []; }
 
 ## Lo que viene
 
-El próximo capítulo cubre **Utility Types** — los tipos genéricos que TypeScript trae incorporados: \`Partial\`, \`Pick\`, \`Omit\`, \`Record\`, \`ReturnType\`, y más.
+El próximo capítulo cubre **Utility Types** - los tipos genéricos que TypeScript trae incorporados: \`Partial\`, \`Pick\`, \`Omit\`, \`Record\`, \`ReturnType\`, y más.
 `,
     },
   ],

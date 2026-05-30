@@ -39,7 +39,7 @@ p.format(); // "Laptop: $999.00"
 TypeScript tiene una sintaxis abreviada: si añadís un modificador de visibilidad (\`public\`, \`private\`, \`protected\`, o \`readonly\`) a un parámetro del constructor, TypeScript declara la propiedad y la asigna automáticamente:
 
 \`\`\`typescript
-// Versión abreviada — equivalente a la anterior
+// Versión abreviada - equivalente a la anterior
 class Product {
     constructor(
         public name: string,
@@ -53,7 +53,7 @@ class Product {
 }
 \`\`\`
 
-Eliminás la declaración de propiedades Y la asignación en el constructor — todo en una línea.
+Eliminás la declaración de propiedades Y la asignación en el constructor - todo en una línea.
 
 ## Métodos y tipos de retorno
 
@@ -72,7 +72,7 @@ class OrderSummary {
     }
 
     describe(): string {
-        return \`Pedido \${this.orderId}: \${this.itemCount()} ítems — $\${this.total.toFixed(2)}\`;
+        return \`Pedido \${this.orderId}: \${this.itemCount()} ítems - $\${this.total.toFixed(2)}\`;
     }
 }
 \`\`\`
@@ -103,7 +103,7 @@ Refactorizá la clase para usar la sintaxis abreviada del constructor de TypeScr
     }
 
     describe(): string {
-        return \`\${this.name} x\${this.quantity} — $\${this.total().toFixed(2)}\`;
+        return \`\${this.name} x\${this.quantity} - $\${this.total().toFixed(2)}\`;
     }
 }
 
@@ -125,7 +125,7 @@ console.log(\`Total: $\${(laptop.total() + mouse.total()).toFixed(2)}\`);`,
     }
 
     describe(): string {
-        return \`\${this.name} x\${this.quantity} — $\${this.total().toFixed(2)}\`;
+        return \`\${this.name} x\${this.quantity} - $\${this.total().toFixed(2)}\`;
     }
 }
 
@@ -195,7 +195,7 @@ class BankAccount {
     }
 
     deposit(amount: number): void {
-        this.balance += amount; // ✓ — desde adentro de la clase
+        this.balance += amount; // ✓ - desde adentro de la clase
     }
 
     getBalance(): number {
@@ -204,21 +204,21 @@ class BankAccount {
 }
 
 const acc = new BankAccount("CTA-001", 1, 1000);
-acc.deposit(500);           // ✓ — método público
+acc.deposit(500);           // ✓ - método público
 acc.balance;                // Error: balance es private
 acc.currency = "EUR";      // Error: currency es readonly
-acc.getBalance();           // ✓ — a través del método público
+acc.getBalance();           // ✓ - a través del método público
 \`\`\`
 
 ## TypeScript private vs JavaScript #
 
-\`private\` en TypeScript es **compile-time only** — protege en el editor, pero en runtime el valor es accesible:
+\`private\` en TypeScript es **compile-time only** - protege en el editor, pero en runtime el valor es accesible:
 
 \`\`\`typescript
 class A { private x = 1; }
-(new A() as any).x; // 1 — accesible en runtime
+(new A() as any).x; // 1 - accesible en runtime
 
-// JavaScript private field — verdaderamente privado en runtime
+// JavaScript private field - verdaderamente privado en runtime
 class B { #x = 1; }
 (new B() as any).#x; // SyntaxError
 \`\`\`
@@ -247,7 +247,7 @@ c.env = "development"; // Error: readonly
 
 La clase \`BankAccount\` tiene un bug de diseño: \`balance\` es público, lo que significa que cualquier código externo puede modificarlo directamente sin pasar por \`deposit\` o \`withdraw\`.
 
-Además, \`accountId\` debería ser inmutable — una vez asignado al crear la cuenta, no debería poder cambiarse.
+Además, \`accountId\` debería ser inmutable - una vez asignado al crear la cuenta, no debería poder cambiarse.
 
 Corregí los modificadores de acceso para que el diseño sea correcto.`,
       starterCode: `class BankAccount {
@@ -368,7 +368,7 @@ abstract class Shape {
 new Shape("red"); // Error: no se puede instanciar una clase abstracta
 \`\`\`
 
-## extends — herencia
+## extends - herencia
 
 \`extends\` hereda toda la implementación de la clase base. El constructor de la subclase debe llamar a \`super()\` antes de acceder a \`this\`:
 
@@ -394,7 +394,7 @@ class Rectangle extends Shape {
 }
 
 const c = new Circle("red", 5);
-c.describe(); // "red: área 78.54" — usa Circle.area() + Shape.describe()
+c.describe(); // "red: área 78.54" - usa Circle.area() + Shape.describe()
 \`\`\`
 
 ## Method Override
@@ -426,7 +426,7 @@ const shapes: Shape[] = [
 shapes.forEach(s => console.log(s.describe()));
 // "red: área 78.54"
 // "blue: área 24.00"
-// — cada uno usa su propia implementación de area()
+// - cada uno usa su propia implementación de area()
 \`\`\`
 `,
     },
@@ -513,7 +513,7 @@ const fixedOff = new FixedDiscount(100);
 
 console.log(\`20% off: \${percentOff.apply(laptop)}\`);
 console.log(\`$100 off: \${fixedOff.apply(laptop)}\`);`,
-      hint: "Cada subclase solo necesita implementar `calculate`. `apply` ya llama a `calculate` internamente — no tenés que tocar ese método.",
+      hint: "Cada subclase solo necesita implementar `calculate`. `apply` ya llama a `calculate` internamente - no tenés que tocar ese método.",
       tests: [
         {
           name: "Ambas subclases extienden DiscountStrategy",
@@ -554,7 +554,7 @@ console.log(\`$100 off: \${fixedOff.apply(laptop)}\`);`,
       id: "ch09-07",
       title: "Resumen del capítulo",
       type: "explanation",
-      content: `# Resumen — Classes
+      content: `# Resumen - Classes
 
 ## Constructor Shorthand
 
@@ -584,7 +584,7 @@ Añadir un modificador de visibilidad al parámetro del constructor crea y asign
 
 \`\`\`typescript
 abstract class Base {
-    abstract method(): ReturnType; // sin cuerpo — subclase lo implementa
+    abstract method(): ReturnType; // sin cuerpo - subclase lo implementa
     concrete(): string { return "compartido"; } // implementación heredada
 }
 \`\`\`
@@ -602,7 +602,7 @@ abstract class Base {
 
 ## Lo que viene
 
-El próximo capítulo cubre **Generics** — tipos que funcionan con cualquier tipo, con constraints para limitarlos.
+El próximo capítulo cubre **Generics** - tipos que funcionan con cualquier tipo, con constraints para limitarlos.
 `,
     },
   ],

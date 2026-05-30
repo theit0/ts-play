@@ -15,7 +15,7 @@ export const ch11: Chapter = {
 
 El mismo concepto aparece en múltiples formas a lo largo de una aplicación: un \`Product\` completo para la base de datos, uno parcial para actualizaciones, uno inmutable para la configuración. Sin utility types, terminarías duplicando el tipo manualmente cada vez que cambia su forma.
 
-Los **Utility Types** son genéricos incorporados en TypeScript que derivan tipos nuevos a partir de tipos existentes — sin copiar ni redefinir.
+Los **Utility Types** son genéricos incorporados en TypeScript que derivan tipos nuevos a partir de tipos existentes - sin copiar ni redefinir.
 
 ## Partial<T>
 
@@ -29,11 +29,11 @@ type Product = {
     stock: number;
 };
 
-// Sin Partial — tenés que pasar el objeto completo aunque solo cambie el precio
+// Sin Partial - tenés que pasar el objeto completo aunque solo cambie el precio
 function updateProduct(id: number, data: Product) { /* ... */ }
 updateProduct(1, { id: 1, name: "Laptop", price: 899, stock: 5 }); // ✓ pero tedioso
 
-// Con Partial — solo los campos que cambian
+// Con Partial - solo los campos que cambian
 function patchProduct(id: number, changes: Partial<Product>) { /* ... */ }
 patchProduct(1, { price: 899 });              // ✓ solo el precio
 patchProduct(2, { stock: 0, name: "Mouse" }); // ✓ varios campos
@@ -41,7 +41,7 @@ patchProduct(2, { stock: 0, name: "Mouse" }); // ✓ varios campos
 
 ## Required<T>
 
-Lo opuesto de \`Partial\` — hace todos los campos obligatorios. Útil cuando un borrador tiene campos opcionales pero la versión final publicada no puede tener ninguno faltante:
+Lo opuesto de \`Partial\` - hace todos los campos obligatorios. Útil cuando un borrador tiene campos opcionales pero la versión final publicada no puede tener ninguno faltante:
 
 \`\`\`typescript
 type DraftProduct = {
@@ -59,7 +59,7 @@ publish({ name: "Laptop" }); // Error: falta price y description
 
 ## Readonly<T>
 
-Hace todos los campos \`readonly\` — el objeto no puede modificarse después de crearse. Útil para configuración y para evitar que una función mute accidentalmente sus argumentos:
+Hace todos los campos \`readonly\` - el objeto no puede modificarse después de crearse. Útil para configuración y para evitar que una función mute accidentalmente sus argumentos:
 
 \`\`\`typescript
 type AppConfig = Readonly<{
@@ -75,13 +75,13 @@ config.timeout = 3000; // Error: Cannot assign to 'timeout' because it is a read
 ## Error común
 
 \`\`\`typescript
-// ❌ Redefinir el tipo manualmente — se desincroniza cuando Product cambia
+// ❌ Redefinir el tipo manualmente - se desincroniza cuando Product cambia
 type ProductUpdate = {
     name?: string;
     price?: number;
 };
 
-// ✓ Derivar del tipo base — siempre sincronizado con Product
+// ✓ Derivar del tipo base - siempre sincronizado con Product
 type ProductUpdate = Partial<Product>;
 \`\`\`
 `,
@@ -92,13 +92,9 @@ type ProductUpdate = Partial<Product>;
       type: "exercise",
       instructions: `## Actualización de producto
 
-El módulo de gestión de productos tiene dos funciones que necesitan mejor tipado:
+La función \`patchProduct\` aplica cambios sobre un producto existente. Actualmente requiere pasar el objeto completo como argumento, lo que obliga al llamador a conocer todos los campos aunque solo quiera cambiar el precio.
 
-1. \`patchProduct\` recibe los cambios a aplicar sobre un producto. Actualmente requiere el objeto completo, pero debería aceptar solo los campos que cambiaron.
-
-2. \`getProductSummary\` expone un producto para la vista pública. Actualmente declara que retorna \`Product\` completo, pero solo retorna \`name\` y \`price\`.
-
-Corregí los tipos usando los utility types apropiados.`,
+Corregí el tipo del parámetro \`changes\` para que acepte solo los campos que cambiaron.`,
       starterCode: `type Product = {
     id: number;
     name: string;
@@ -119,17 +115,12 @@ function patchProduct(id: number, changes: Product): Product | undefined {
     return catalog[index];
 }
 
-function getProductSummary(product: Product): Product {
-    return { name: product.name, price: product.price };
-}
-
 const updated = patchProduct(1, { price: 899 });
 console.log(updated?.name);
 console.log(updated?.price);
 
-const summary = getProductSummary(catalog[1]);
-console.log(summary.name);
-console.log(summary.price);`,
+const notFound = patchProduct(99, { price: 0 });
+console.log(notFound);`,
       solution: `type Product = {
     id: number;
     name: string;
@@ -150,26 +141,17 @@ function patchProduct(id: number, changes: Partial<Product>): Product | undefine
     return catalog[index];
 }
 
-function getProductSummary(product: Product): Pick<Product, "name" | "price"> {
-    return { name: product.name, price: product.price };
-}
-
 const updated = patchProduct(1, { price: 899 });
 console.log(updated?.name);
 console.log(updated?.price);
 
-const summary = getProductSummary(catalog[1]);
-console.log(summary.name);
-console.log(summary.price);`,
-      hint: "Hay dos utility types relevantes: uno convierte todos los campos de un tipo en opcionales, y otro selecciona un subconjunto de propiedades por nombre.",
+const notFound = patchProduct(99, { price: 0 });
+console.log(notFound);`,
+      hint: "Hay un utility type que convierte todos los campos de un tipo en opcionales, permitiendo pasar solo los que querés modificar.",
       tests: [
         {
           name: "patchProduct usa Partial<Product> para el parámetro changes",
           run: (code) => /changes\s*:\s*Partial\s*<\s*Product\s*>/.test(code),
-        },
-        {
-          name: "getProductSummary usa Pick<Product para el tipo de retorno",
-          run: (code) => /Pick\s*<\s*Product\s*,/.test(code),
         },
         {
           name: "patchProduct(1, { price: 899 }) retorna el nombre del producto",
@@ -186,10 +168,10 @@ console.log(summary.price);`,
           },
         },
         {
-          name: "getProductSummary retorna name y price correctamente",
+          name: "patchProduct retorna undefined si el id no existe",
           run: (code) => {
             const { output, error } = runCode(code);
-            return !error && output[2] === "Mouse" && output[3] === "49";
+            return !error && output[2] === "undefined";
           },
         },
       ],
@@ -214,7 +196,7 @@ type ProductPreview = Pick<Product, "name" | "price">;
 
 ## Omit<T, K>
 
-Lo opuesto de \`Pick\` — elimina propiedades específicas. Más cómodo cuando querés conservar casi todo el tipo:
+Lo opuesto de \`Pick\` - elimina propiedades específicas. Más cómodo cuando querés conservar casi todo el tipo:
 
 \`\`\`typescript
 // Para crear un producto nuevo, no queremos que el cliente envíe el id
@@ -253,7 +235,7 @@ type ActiveStatus = Exclude<Status, "deleted">;  // "pending" | "active"
 
 ## Extract<T, U>
 
-Mantiene solo los miembros de la union que extienden \`U\` — lo opuesto de \`Exclude\`:
+Mantiene solo los miembros de la union que extienden \`U\` - lo opuesto de \`Exclude\`:
 
 \`\`\`typescript
 type Input = string | number | boolean | null;
@@ -275,10 +257,10 @@ function processProduct(p: NonNullable<MaybeProduct>) { /* p nunca es null */ }
 ## Error común
 
 \`\`\`typescript
-// ❌ Record con Record<string, any> — pierde información de tipos
+// ❌ Record con Record<string, any> - pierde información de tipos
 const config: Record<string, any> = { ... };
 
-// ✓ Record con tipos específicos — TypeScript valida claves y valores
+// ✓ Record con tipos específicos - TypeScript valida claves y valores
 const config: Record<OrderStatus, StatusConfig> = { ... };
 \`\`\`
 `,
@@ -289,7 +271,7 @@ const config: Record<OrderStatus, StatusConfig> = { ... };
       type: "exercise",
       instructions: `## Inventario por categoría
 
-La función \`groupByCategory\` agrupa productos por categoría en un objeto. Actualmente usa \`any\` tanto en la variable interna como en el tipo de retorno — TypeScript no puede verificar que el resultado tiene la forma correcta ni que cubre exactamente las categorías definidas.
+La función \`groupByCategory\` agrupa productos por categoría en un objeto. Actualmente usa \`any\` tanto en la variable interna como en el tipo de retorno - TypeScript no puede verificar que el resultado tiene la forma correcta ni que cubre exactamente las categorías definidas.
 
 Reemplazá los dos usos de \`any\` con el tipo correcto usando \`Record\`.`,
       starterCode: `type Category = "electronics" | "peripherals" | "accessories";
@@ -309,9 +291,12 @@ const products: Product[] = [
 ];
 
 function groupByCategory(items: Product[]): any {
-    const result: any = {};
+    const result: any = {
+        electronics: [],
+        peripherals: [],
+        accessories: [],
+    };
     for (const item of items) {
-        if (!result[item.category]) result[item.category] = [];
         result[item.category].push(item);
     }
     return result;
@@ -338,9 +323,12 @@ const products: Product[] = [
 ];
 
 function groupByCategory(items: Product[]): Record<Category, Product[]> {
-    const result = {} as Record<Category, Product[]>;
+    const result: Record<Category, Product[]> = {
+        electronics: [],
+        peripherals: [],
+        accessories: [],
+    };
     for (const item of items) {
-        if (!result[item.category]) result[item.category] = [];
         result[item.category].push(item);
     }
     return result;
@@ -389,7 +377,7 @@ console.log(inventory["accessories"][0].name);`,
       type: "explanation",
       content: `# Parameters, ReturnType y más
 
-Estos utility types extraen información de tipos que ya existen — funciones, clases, promesas — sin tener que redefinir nada a mano.
+Estos utility types extraen información de tipos que ya existen - funciones, clases, promesas - sin tener que redefinir nada a mano.
 
 ## ReturnType<F>
 
@@ -458,7 +446,7 @@ class OrderRepository {
 }
 
 type RepoInstance = InstanceType<typeof OrderRepository>;
-// OrderRepository — el tipo de lo que retorna \`new OrderRepository()\`
+// OrderRepository - el tipo de lo que retorna \`new OrderRepository()\`
 
 function useRepo(repo: RepoInstance) {
     return repo.findAll();
@@ -468,7 +456,7 @@ function useRepo(repo: RepoInstance) {
 ## Error común
 
 \`\`\`typescript
-// ❌ Duplicar tipos manualmente — se desincroniza
+// ❌ Duplicar tipos manualmente - se desincroniza
 function getUser() { return { id: 1, name: "Ana", role: "admin" }; }
 type User = { id: number; name: string; role: string }; // copia manual
 
@@ -515,7 +503,7 @@ const product: Product = { id: 1, name: "Laptop", price: 999 };
 const args: FormatArgs = [product, "$", 0.1];
 const result: FormatResult = formatPrice(...args);
 console.log(result);`,
-      hint: "Ambos utility types toman `typeof nombreFuncion` como argumento — no el tipo directamente, sino la función misma referenciada con `typeof`.",
+      hint: "Ambos utility types toman `typeof nombreFuncion` como argumento - no el tipo directamente, sino la función misma referenciada con `typeof`.",
       tests: [
         {
           name: "FormatResult usa ReturnType<typeof formatPrice>",
@@ -540,16 +528,16 @@ console.log(result);`,
       id: "ch11-07",
       title: "Resumen del capítulo",
       type: "explanation",
-      content: `# Resumen — Utility Types
+      content: `# Resumen - Utility Types
 
 Los utility types son genéricos incorporados que derivan tipos nuevos a partir de tipos existentes. Eliminan la duplicación y mantienen el código sincronizado automáticamente.
 
 ## Transformar todas las propiedades
 
 \`\`\`typescript
-Partial<T>   // todos los campos opcionales — actualizaciones parciales
-Required<T>  // todos los campos obligatorios — validar completitud
-Readonly<T>  // todos los campos readonly — prevenir mutaciones
+Partial<T>   // todos los campos opcionales - actualizaciones parciales
+Required<T>  // todos los campos obligatorios - validar completitud
+Readonly<T>  // todos los campos readonly - prevenir mutaciones
 \`\`\`
 
 ## Seleccionar o eliminar propiedades
@@ -589,7 +577,7 @@ InstanceType<typeof C>   // tipo de instancia de la clase C
 
 ## Lo que viene
 
-El próximo capítulo cubre **Advanced Types** — tipos mapeados, condicionales, template literal types y tipos recursivos. Son la base de cómo se construyen los utility types que acabás de aprender.
+El próximo capítulo cubre **Advanced Types** - tipos mapeados, condicionales, template literal types y tipos recursivos. Son la base de cómo se construyen los utility types que acabás de aprender.
 `,
     },
   ],
