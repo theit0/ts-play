@@ -18,17 +18,17 @@ TypeScript es un lenguaje creado por Microsoft que extiende JavaScript añadiend
 JavaScript es dinámico: cualquier variable puede contener cualquier valor en cualquier momento. Eso es flexible, pero permite bugs que solo aparecen en producción:
 
 \`\`\`javascript
-// JavaScript — sin tipos, sin advertencias
+// JavaScript - sin tipos, sin advertencias
 function calcularDescuento(precio, porcentaje) {
     return precio - (precio * porcentaje / 100);
 }
 
 calcularDescuento(200, "15"); // retorna 185, pero "15" debería ser número
-calcularDescuento("gratis", 10); // retorna NaN — bug silencioso
+calcularDescuento("gratis", 10); // retorna NaN - bug silencioso
 \`\`\`
 
 \`\`\`typescript
-// TypeScript — el error aparece antes de ejecutar
+// TypeScript - el error aparece antes de ejecutar
 function calcularDescuento(precio: number, porcentaje: number): number {
     return precio - (precio * porcentaje / 100);
 }
@@ -39,10 +39,10 @@ calcularDescuento("gratis", 10); // Error: 'string' no es asignable a 'number'
 
 ## Lo que TypeScript agrega
 
-- **Tipos en parámetros y variables** — el compilador sabe qué tipo espera cada cosa
-- **Detección de errores temprana** — antes de ejecutar, no en producción
-- **Autocompletado inteligente** — el editor sabe qué propiedades tiene cada objeto
-- **Refactoring seguro** — renombrar algo actualiza todas sus referencias
+- **Tipos en parámetros y variables** - el compilador sabe qué tipo espera cada cosa
+- **Detección de errores temprana** - antes de ejecutar, no en producción
+- **Autocompletado inteligente** - el editor sabe qué propiedades tiene cada objeto
+- **Refactoring seguro** - renombrar algo actualiza todas sus referencias
 
 ## Lo que TypeScript NO cambia
 
@@ -82,7 +82,7 @@ nombre.toUpperCase();     // ✓ TypeScript sabe que nombre es string
 edad.toUpperCase();       // Error: 'toUpperCase' no existe en 'number'
 \`\`\`
 
-No siempre necesitas escribir el tipo — TypeScript lo deduce del valor.
+No siempre necesitas escribir el tipo - TypeScript lo deduce del valor.
 
 ## Archivos de declaración (.d.ts)
 
@@ -95,7 +95,7 @@ _.chunk(['a', 'b', 'c'], 2);
 // TypeScript sabe que retorna string[][]
 \`\`\`
 
-## @types — Tipos de la comunidad
+## @types - Tipos de la comunidad
 
 El repositorio **DefinitelyTyped** tiene tipos para miles de librerías JS:
 
@@ -154,9 +154,9 @@ La opción más importante. Activa un conjunto de verificaciones estrictas:
 \`\`\`
 
 Incluye automáticamente:
-- **\`noImplicitAny\`** — error si TypeScript infiere \`any\` para un parámetro
-- **\`strictNullChecks\`** — \`null\` y \`undefined\` no son asignables a otros tipos
-- **\`strictFunctionTypes\`** — verificación estricta en tipos de funciones
+- **\`noImplicitAny\`** - error si TypeScript infiere \`any\` para un parámetro
+- **\`strictNullChecks\`** - \`null\` y \`undefined\` no son asignables a otros tipos
+- **\`strictFunctionTypes\`** - verificación estricta en tipos de funciones
 - Otras verificaciones de seguridad
 
 ### \`target\`
@@ -203,7 +203,7 @@ Para proyectos nuevos, siempre usa \`"strict": true\`. Te fuerza a escribir Type
 
 TypeScript no corre directamente en navegadores ni en Node.js. Necesita ser compilado primero.
 
-## tsc — El compilador oficial
+## tsc - El compilador oficial
 
 \`\`\`bash
 # Compilar un archivo específico
@@ -218,7 +218,7 @@ npx tsc --watch
 
 El output de \`tsc\` son archivos \`.js\` normales que cualquier runtime puede ejecutar.
 
-## ts-node — TypeScript directo en Node.js
+## ts-node - TypeScript directo en Node.js
 
 Para desarrollo, \`ts-node\` ejecuta TypeScript sin compilar manualmente:
 
@@ -228,12 +228,12 @@ npx ts-node archivo.ts
 
 Internamente compila y ejecuta en memoria. Más lento que Node.js puro, pero conveniente para scripts y desarrollo.
 
-## Build tools — La forma más común en proyectos reales
+## Build tools - La forma más común en proyectos reales
 
 Herramientas como Vite, webpack, o esbuild manejan TypeScript como parte del proceso de build:
 
 \`\`\`typescript
-// vite.config.ts — Vite entiende TypeScript nativo
+// vite.config.ts - Vite entiende TypeScript nativo
 import { defineConfig } from 'vite';
 
 export default defineConfig({
@@ -246,7 +246,7 @@ No necesitas correr \`tsc\` manualmente: el bundler lo hace como parte de \`npm 
 
 ## TypeScript Playground
 
-**typescriptlang.org/play** — entorno online oficial. Útil para:
+**typescriptlang.org/play** - entorno online oficial. Útil para:
 - Experimentar con tipos sin instalar nada
 - Compartir snippets de código
 - Ver el JavaScript generado en tiempo real
@@ -268,17 +268,17 @@ La función \`formatUser\` construye un string con los datos de un usuario, pero
 Añade las anotaciones necesarias.`,
       starterCode: `function formatUser(name, age, isPremium) {
     const badge = isPremium ? "⭐ Premium" : "Free";
-    return \`\${name} (\${age} años) — \${badge}\`;
+    return \`\${name} (\${age} años) - \${badge}\`;
 }
 
 console.log(formatUser("Ana", 28, true));
-// Ana (28 años) — ⭐ Premium
+// Ana (28 años) - ⭐ Premium
 
 console.log(formatUser("Luis", 35, false));
-// Luis (35 años) — Free`,
+// Luis (35 años) - Free`,
       solution: `function formatUser(name: string, age: number, isPremium: boolean): string {
     const badge = isPremium ? "⭐ Premium" : "Free";
-    return \`\${name} (\${age} años) — \${badge}\`;
+    return \`\${name} (\${age} años) - \${badge}\`;
 }
 
 console.log(formatUser("Ana", 28, true));
@@ -313,7 +313,7 @@ console.log(formatUser("Luis", 35, false));`,
       type: "exercise",
       instructions: `## El bug silencioso
 
-El siguiente código tiene un error de tipo que JavaScript ejecutaría en silencio — produciendo un resultado incorrecto sin ninguna advertencia.
+El siguiente código tiene un error de tipo que JavaScript ejecutaría en silencio - produciendo un resultado incorrecto sin ninguna advertencia.
 
 Identifica el problema y corrígelo. La función debe retornar \`15\`.`,
       starterCode: `function addNumbers(a: number, b: number): number {
@@ -351,15 +351,15 @@ console.log(addNumbers(x, y));`,
       id: "ch01-07",
       title: "Resumen del capítulo",
       type: "explanation",
-      content: `# Resumen — Introduction to TypeScript
+      content: `# Resumen - Introduction to TypeScript
 
 ## Puntos clave
 
 - TypeScript extiende JavaScript añadiendo **tipos estáticos**
-- Los tipos se verifican en tiempo de desarrollo, no en runtime — el output es JavaScript puro
-- **Todo JavaScript válido es TypeScript válido** — la migración puede ser gradual
+- Los tipos se verifican en tiempo de desarrollo, no en runtime - el output es JavaScript puro
+- **Todo JavaScript válido es TypeScript válido** - la migración puede ser gradual
 - TypeScript infiere tipos automáticamente cuando puede; los tipos explícitos son para los casos que no puede inferir
-- \`tsconfig.json\` configura el compilador — usa siempre \`"strict": true\`
+- \`tsconfig.json\` configura el compilador - usa siempre \`"strict": true\`
 - \`tsc\` compila, \`ts-node\` ejecuta directamente, los build tools integran TypeScript en el workflow
 
 ## La sintaxis básica
@@ -380,7 +380,7 @@ const lista: string[] = [];
 
 ## Lo que viene
 
-El próximo capítulo cubre **TypeScript ESLint** — reglas que hacen cumplir buenas prácticas más allá de lo que el compilador verifica por defecto.
+El próximo capítulo cubre **TypeScript ESLint** - reglas que hacen cumplir buenas prácticas más allá de lo que el compilador verifica por defecto.
 `,
     },
   ],

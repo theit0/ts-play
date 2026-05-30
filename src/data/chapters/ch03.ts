@@ -11,7 +11,7 @@ export const ch03: Chapter = {
       type: "explanation",
       content: `# Primitive Types
 
-TypeScript tiene seis tipos para valores simples. Si ya sabés JavaScript, ya los conocés — ahora les ponés nombre:
+TypeScript tiene seis tipos para valores simples. Si ya sabés JavaScript, ya los conocés - ahora les ponés nombre:
 
 | Valor | Tipo |
 |-------|------|
@@ -42,7 +42,7 @@ Con \`strict: true\`, \`null\` y \`undefined\` no caben en otros tipos:
 
 \`\`\`typescript
 let nombre: string = null;           // Error: null no es string
-let nombre: string | null = null;    // ✓ — le dijiste que puede ser null
+let nombre: string | null = null;    // ✓ - le dijiste que puede ser null
 \`\`\`
 
 Esto previene el error más clásico de JavaScript: *"Cannot read properties of null"*. TypeScript te obliga a verificar si algo puede ser null antes de usarlo.
@@ -59,14 +59,14 @@ La función \`createProduct\` genera la descripción de un producto para un cat�
 Añade las anotaciones correctas basándote en cómo se usa cada parámetro dentro de la función.`,
       starterCode: `function createProduct(name, price, inStock, quantity) {
     const status = inStock ? "en stock" : "agotado";
-    return \`\${name}: \${price.toFixed(2)} — \${status} (\${quantity} unidades)\`;
+    return \`\${name}: \${price.toFixed(2)} - \${status} (\${quantity} unidades)\`;
 }
 
 console.log(createProduct("Laptop", 999.99, true, 15));
 console.log(createProduct("Teclado", 49.90, false, 0));`,
       solution: `function createProduct(name: string, price: number, inStock: boolean, quantity: number): string {
     const status = inStock ? "en stock" : "agotado";
-    return \`\${name}: \${price.toFixed(2)} — \${status} (\${quantity} unidades)\`;
+    return \`\${name}: \${price.toFixed(2)} - \${status} (\${quantity} unidades)\`;
 }
 
 console.log(createProduct("Laptop", 999.99, true, 15));
@@ -117,7 +117,7 @@ const nombres: string[] = ["Ana", "Luis", "María"];
 const precios: number[] = [9.99, 19.99, 4.99];
 \`\`\`
 
-También existe la sintaxis genérica — es equivalente:
+También existe la sintaxis genérica - es equivalente:
 
 \`\`\`typescript
 const nombres: Array<string> = ["Ana", "Luis", "María"];
@@ -162,7 +162,7 @@ getLabel("pending");           // Error: usa el enum, no el string directamente
 Para la mayoría de los casos, un **union literal** es más simple:
 
 \`\`\`typescript
-// Más simple y directa — no requiere importar nada
+// Más simple y directa - no requiere importar nada
 type OrderStatus = "pending" | "shipped" | "delivered";
 \`\`\`
 
@@ -175,7 +175,7 @@ Preferí union literals para casos simples. Usá \`enum\` solo cuando necesitás
       type: "exercise",
       instructions: `## Más que un array
 
-La función \`parseRGB\` descompone un color hexadecimal en sus tres componentes. Retorna \`number[]\`, pero ese tipo no garantiza nada sobre la longitud — TypeScript no sabe si el array tiene 1 elemento o 10.
+La función \`parseRGB\` descompone un color hexadecimal en sus tres componentes. Retorna \`number[]\`, pero ese tipo no garantiza nada sobre la longitud - TypeScript no sabe si el array tiene 1 elemento o 10.
 
 Cambia el tipo de retorno para expresar exactamente que siempre retorna tres números: rojo, verde y azul.`,
       starterCode: `function parseRGB(hex: string): number[] {
@@ -225,21 +225,21 @@ console.log(\`R:\${red} G:\${green} B:\${blue}\`);`,
 
 Ambos tipos aceptan cualquier valor. La diferencia está en qué podés hacer con ellos después.
 
-## any — TypeScript se calla
+## any - TypeScript se calla
 
 Con \`any\`, TypeScript deja de verificar ese valor completamente:
 
 \`\`\`typescript
 function procesar(valor: any) {
-    valor.toUpperCase();      // TypeScript no dice nada — puede crashear
-    valor.metodoInventado();  // TypeScript no dice nada — puede crashear
-    valor();                  // TypeScript no dice nada — puede crashear
+    valor.toUpperCase();      // TypeScript no dice nada - puede crashear
+    valor.metodoInventado();  // TypeScript no dice nada - puede crashear
+    valor();                  // TypeScript no dice nada - puede crashear
 }
 \`\`\`
 
 \`any\` es contagioso: si lo asignás a otra variable tipada, esa variable también pierde su tipo.
 
-## unknown — verificación obligatoria
+## unknown - verificación obligatoria
 
 \`unknown\` acepta cualquier valor, pero no podés usarlo hasta verificar qué es:
 
@@ -248,14 +248,14 @@ function procesar(valor: unknown) {
     valor.toUpperCase(); // Error: TypeScript no sabe si tiene .toUpperCase()
 
     if (typeof valor === "string") {
-        valor.toUpperCase(); // ✓ — dentro del if, TypeScript sabe que es string
+        valor.toUpperCase(); // ✓ - dentro del if, TypeScript sabe que es string
     }
 }
 \`\`\`
 
 ## ¿Cuándo usar cada uno?
 
-- **\`unknown\`**: para datos externos — respuestas de APIs, JSON parseado, inputs del usuario. Aceptás cualquier cosa pero te obliga a verificar antes de usar.
+- **\`unknown\`**: para datos externos - respuestas de APIs, JSON parseado, inputs del usuario. Aceptás cualquier cosa pero te obliga a verificar antes de usar.
 - **\`any\`**: solo en migraciones de JavaScript legacy donde es imposible tipar correctamente.
 - **Ninguno**: en código nuevo casi siempre hay un tipo más específico disponible.
 
@@ -268,7 +268,7 @@ function procesar(valor: unknown) {
       type: "exercise",
       instructions: `## Datos del exterior
 
-La función \`parseAPIResponse\` recibe datos de una fuente externa. Usa \`any\`, lo que desactiva completamente la protección de TypeScript — si recibís un número o \`null\`, el código crashea sin ninguna advertencia.
+La función \`parseAPIResponse\` recibe datos de una fuente externa. Usa \`any\`, lo que desactiva completamente la protección de TypeScript - si recibís un número o \`null\`, el código crashea sin ninguna advertencia.
 
 Cambia el tipo a \`unknown\` y agregá la verificación necesaria. La función debe retornar el string en mayúsculas si recibe un string, o \`"[dato inválido]"\` para cualquier otro tipo.`,
       starterCode: `function parseAPIResponse(data: any): string {
@@ -324,11 +324,11 @@ console.log(parseAPIResponse(null));`,
 
 ## Funciones que nunca retornan
 
-Algunas funciones no terminan normalmente — siempre lanzan un error o entran en un loop infinito. Su tipo de retorno es \`never\`:
+Algunas funciones no terminan normalmente - siempre lanzan un error o entran en un loop infinito. Su tipo de retorno es \`never\`:
 
 \`\`\`typescript
 function lanzarError(mensaje: string): never {
-    throw new Error(mensaje); // siempre lanza — nunca produce un valor de retorno
+    throw new Error(mensaje); // siempre lanza - nunca produce un valor de retorno
 }
 
 function loopInfinito(): never {
@@ -338,7 +338,7 @@ function loopInfinito(): never {
 
 Esto es útil porque TypeScript puede usar esa información para razonar sobre el flujo del código.
 
-## Exhaustive checks — el uso más práctico
+## Exhaustive checks - el uso más práctico
 
 Cuando un \`switch\` cubre todos los casos de un union type, el \`default\` nunca debería ejecutarse. Podés aprovecharlo para que TypeScript avise si alguien añade un nuevo caso y olvida actualizar el switch:
 
@@ -357,7 +357,7 @@ function getHex(color: Color): string {
 }
 \`\`\`
 
-¿Por qué funciona? Si el switch cubre todos los casos, en el \`default\` \`color\` tiene tipo \`never\` — TypeScript sabe que nunca llega ahí. Si alguien añade \`"yellow"\` al tipo \`Color\` y olvida el case, TypeScript marca error en la asignación a \`_check\`.
+¿Por qué funciona? Si el switch cubre todos los casos, en el \`default\` \`color\` tiene tipo \`never\` - TypeScript sabe que nunca llega ahí. Si alguien añade \`"yellow"\` al tipo \`Color\` y olvida el case, TypeScript marca error en la asignación a \`_check\`.
 `,
     },
     {
@@ -366,7 +366,7 @@ function getHex(color: Color): string {
       type: "exercise",
       instructions: `## El switch infalible
 
-La función \`getPaymentFee\` retorna la comisión para cada método de pago. Cubre todos los casos actuales, pero hay un problema: si alguien añade un nuevo método al tipo \`PaymentMethod\` y olvida actualizar el switch, TypeScript no avisa — el \`default: return 0\` lo absorbe en silencio.
+La función \`getPaymentFee\` retorna la comisión para cada método de pago. Cubre todos los casos actuales, pero hay un problema: si alguien añade un nuevo método al tipo \`PaymentMethod\` y olvida actualizar el switch, TypeScript no avisa - el \`default: return 0\` lo absorbe en silencio.
 
 Implementá un exhaustive check en el \`default\` usando \`never\` para que TypeScript detecte casos no manejados automáticamente.`,
       starterCode: `type PaymentMethod = "credit_card" | "debit_card" | "paypal";
@@ -426,7 +426,7 @@ console.log(getPaymentFee("paypal"));`,
       type: "explanation",
       content: `# Type Inference y Type Compatibility
 
-## Type Inference — TypeScript lee tu código
+## Type Inference - TypeScript lee tu código
 
 TypeScript puede deducir el tipo de la mayoría de las expresiones sin que lo declares:
 
@@ -436,15 +436,15 @@ const edad = 28;        // TypeScript infiere: number
 const activo = true;    // TypeScript infiere: boolean
 \`\`\`
 
-No tenés que anotar todo — TypeScript ya lo sabe.
+No tenés que anotar todo - TypeScript ya lo sabe.
 
 ### const vs let
 
 \`const\` y \`let\` producen tipos distintos:
 
 \`\`\`typescript
-const dir = "norte";  // tipo: "norte" (el valor exacto — tipo literal)
-let dir2 = "norte";   // tipo: string (cualquier string — tipo general)
+const dir = "norte";  // tipo: "norte" (el valor exacto - tipo literal)
+let dir2 = "norte";   // tipo: string (cualquier string - tipo general)
 \`\`\`
 
 Por qué: \`const\` no puede cambiar, así que TypeScript sabe que siempre será \`"norte"\`. \`let\` puede cambiar a cualquier string.
@@ -472,7 +472,7 @@ function label(activo: boolean) {
 }
 \`\`\`
 
-## Type Compatibility — la forma importa, no el nombre
+## Type Compatibility - la forma importa, no el nombre
 
 TypeScript verifica compatibilidad por **forma** (structural typing), no por nombre. Dos tipos son compatibles si tienen las mismas propiedades:
 
@@ -481,7 +481,7 @@ interface Punto      { x: number; y: number; }
 interface Coordenada { x: number; y: number; }
 
 const p: Punto = { x: 10, y: 20 };
-const c: Coordenada = p; // ✓ — misma forma, TypeScript los acepta como compatibles
+const c: Coordenada = p; // ✓ - misma forma, TypeScript los acepta como compatibles
 \`\`\`
 
 Y si un objeto tiene más propiedades de las requeridas, sigue siendo compatible:
@@ -490,7 +490,7 @@ Y si un objeto tiene más propiedades de las requeridas, sigue siendo compatible
 interface Usuario { nombre: string; edad: number; }
 
 const empleado = { nombre: "Ana", edad: 28, empresa: "Acme" };
-const u: Usuario = empleado; // ✓ — TypeScript solo verifica nombre y edad
+const u: Usuario = empleado; // ✓ - TypeScript solo verifica nombre y edad
 \`\`\`
 
 Esto refleja cómo funciona JavaScript: si un objeto tiene lo que necesitás, funciona.
@@ -500,7 +500,7 @@ Esto refleja cómo funciona JavaScript: si un objeto tiene lo que necesitás, fu
       id: "ch03-10",
       title: "Resumen del capítulo",
       type: "explanation",
-      content: `# Resumen — TypeScript Types
+      content: `# Resumen - TypeScript Types
 
 ## Tipos primitivos
 
@@ -510,21 +510,21 @@ Esto refleja cómo funciona JavaScript: si un objeto tiene lo que necesitás, fu
 | \`number\` | Enteros y decimales |
 | \`string\` | Texto |
 | \`void\` | Retorno sin valor útil |
-| \`undefined\` / \`null\` | Ausencia de valor — separados con \`strict: true\` |
+| \`undefined\` / \`null\` | Ausencia de valor - separados con \`strict: true\` |
 
 ## Object types
 
-- **\`Array\`** \`string[]\` — longitud variable, todos del mismo tipo
-- **\`Tuple\`** \`[string, number]\` — longitud fija, tipo por posición
-- **\`Enum\`** — constantes con nombre; para la mayoría de casos, preferir union literals
+- **\`Array\`** \`string[]\` - longitud variable, todos del mismo tipo
+- **\`Tuple\`** \`[string, number]\` - longitud fija, tipo por posición
+- **\`Enum\`** - constantes con nombre; para la mayoría de casos, preferir union literals
 
 ## Top & Bottom Types
 
 | Tipo | Qué hace |
 |------|---------|
-| \`any\` | Apaga TypeScript para ese valor — evitar |
+| \`any\` | Apaga TypeScript para ese valor - evitar |
 | \`unknown\` | Acepta todo, pero obliga a verificar antes de usar |
-| \`never\` | Valor imposible — funciones que siempre lanzan, exhaustive checks |
+| \`never\` | Valor imposible - funciones que siempre lanzan, exhaustive checks |
 
 ## Type Inference
 
@@ -532,11 +532,11 @@ TypeScript infiere tipos automáticamente. \`const\` produce tipos literales; \`
 
 ## Type Compatibility
 
-TypeScript usa structural typing — la compatibilidad se basa en la forma del tipo, no en su nombre.
+TypeScript usa structural typing - la compatibilidad se basa en la forma del tipo, no en su nombre.
 
 ## Lo que viene
 
-El próximo capítulo cubre **Assertions & Special Syntax** — \`as\`, \`as const\`, el operador non-null \`!\`, y el keyword \`satisfies\`.
+El próximo capítulo cubre **Assertions & Special Syntax** - \`as\`, \`as const\`, el operador non-null \`!\`, y el keyword \`satisfies\`.
 `,
     },
   ],

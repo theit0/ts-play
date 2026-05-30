@@ -306,7 +306,7 @@ console.log(describePerson("Ana", 25, true));
       id: "ch02-08",
       title: "Resumen del capítulo",
       type: "explanation",
-      content: `# Resumen — TypeScript ESLint
+      content: `# Resumen - TypeScript ESLint
 
 ## Reglas vistas
 
@@ -319,13 +319,13 @@ console.log(describePerson("Ana", 25, true));
 ## Puntos clave
 
 - TypeScript ESLint añade reglas específicas de TypeScript a ESLint que van más allá del compilador.
-- \`@ts-ignore\` silencia errores sin arreglarlos — evítalo.
+- \`@ts-ignore\` silencia errores sin arreglarlos - evítalo.
 - Si necesitas suprimir un error de forma excepcional, usa \`@ts-expect-error\` con una explicación.
 - Siempre usa tipos primitivos en minúscula: \`string\`, \`number\`, \`boolean\`.
 
 ## Lo que viene
 
-El próximo capítulo cubre **TypeScript Types** — todos los tipos que ofrece el sistema de tipos: primitivos, object types, top types, bottom types, y cómo TypeScript los infiere automáticamente.
+El próximo capítulo cubre **TypeScript Types** - todos los tipos que ofrece el sistema de tipos: primitivos, object types, top types, bottom types, y cómo TypeScript los infiere automáticamente.
 `,
     },
   ],

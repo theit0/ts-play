@@ -20,37 +20,37 @@ const input = document.getElementById("email") as HTMLInputElement;
 // as HTMLInputElement le dice el tipo exacto
 \`\`\`
 
-La sintaxis es \`valor as Tipo\`. No convierte el valor en runtime — solo cambia lo que TypeScript cree sobre el tipo.
+La sintaxis es \`valor as Tipo\`. No convierte el valor en runtime - solo cambia lo que TypeScript cree sobre el tipo.
 
 ## Cuándo usarlas
 
 Las assertions son apropiadas cuando **vos tenés información que TypeScript no puede deducir**:
 
 \`\`\`typescript
-// Una función retorna un tipo base — vos sabés que es un subtipo específico
+// Una función retorna un tipo base - vos sabés que es un subtipo específico
 const canvas = document.querySelector("#canvas") as HTMLCanvasElement;
 
 // Datos externos que ya validaste
 const user = JSON.parse(response) as User;
 \`\`\`
 
-## as any — el último recurso
+## as any - el último recurso
 
 \`as any\` elimina toda verificación de tipos:
 
 \`\`\`typescript
-// ✗ Mal — perdés protección para todo lo que siga
+// ✗ Mal - perdés protección para todo lo que siga
 const error = err as any;
 error.code;              // TypeScript no verifica nada
-error.metodoInventado(); // TypeScript no dice nada — crash posible en runtime
+error.metodoInventado(); // TypeScript no dice nada - crash posible en runtime
 
-// ✓ Mejor — aserción al tipo exacto
+// ✓ Mejor - aserción al tipo exacto
 const error = err as ApiError;
 error.code;              // TypeScript verifica que ApiError tiene .code
 error.metodoInventado(); // Error: ApiError no tiene ese método ✓
 \`\`\`
 
-## Error común — doble aserción para mentirle a TypeScript
+## Error común - doble aserción para mentirle a TypeScript
 
 \`\`\`typescript
 // ✗ Señal de alarma
@@ -66,10 +66,10 @@ Cuando el tipo puede ser varias cosas, preferí narrowing sobre assertions:
 
 \`\`\`typescript
 function procesar(valor: unknown) {
-    // ✗ Assertion — si valor no es string, crash silencioso
+    // ✗ Assertion - si valor no es string, crash silencioso
     return (valor as string).toUpperCase();
 
-    // ✓ Narrowing — verificación real en runtime
+    // ✓ Narrowing - verificación real en runtime
     if (typeof valor === "string") {
         return valor.toUpperCase();
     }
@@ -153,7 +153,7 @@ console.log(formatError(serverError));`,
       id: "ch04-03",
       title: "as const",
       type: "explanation",
-      content: `# as const — tipos literales y readonly
+      content: `# as const - tipos literales y readonly
 
 Cuando declarás con \`const\`, el valor no cambia. Pero TypeScript igual infiere un tipo general:
 
@@ -175,18 +175,18 @@ Sin \`as const\`, las propiedades tienen tipos generales:
 
 \`\`\`typescript
 const config = { theme: "dark", lang: "es" };
-// config.theme: string — TypeScript permite config.theme = "cualquier string"
+// config.theme: string - TypeScript permite config.theme = "cualquier string"
 \`\`\`
 
 Con \`as const\`, las propiedades tienen tipos literales y el objeto es readonly:
 
 \`\`\`typescript
 const config = { theme: "dark", lang: "es" } as const;
-// config.theme: "dark" — solo puede ser "dark"
-// config es readonly — TypeScript impide modificaciones
+// config.theme: "dark" - solo puede ser "dark"
+// config es readonly - TypeScript impide modificaciones
 \`\`\`
 
-## En arrays — derivar union types
+## En arrays - derivar union types
 
 Este patrón es muy práctico para derivar un tipo union desde un array:
 
@@ -200,7 +200,7 @@ const METHODS = ["GET", "POST", "PUT", "DELETE"] as const;
 type Method = typeof METHODS[number]; // "GET" | "POST" | "PUT" | "DELETE"
 \`\`\`
 
-La ventaja: el array es la **fuente de verdad**. Si añadís \`"PATCH"\` al array, el tipo \`Method\` se actualiza automáticamente — sin tener que editar el tipo por separado.
+La ventaja: el array es la **fuente de verdad**. Si añadís \`"PATCH"\` al array, el tipo \`Method\` se actualiza automáticamente - sin tener que editar el tipo por separado.
 `,
     },
     {
@@ -291,7 +291,7 @@ El operador \`!\` le dice a TypeScript que un valor no es \`null\` ni \`undefine
 const button = document.getElementById("submit"); // HTMLElement | null
 
 button.addEventListener("click", fn);  // Error: button puede ser null
-button!.addEventListener("click", fn); // ✓ — vos decís que no es null
+button!.addEventListener("click", fn); // ✓ - vos decís que no es null
 \`\`\`
 
 **Usalo raramente.** Si TypeScript no puede deducir que no es null, es porque el tipo dice que sí puede serlo.
@@ -304,9 +304,9 @@ if (button) {
 }
 \`\`\`
 
-Cuándo \`!\` es apropiado: cuando tenés certeza absoluta de que el valor existe y TypeScript no puede verificarlo — por ejemplo, después de crear el elemento vos mismo.
+Cuándo \`!\` es apropiado: cuando tenés certeza absoluta de que el valor existe y TypeScript no puede verificarlo - por ejemplo, después de crear el elemento vos mismo.
 
-## \`satisfies\` — validar sin perder tipos
+## \`satisfies\` - validar sin perder tipos
 
 El problema con las anotaciones de tipo explícitas:
 
@@ -318,8 +318,8 @@ const palette: Record<string, Color> = {
     green: "#00ff00"
 };
 
-palette.red;   // tipo: Color (string | [number, number, number]) — perdiste que es un array
-palette.green; // tipo: Color — TypeScript no sabe que es string
+palette.red;   // tipo: Color (string | [number, number, number]) - perdiste que es un array
+palette.green; // tipo: Color - TypeScript no sabe que es string
 \`\`\`
 
 Con \`satisfies\`, TypeScript verifica que el objeto cumple el tipo, pero preserva el tipo inferido de cada propiedad:
@@ -330,8 +330,8 @@ const palette = {
     green: "#00ff00"
 } satisfies Record<string, Color>;
 
-palette.red;   // tipo: number[] — TypeScript lo sabe
-palette.green; // tipo: string — TypeScript lo sabe
+palette.red;   // tipo: number[] - TypeScript lo sabe
+palette.green; // tipo: string - TypeScript lo sabe
 \`\`\`
 
 La diferencia clave:
@@ -347,7 +347,7 @@ La diferencia clave:
 
 La plataforma usa feature flags para controlar funcionalidades. Algunos flags son un simple \`boolean\`, otros son un objeto con configuración de rollout.
 
-Con la anotación actual, TypeScript trata todas las propiedades como \`FeatureFlag\` — el tipo más amplio. Eso hace que acceder a \`rolloutPercentage\` de \`betaSearch\` requiera un cast extra.
+Con la anotación actual, TypeScript trata todas las propiedades como \`FeatureFlag\` - el tipo más amplio. Eso hace que acceder a \`rolloutPercentage\` de \`betaSearch\` requiera un cast extra.
 
 Refactorizá la declaración de \`FLAGS\` para que TypeScript valide que el objeto cumple \`Record<string, FeatureFlag>\` pero preserve el tipo específico de cada propiedad. Cuando lo hagas, también vas a poder eliminar el cast extra en la desestructuración.`,
       starterCode: `type FeatureFlag = boolean | { enabled: boolean; rolloutPercentage: number };
@@ -408,28 +408,28 @@ console.log(\`New checkout: \${FLAGS.newCheckout}\`);`,
       id: "ch04-07",
       title: "Resumen del capítulo",
       type: "explanation",
-      content: `# Resumen — Assertions & Special Syntax
+      content: `# Resumen - Assertions & Special Syntax
 
 ## Type Assertions (\`as\`)
 
 | Forma | Cuándo usarla |
 |-------|---------------|
 | \`valor as Tipo\` | Cuando tenés más información que TypeScript sobre el tipo real |
-| \`as any\` | Último recurso — apaga toda verificación para ese valor |
-| \`as unknown as T\` | Señal de alarma — probablemente el diseño tiene un problema |
+| \`as any\` | Último recurso - apaga toda verificación para ese valor |
+| \`as unknown as T\` | Señal de alarma - probablemente el diseño tiene un problema |
 
 Preferí **narrowing** sobre assertions cuando sea posible. Narrowing verifica el tipo en runtime; las assertions solo convencen a TypeScript en compile time.
 
 ## \`as const\`
 
 - Convierte tipos generales en literales: \`string\` → \`"dark"\`, \`number\` → \`3\`
-- Hace el objeto o array **readonly** — TypeScript impide modificaciones
+- Hace el objeto o array **readonly** - TypeScript impide modificaciones
 - Permite derivar union types desde arrays: \`typeof ARRAY[number]\`
 
 ## Non-null assertion (\`!\`)
 
 - Afirma que un valor no es \`null\` ni \`undefined\`
-- Usalo raramente — si podés usar narrowing, úsalo
+- Usalo raramente - si podés usar narrowing, úsalo
 - Apropiado solo cuando tenés certeza que TypeScript no puede verificar
 
 ## \`satisfies\`
@@ -440,7 +440,7 @@ Preferí **narrowing** sobre assertions cuando sea posible. Narrowing verifica e
 
 ## Lo que viene
 
-El próximo capítulo cubre **Combining Types** — union types (\`|\`), intersection types (\`&\`), type aliases, y el operador \`keyof\`.
+El próximo capítulo cubre **Combining Types** - union types (\`|\`), intersection types (\`&\`), type aliases, y el operador \`keyof\`.
 `,
     },
   ],
