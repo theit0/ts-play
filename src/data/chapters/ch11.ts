@@ -17,7 +17,7 @@ El mismo concepto aparece en múltiples formas a lo largo de una aplicación: un
 
 Los **Utility Types** son genéricos incorporados en TypeScript que derivan tipos nuevos a partir de tipos existentes — sin copiar ni redefinir.
 
-## Partial\<T\>
+## Partial<T>
 
 Hace todos los campos opcionales. El caso de uso más común es una función de actualización donde solo querés modificar algunos campos:
 
@@ -39,7 +39,7 @@ patchProduct(1, { price: 899 });              // ✓ solo el precio
 patchProduct(2, { stock: 0, name: "Mouse" }); // ✓ varios campos
 \`\`\`
 
-## Required\<T\>
+## Required<T>
 
 Lo opuesto de \`Partial\` — hace todos los campos obligatorios. Útil cuando un borrador tiene campos opcionales pero la versión final publicada no puede tener ninguno faltante:
 
@@ -57,7 +57,7 @@ function publish(product: PublishedProduct) { /* ... */ }
 publish({ name: "Laptop" }); // Error: falta price y description
 \`\`\`
 
-## Readonly\<T\>
+## Readonly<T>
 
 Hace todos los campos \`readonly\` — el objeto no puede modificarse después de crearse. Útil para configuración y para evitar que una función mute accidentalmente sus argumentos:
 
@@ -200,7 +200,7 @@ console.log(summary.price);`,
       type: "explanation",
       content: `# Pick, Omit, Record y más
 
-## Pick\<T, K\>
+## Pick<T, K>
 
 Selecciona un subconjunto de propiedades de un tipo. Útil para exponer solo los campos seguros de un objeto en una API pública o vista:
 
@@ -212,7 +212,7 @@ type ProductPreview = Pick<Product, "name" | "price">;
 // internalCost no se expone
 \`\`\`
 
-## Omit\<T, K\>
+## Omit<T, K>
 
 Lo opuesto de \`Pick\` — elimina propiedades específicas. Más cómodo cuando querés conservar casi todo el tipo:
 
@@ -224,7 +224,7 @@ type NewProduct = Omit<Product, "id" | "internalCost">;
 
 **Regla práctica:** si eliminás pocas propiedades usá \`Omit\`, si seleccionás pocas usá \`Pick\`.
 
-## Record\<K, V\>
+## Record<K, V>
 
 Crea un tipo de objeto con claves de tipo \`K\` y valores de tipo \`V\`. Garantiza que un objeto cubre exactamente las claves que debería cubrir:
 
@@ -242,7 +242,7 @@ const statusConfig: StatusConfig = {
 };
 \`\`\`
 
-## Exclude\<T, U\>
+## Exclude<T, U>
 
 Elimina de una union los miembros que extienden \`U\`:
 
@@ -251,7 +251,7 @@ type Status = "pending" | "active" | "deleted";
 type ActiveStatus = Exclude<Status, "deleted">;  // "pending" | "active"
 \`\`\`
 
-## Extract\<T, U\>
+## Extract<T, U>
 
 Mantiene solo los miembros de la union que extienden \`U\` — lo opuesto de \`Exclude\`:
 
@@ -260,7 +260,7 @@ type Input = string | number | boolean | null;
 type StringInput = Extract<Input, string | number>;  // string | number
 \`\`\`
 
-## NonNullable\<T\>
+## NonNullable<T>
 
 Elimina \`null\` y \`undefined\` de un tipo:
 
@@ -391,7 +391,7 @@ console.log(inventory["accessories"][0].name);`,
 
 Estos utility types extraen información de tipos que ya existen — funciones, clases, promesas — sin tener que redefinir nada a mano.
 
-## ReturnType\<F\>
+## ReturnType<F>
 
 Extrae el tipo de retorno de una función usando \`typeof\`:
 
@@ -406,7 +406,7 @@ type Order = ReturnType<typeof createOrder>;
 
 El tipo se mantiene sincronizado automáticamente: si cambia el tipo de retorno de \`createOrder\`, \`Order\` se actualiza sin tocar nada más.
 
-## Parameters\<F\>
+## Parameters<F>
 
 Extrae los tipos de los parámetros como una tupla:
 
@@ -433,7 +433,7 @@ function withLogging<F extends (...args: any[]) => any>(fn: F) {
 }
 \`\`\`
 
-## Awaited\<T\>
+## Awaited<T>
 
 Desenvuelve el tipo de una \`Promise\`. Útil cuando trabajás con funciones async y querés el tipo del valor resuelto:
 
@@ -447,7 +447,7 @@ type FetchedProduct = Awaited<ReturnType<typeof fetchProduct>>;
 // Sin Awaited, ReturnType daría Promise<{ id: number; name: string }>
 \`\`\`
 
-## InstanceType\<C\>
+## InstanceType<C>
 
 Extrae el tipo de instancia de una clase. Útil cuando pasás la clase como valor (no como tipo) y necesitás referirte al tipo de sus instancias:
 
