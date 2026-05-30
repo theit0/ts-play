@@ -13,7 +13,7 @@ export const ch07: Chapter = {
 
 ## Parámetros y retorno
 
-La anotación básica de una función — tipos en los parámetros y en el retorno:
+La anotación básica de una función - tipos en los parámetros y en el retorno:
 
 \`\`\`typescript
 function add(a: number, b: number): number {
@@ -21,9 +21,9 @@ function add(a: number, b: number): number {
 }
 \`\`\`
 
-TypeScript puede **inferir el tipo de retorno** en la mayoría de los casos — no siempre es necesario anotarlo. Pero para funciones públicas o exportadas, la anotación explícita es buena práctica: documenta la intención y evita que un refactor cambie el contrato sin que TypeScript avise.
+TypeScript puede **inferir el tipo de retorno** en la mayoría de los casos - no siempre es necesario anotarlo. Pero para funciones públicas o exportadas, la anotación explícita es buena práctica: documenta la intención y evita que un refactor cambie el contrato sin que TypeScript avise.
 
-## void — sin retorno útil
+## void - sin retorno útil
 
 Funciones que no retornan un valor (o retornan \`undefined\`) usan \`void\`:
 
@@ -45,7 +45,7 @@ function applyToAll(items: string[], fn: (item: string) => string): string[] {
     return items.map(fn);
 }
 
-// Type alias — más legible cuando el tipo se reutiliza
+// Type alias - más legible cuando el tipo se reutiliza
 type Formatter = (item: string, index: number) => string;
 
 function formatList(items: string[], formatter: Formatter): string[] {
@@ -55,7 +55,7 @@ function formatList(items: string[], formatter: Formatter): string[] {
 
 ## Parámetros opcionales
 
-Un parámetro con \`?\` puede ser \`undefined\` — quien llama puede omitirlo:
+Un parámetro con \`?\` puede ser \`undefined\` - quien llama puede omitirlo:
 
 \`\`\`typescript
 function createSlug(text: string, separator?: string): string {
@@ -161,7 +161,7 @@ console.log(msg2);`,
 
 ## Parámetros con valor por defecto
 
-Un parámetro con valor por defecto es opcional para quien llama — si no se pasa, usa el valor definido:
+Un parámetro con valor por defecto es opcional para quien llama - si no se pasa, usa el valor definido:
 
 \`\`\`typescript
 function paginate(data: string[], page = 1, pageSize = 10): string[] {
@@ -174,7 +174,7 @@ paginate(items, 2);      // page=2, pageSize=10
 paginate(items, 3, 5);   // page=3, pageSize=5
 \`\`\`
 
-TypeScript infiere el tipo del parámetro desde el valor por defecto — no necesitás anotarlo explícitamente si el default es suficientemente específico.
+TypeScript infiere el tipo del parámetro desde el valor por defecto - no necesitás anotarlo explícitamente si el default es suficientemente específico.
 
 ### Default vs opcional
 
@@ -198,7 +198,7 @@ joinStrings(", ", "Ana", "Luis", "María"); // "Ana, Luis, María"
 joinStrings("-", "2024", "01", "15");      // "2024-01-15"
 \`\`\`
 
-El tipo \`...parts: string[]\` — siempre un array del tipo que declarás.
+El tipo \`...parts: string[]\` - siempre un array del tipo que declarás.
 
 ### Rest vs spread
 
@@ -240,7 +240,7 @@ console.log(buildQuery("/api/users", 20, "active", "admin"));`,
 console.log(buildQuery("/api/products"));
 console.log(buildQuery("/api/orders", 5));
 console.log(buildQuery("/api/users", 20, "active", "admin"));`,
-      hint: "Dos cambios en la firma: (1) `limit` necesita un valor por defecto con `=`. (2) `filters` necesita capturar múltiples argumentos individuales — buscá la sintaxis para eso.",
+      hint: "Dos cambios en la firma: (1) `limit` necesita un valor por defecto con `=`. (2) `filters` necesita capturar múltiples argumentos individuales - buscá la sintaxis para eso.",
       tests: [
         {
           name: "limit tiene valor por defecto de 10",
@@ -277,7 +277,7 @@ console.log(buildQuery("/api/users", 20, "active", "admin"));`,
       type: "explanation",
       content: `# Function Overloading
 
-Los **function overloads** permiten definir múltiples call signatures para la misma función — distintos tipos de argumentos, distintos tipos de retorno.
+Los **function overloads** permiten definir múltiples call signatures para la misma función - distintos tipos de argumentos, distintos tipos de retorno.
 
 ## El problema sin overloads
 
@@ -288,8 +288,8 @@ function formatId(idOrIds: number | number[]): string | string[] {
     return \`#\${idOrIds}\`;
 }
 
-const single = formatId(1);        // tipo: string | string[] — TypeScript no sabe cuál
-const batch  = formatId([1, 2]);   // tipo: string | string[] — idem
+const single = formatId(1);        // tipo: string | string[] - TypeScript no sabe cuál
+const batch  = formatId([1, 2]);   // tipo: string | string[] - idem
 single.toUpperCase();              // Error: string[] no tiene .toUpperCase()
 \`\`\`
 
@@ -312,14 +312,14 @@ const batch  = formatId([1, 2]); // tipo: string[] ✓
 single.toUpperCase();            // ✓ TypeScript sabe que single es string
 \`\`\`
 
-La implementación es invisible para quien llama — solo ven las overload signatures.
+La implementación es invisible para quien llama - solo ven las overload signatures.
 
 ## Cuándo usarlos
 
 Los overloads son útiles cuando el **tipo de retorno depende del tipo del argumento**. Si tanto la entrada como la salida son uniones simples y no hay relación entre ellas, una firma normal con unión es suficiente.
 
 \`\`\`typescript
-// No necesita overloads — unión simple en ambos lados
+// No necesita overloads - unión simple en ambos lados
 function toString(value: string | number): string {
     return String(value);
 }
@@ -327,7 +327,7 @@ function toString(value: string | number): string {
 
 ## Error común
 
-La firma de implementación no es accesible desde afuera — debe ser compatible con todas las overloads pero no se usa directamente:
+La firma de implementación no es accesible desde afuera - debe ser compatible con todas las overloads pero no se usa directamente:
 
 \`\`\`typescript
 function process(x: string): string;
@@ -336,7 +336,7 @@ function process(x: string | number): string | number { // implementación
     return x;
 }
 
-// ✗ No podés llamar con string | number — esa firma no existe para callers
+// ✗ No podés llamar con string | number - esa firma no existe para callers
 const value: string | number = "hola";
 process(value); // Error
 \`\`\`
@@ -348,7 +348,7 @@ process(value); // Error
       type: "exercise",
       instructions: `## Buscador del catálogo
 
-La función \`findProduct\` puede buscar por un ID individual o por un array de IDs, y retorna tipos distintos en cada caso. La implementación ya funciona correctamente, pero TypeScript no puede inferir el tipo de retorno específico para cada llamada — \`findProduct(1)\` debería retornar \`Product | undefined\`, y \`findProduct([2, 3])\` debería retornar \`Product[]\`.
+La función \`findProduct\` puede buscar por un ID individual o por un array de IDs, y retorna tipos distintos en cada caso. La implementación ya funciona correctamente, pero TypeScript no puede inferir el tipo de retorno específico para cada llamada - \`findProduct(1)\` debería retornar \`Product | undefined\`, y \`findProduct([2, 3])\` debería retornar \`Product[]\`.
 
 Añadí las overload signatures necesarias para que TypeScript conozca el tipo exacto de retorno según el argumento.`,
       starterCode: `type Product = { id: number; name: string; price: number };
@@ -429,7 +429,7 @@ console.log(peripherals.map(p => p.name).join(", "));`,
       id: "ch07-07",
       title: "Resumen del capítulo",
       type: "explanation",
-      content: `# Resumen — TypeScript Functions
+      content: `# Resumen - TypeScript Functions
 
 ## Anotaciones básicas
 
@@ -437,15 +437,15 @@ console.log(peripherals.map(p => p.name).join(", "));`,
 function fn(param: Tipo, callback: (x: Tipo) => Retorno): Retorno {}
 \`\`\`
 
-- TypeScript infiere el tipo de retorno — la anotación explícita es mejor para APIs públicas
+- TypeScript infiere el tipo de retorno - la anotación explícita es mejor para APIs públicas
 - \`void\`: función que no retorna un valor útil
 
 ## Parámetros opcionales y por defecto
 
 | Sintaxis | Comportamiento |
 |----------|----------------|
-| \`param?: Tipo\` | Opcional — puede ser \`undefined\` dentro de la función |
-| \`param: Tipo = valor\` | Tiene default — siempre es \`Tipo\` dentro de la función |
+| \`param?: Tipo\` | Opcional - puede ser \`undefined\` dentro de la función |
+| \`param: Tipo = valor\` | Tiene default - siempre es \`Tipo\` dentro de la función |
 
 Los opcionales y los con default van **al final** de los parámetros requeridos.
 
@@ -466,7 +466,7 @@ Usá overloads cuando el tipo de retorno depende del tipo del argumento. Si la r
 
 ## Lo que viene
 
-El próximo capítulo cubre **TypeScript Interfaces** — declaration, extends, declaration merging, y cuándo usar \`interface\` vs \`type\`.
+El próximo capítulo cubre **TypeScript Interfaces** - declaration, extends, declaration merging, y cuándo usar \`interface\` vs \`type\`.
 `,
     },
   ],

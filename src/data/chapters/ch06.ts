@@ -30,13 +30,13 @@ Los strings que \`typeof\` puede retornar: \`"string"\`, \`"number"\`, \`"boolea
 
 ### El caso de null
 
-\`typeof null === "object"\` — este es un bug histórico de JavaScript que no se va a corregir. Para verificar null, usá comparación directa:
+\`typeof null === "object"\` - este es un bug histórico de JavaScript que no se va a corregir. Para verificar null, usá comparación directa:
 
 \`\`\`typescript
 function procesar(value: string | null): string {
     // ✗ Bug: typeof null es "object"
     if (typeof value === "object") {
-        return "(nulo)"; // nunca llegarías a value.toUpperCase() — pero el tipo está mal
+        return "(nulo)"; // nunca llegarías a value.toUpperCase() - pero el tipo está mal
     }
 
     // ✓ Comparación directa para null
@@ -162,7 +162,7 @@ function handleError(err: AppError): string {
 }
 \`\`\`
 
-\`instanceof\` solo funciona con **clases** — para objetos planos, usá type predicates (próxima lección).
+\`instanceof\` solo funciona con **clases** - para objetos planos, usá type predicates (próxima lección).
 
 ## Equality Narrowing
 
@@ -178,7 +178,7 @@ function getStatusMessage(status: Status): string {
 }
 \`\`\`
 
-## switch — narrowing implícito
+## switch - narrowing implícito
 
 En un \`switch\`, TypeScript estrecha el tipo en cada \`case\`:
 
@@ -194,7 +194,7 @@ function describe(shape: ShapeType): string {
 }
 \`\`\`
 
-Si el tipo \`ShapeType\` tiene todos los casos cubiertos, TypeScript sabe que el \`switch\` es exhaustivo — no necesitás \`default\` (aunque podés añadir uno con el exhaustive check de \`never\` que vimos en ch03).
+Si el tipo \`ShapeType\` tiene todos los casos cubiertos, TypeScript sabe que el \`switch\` es exhaustivo - no necesitás \`default\` (aunque podés añadir uno con el exhaustive check de \`never\` que vimos en ch03).
 `,
     },
     {
@@ -252,7 +252,7 @@ const weight = new WeightBasedShipping(2.5);
 
 console.log(\`Flat: $\${calculateShipping(flat, 2).toFixed(2)}\`);
 console.log(\`Weight (2kg): $\${calculateShipping(weight, 2).toFixed(2)}\`);`,
-      hint: "Ya tenés el caso `FlatShipping` manejado. En el `else` (o después del `if`), TypeScript sabe que `method` es `WeightBasedShipping` — podés acceder a sus propiedades directamente.",
+      hint: "Ya tenés el caso `FlatShipping` manejado. En el `else` (o después del `if`), TypeScript sabe que `method` es `WeightBasedShipping` - podés acceder a sus propiedades directamente.",
       tests: [
         {
           name: "Usa instanceof para el narrowing",
@@ -287,7 +287,7 @@ Un **type predicate** es una función que retorna \`boolean\` y le dice a TypeSc
 \`typeof\` e \`instanceof\` no son suficientes para verificar la forma de un objeto arbitrario:
 
 \`\`\`typescript
-// Función de validación normal — TypeScript no estrecha el tipo después
+// Función de validación normal - TypeScript no estrecha el tipo después
 function isProduct(value: unknown): boolean {
     return typeof value === "object" && value !== null && "name" in value;
 }
@@ -323,7 +323,7 @@ function process(input: unknown) {
 }
 \`\`\`
 
-La función sigue retornando \`boolean\` en runtime — el type predicate solo afecta a TypeScript.
+La función sigue retornando \`boolean\` en runtime - el type predicate solo afecta a TypeScript.
 
 ## Implementación típica
 
@@ -435,11 +435,11 @@ console.log(isOrder(badId));`,
       id: "ch06-07",
       title: "Resumen del capítulo",
       type: "explanation",
-      content: `# Resumen — Type Guards / Narrowing
+      content: `# Resumen - Type Guards / Narrowing
 
 ## Narrowing
 
-TypeScript reduce el tipo de una variable dentro de un condicional — sin casts, sin assertions. Solo análisis del flujo del código.
+TypeScript reduce el tipo de una variable dentro de un condicional - sin casts, sin assertions. Solo análisis del flujo del código.
 
 ## Técnicas de narrowing
 
@@ -453,13 +453,13 @@ TypeScript reduce el tipo de una variable dentro de un condicional — sin casts
 
 ## Cuidados
 
-- \`typeof null === "object"\` — para null usá comparación directa: \`value === null\`
+- \`typeof null === "object"\` - para null usá comparación directa: \`value === null\`
 - \`instanceof\` solo funciona con clases, no con tipos de objeto plano
-- Los type predicates son contratos — TypeScript confía en vos. Si la implementación es incorrecta, el narrowing va a mentir
+- Los type predicates son contratos - TypeScript confía en vos. Si la implementación es incorrecta, el narrowing va a mentir
 
 ## Lo que viene
 
-El próximo capítulo cubre **TypeScript Functions** — cómo tipar parámetros, retorno, parámetros opcionales, rest params, y function overloading.
+El próximo capítulo cubre **TypeScript Functions** - cómo tipar parámetros, retorno, parámetros opcionales, rest params, y function overloading.
 `,
     },
   ],
