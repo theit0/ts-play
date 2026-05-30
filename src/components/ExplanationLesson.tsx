@@ -18,7 +18,7 @@ export function ExplanationLesson({ lesson }: Props) {
 
   function handleContinue() {
     markComplete(lesson.id);
-    if (next) navigateTo(navigate, `/lesson/${next.id}`);
+    navigateTo(navigate, next ? `/lesson/${next.id}` : "/");
   }
 
   return (
@@ -36,7 +36,7 @@ export function ExplanationLesson({ lesson }: Props) {
             onClick={handleContinue}
             className="flex items-center gap-2 px-5 py-2.5 rounded bg-[var(--vs-accent)] text-white font-semibold text-sm hover:bg-[var(--vs-accent-dark)] transition-colors"
           >
-            {next ? "Continuar" : "Finalizar capítulo"}
+            {next ? "Continuar" : "Finalizar curso"}
             <ChevronRight className="w-4 h-4" />
           </button>
         </div>

@@ -106,7 +106,7 @@ export function OutputPanel({
             {!babelReady ? "Cargando..." : isRunning ? "Ejecutando..." : "Run"}
             {babelReady && !isRunning && <span className="text-white/60 text-[10px] hidden sm:inline">Ctrl+Enter</span>}
           </button>
-          {(allPassed || isDone) && nextLesson && (
+          {(allPassed || isDone) && (
             <button
               onClick={onNavigateNext}
               disabled={isNavigating}
@@ -114,7 +114,9 @@ export function OutputPanel({
             >
               {isNavigating
                 ? <span className="w-3 h-3 border-2 border-white/40 border-t-white rounded-full animate-spin" />
-                : <>Siguiente<ChevronRight className="w-3 h-3" /></>}
+                : nextLesson
+                  ? <>Siguiente<ChevronRight className="w-3 h-3" /></>
+                  : <>Finalizar curso<ChevronRight className="w-3 h-3" /></>}
             </button>
           )}
         </div>

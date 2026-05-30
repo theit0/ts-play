@@ -124,7 +124,7 @@ export function ExerciseLesson({ lesson }: Props) {
         onReset={handleReset}
         onShowHint={() => setShowHint(true)}
         onShowSolution={() => lesson.solution && setCode(lesson.solution)}
-        onNavigateNext={() => { setIsNavigating(true); navigateTo(navigate, `/lesson/${next!.id}`); }}
+        onNavigateNext={() => { setIsNavigating(true); navigateTo(navigate, next ? `/lesson/${next.id}` : "/"); }}
       />
     </div>
   );
