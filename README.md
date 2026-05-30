@@ -25,7 +25,7 @@ La plataforma combina explicaciones claras en español con un entorno de código
 - **Visualización del JS compilado** - panel en tiempo real que muestra el JavaScript resultante de transpilar el código TypeScript del usuario
 - **Sistema de tests automáticos** - cada ejercicio incluye tests que verifican si la solución es correcta
 - **Progreso persistente** - el progreso y el código de cada ejercicio se guardan en `localStorage`
-- **10 capítulos de contenido** - desde introducción hasta funciones avanzadas, con más de 50 lecciones
+- **13 capítulos de contenido** - desde introducción hasta tipos avanzados y módulos, con más de 80 lecciones
 - **Dos tipos de lecciones**: explicaciones teóricas con markdown enriquecido y ejercicios interactivos con playground
 - **Diseño responsive** - interfaz adaptada para móviles con sidebar drawer y tab switcher en el editor
 - **Diseño dark theme** - interfaz moderna orientada a desarrolladores
@@ -36,59 +36,19 @@ La plataforma combina explicaciones claras en español con un entorno de código
 
 | # | Capítulo | Contenido |
 |---|----------|-----------|
-| 1 | Intro to TypeScript | Qué es TS, parámetros tipados, cómo funciona |
-| 2 | The any type | El tipo `any`, tsconfig.json |
-| 3 | TypeScript ESLint | Reglas ESLint, ban-ts-comment, tipos prohibidos |
-| 4 | Primitive types | string, number, boolean, inferencia de tipos |
-| 5 | Union types | Tipos de unión, type narrowing con `typeof` |
-| 6 | The type alias | Aliases de tipos, reutilización |
-| 7 | Arrays | Tipado de arrays, métodos |
-| 8 | Tuples | Tuplas, tipos por posición |
-| 9 | Literal types | Tipos literales, `const` vs `let` |
-| 10 | Functions | Tipos de retorno, void, parámetros opcionales, arrow functions |
-| 11 | Modules | import/export, import type |
-| 12 | Objects | Tipos de objetos, duck typing, sistema estructural |
-| 13 | Interfaces | Introducción a interfaces, declaration merging, extends |
-| 14 | Type vs. Interface | Diferencias, cuándo usar cada uno |
-| 15 | Real-life complex objects | Objetos complejos, optional chaining, propiedades anidadas |
-| 16 | Callbacks | Tipado de callbacks, params y return types |
-| 17 | Classes I | Clases, constructores, propiedades opcionales |
-| 18 | Classes II | Visibility modifiers, parameter properties, readonly |
-| 19 | Class implements | implements interface, descripción de instancias |
-| 20 | Class extends | Herencia, substitutability |
-| 21 | Polymorphism | Polimorfismo, refactoring con clases |
-| 22 | Unknown and type narrowing | El tipo `unknown`, narrowing avanzado |
-| 23 | Function overloads | Sobrecargas de función, firmas de sobrecarga |
-| 24 | Misc concepts | Conceptos varios, tipos avanzados |
-| 25 | Intro to generics | Problema y solución de generics, sintaxis |
-| 26 | Generics (continued) | Técnica para resolver generics |
-| 27 | Array generics | Generics con arrays |
-| 28 | Object generics | Generics con objetos, paginado |
-| 29 | Class generics | Clases genéricas, caché service |
-| 30 | Generic default type | Tipos genéricos con valor por defecto |
-| 31 | Multiple generic types | Múltiples parámetros de tipo |
-| 32 | Generic constraints | Restricciones con `extends` |
-| 33 | The keyof operator | `keyof`, acceso seguro a propiedades |
-| 34 | Utility Types I | `Required`, `Partial`, `Pick`, `Omit` |
-| 35 | Utility Types II | `typeof`, `ReturnType`, `Parameters`, `NonNullable` |
-| 36 | Record | `Record<Keys, Type>`, casos de uso |
-| 37 | Index signatures | Firmas de índice, tipos dinámicos |
-| 38 | Intersection types | Tipos de intersección con `&` |
-| 39 | Promises | Tipado de Promises, async/await |
-| 40 | Fetch | Fetch API tipada |
-| 41 | Practical fetch | Fetch práctico, uniones discriminadas |
-| 42 | FetchWrapper | Clase genérica FetchWrapper |
-| 43 | Intro to DOM | DOM con TypeScript, querySelector |
-| 44 | HTMLElement | Interfaces HTMLElement, HTMLInputElement |
-| 45 | querySelector generic | querySelector genérico tipado |
-| 46 | Asserting elements | Non-null assertions, type assertions |
-| 47 | querySelector deep dive | Sobrecargas de querySelector |
-| 48 | querySelector summary | Proyecto registro, proyecto clima |
-| 49 | querySelectorAll | `NodeListOf`, querySelectorAll genérico |
-| 50 | DOM Misc | Eventos DOM, getElementById |
-| 51 | DOM Projects | Proyectos DOM completos |
-| 52 | Ambient modules | Módulos ambiente, extender interfaces globales |
-| 53 | Migrating to TypeScript | Migración de JS a TS, proyecto final |
+| 1 | Introduction to TypeScript | TS vs JS, interoperabilidad, tsconfig, primera anotación |
+| 2 | TypeScript ESLint | Reglas ESLint, `ban-ts-comment`, tipos prohibidos, `no-explicit-any` |
+| 3 | TypeScript Types | Primitivos, arrays, tuples, enums, `any` vs `unknown`, `never`, inferencia |
+| 4 | Assertions & Special Syntax | Type assertions, `as const`, non-null assertion, `satisfies` |
+| 5 | Combining Types | Union types, intersection types, type aliases, `keyof` |
+| 6 | Type Guards / Narrowing | `typeof`, truthiness, `instanceof`, type predicates |
+| 7 | TypeScript Functions | Tipado de funciones, parámetros default y rest, overloading |
+| 8 | TypeScript Interfaces | Interface declaration, extending, types vs interfaces |
+| 9 | Classes | Constructor shorthand, access modifiers, abstract classes, herencia |
+| 10 | Generics | Generic types, constraints, generic interfaces y clases |
+| 11 | Utility Types | `Partial`, `Required`, `Readonly`, `Pick`, `Omit`, `Record`, `ReturnType`, `Parameters` |
+| 12 | Advanced Types | Mapped types, conditional types, template literal types, recursive types |
+| 13 | TypeScript Modules | ES modules, declaration merging, namespaces, ambient modules |
 
 ---
 
