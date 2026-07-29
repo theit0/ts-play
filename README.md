@@ -109,6 +109,6 @@ El playground funciona completamente en el cliente:
 
 ## Autor
 
-**Theo Pelegrina** - Frontend Engineer | Systems Engineer
+**Theo Pelegrina** - Systems Engineer
 
 [![GitHub](https://img.shields.io/badge/GitHub-181717?style=flat&logo=github&logoColor=white)](https://github.com/theopelegrina)
